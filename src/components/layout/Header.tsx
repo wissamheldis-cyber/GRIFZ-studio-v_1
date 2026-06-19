@@ -123,7 +123,7 @@ export default function Header() {
             </div>
             
             {/* Dynamic Label */}
-            <div className="absolute top-[100%] mt-12 left-1/2 -translate-x-1/2 whitespace-nowrap h-[24px] flex items-center justify-center pointer-events-none">
+            <div className="absolute top-[100%] mt-2 left-1/2 -translate-x-1/2 whitespace-nowrap h-[24px] flex items-center justify-center pointer-events-none">
               <AnimatePresence mode="wait">
                 {(hoveredLabel || (showCurrent && currentLabel)) && (
                   <motion.span
@@ -132,8 +132,7 @@ export default function Header() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 5 }}
                     transition={{ duration: 0.3 }}
-                    className="text-ink tracking-[0.15em] uppercase text-sm md:text-lg drop-shadow-[0_2px_10px_rgba(255,255,255,0.8)]"
-                    style={{ fontFamily: 'var(--font-header)' }}
+                    className="font-serif text-ink tracking-[0.15em] uppercase text-sm md:text-lg drop-shadow-[0_2px_10px_rgba(255,255,255,0.8)]"
                   >
                     {hoveredLabel || currentLabel}
                   </motion.span>
