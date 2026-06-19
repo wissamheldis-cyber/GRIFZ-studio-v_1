@@ -45,31 +45,24 @@ export default function Header() {
   const ALL_LINKS = [...LEFT_LINKS, ...RIGHT_LINKS]
   const currentLink = ALL_LINKS.find(link => isActive(link.href))
   const currentLabel = currentLink ? currentLink.label : ''
+  /* ─── State for Scroll Blur ──────────────────────────────── */
+  const [isScrolled, setIsScrolled] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20)
+    }
+    window.addEventListener('scroll', handleScroll)
+    handleScroll() // initial check
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   return (
     <>
       {/* ─── Header Flottant ──────────────────────────────── */}
       <header
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 100,
-          display: 'flex',
-          justifyContent: 'center',
-          paddingTop: '16px',
-          paddingBottom: '16px',
-          background: 'var(--header-bg)',
-          backdropFilter: 'blur(32px) saturate(1.8)',
-          WebkitBackdropFilter: 'blur(32px) saturate(1.8)',
-          boxShadow: 'var(--header-shadow)',
-          transition: 'background 0.7s ease, box-shadow 0.7s ease',
-        }}
+        className="fixed top-0 left-0 right-0 z-[100] flex justify-center pt-2 md:pt-6 pb-2 pointer-events-none transition-all duration-700"
       >
-        {/* Ligne translucide pour délimiter légèrement le bas si nécessaire */}
-        <div className="absolute inset-0 w-full h-full border-b border-white/20 pointer-events-none z-0" />
-
         {/* Force l'application des marges via CSS pur pour éviter tout bug de compilation Tailwind */}
         <style dangerouslySetInnerHTML={{ __html: `
           .left-nav-spacing { padding-right: 75px; }
@@ -84,8 +77,14 @@ export default function Header() {
           }
         `}} />
 
-        {/* Conteneur très large - passe en z-10 pour être au dessus de l'animation */}
-        <div className="w-full max-w-6xl flex items-center justify-center relative min-h-[70px] md:min-h-[120px] z-10 mx-auto">
+        {/* Conteneur très large qui devient un "pill" au scroll */}
+        <div 
+          className={`w-[98%] md:w-[95%] max-w-6xl flex items-center justify-center relative min-h-[70px] md:min-h-[120px] z-10 mx-auto transition-all duration-700 pointer-events-auto ${
+            isScrolled 
+              ? 'bg-[var(--header-bg)] backdrop-blur-2xl shadow-[var(--header-shadow)] border border-white/20 rounded-[40px] md:rounded-[60px]' 
+              : 'bg-transparent border-transparent'
+          }`}
+        >
           
           {/* Switcher EN (gauche) */}
           <div className="absolute left-6 md:left-12 top-1/2 -translate-y-1/2 z-20">
