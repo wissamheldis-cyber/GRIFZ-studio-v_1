@@ -168,316 +168,336 @@ export default function RealisationsPage() {
   return (
     <main className="min-h-screen pt-40 pb-32 flex flex-col items-center relative overflow-hidden">
 
-      <div className="w-full max-w-6xl mx-auto px-4 flex flex-col items-center gap-12 relative z-10">
-        
-        {/* Titre central */}
-        <motion.div 
-          className="text-center flex flex-col gap-4"
-          initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
-          animate={hasEntered ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-        >
-          <h1 className="font-serif text-4xl md:text-5xl text-ink">
-            {t('title')}
-          </h1>
-          <p className="text-ink-soft font-light text-sm md:text-base">{t('subtitle')}</p>
-        </motion.div>
-
-        {/* ─── CARROUSEL 3D COVERFLOW ─── */}
-        <div className="relative w-full h-[400px] md:h-[500px] flex items-center justify-center mt-8" style={{ perspective: '1200px' }}>
-          {projects.map((project, index) => {
-            const offset = index - activeIndex
-            const isActive = offset === 0
-
-            // Mathématiques du Coverflow
-            const isInactiveFlippedState = activeFlipped && !isActive
-            const translateX = offset * (typeof window !== 'undefined' && window.innerWidth < 768 ? 140 : 280)
-            const translateZ = Math.abs(offset) * -200 + (isInactiveFlippedState ? -150 : 0) + (isActive && activeFlipped ? 40 : 0)
-            const rotateY = offset * -25
-            const scale = 1 - Math.abs(offset) * 0.1
-            const opacity = isInactiveFlippedState 
-              ? Math.max(0, 1 - Math.abs(offset) * 0.3 - 0.6)
-              : 1 - Math.abs(offset) * 0.3
-            const zIndex = isActive && activeFlipped ? 100 : 50 - Math.abs(offset)
-            
-            const filterBlur = isInactiveFlippedState
-               ? `blur(${Math.abs(offset) * 4 + 16}px) brightness(0.2)`
-               : Math.abs(offset) > 0 ? `blur(${Math.abs(offset) * 4}px)` : 'blur(0px)'
-
-            const staggerDelay = getStaggerDelay(index)
-
-            // État initial : toutes les cartes partent du centre, invisibles, écrasées
-            const entranceInitial = prefersReducedMotion ? false : {
-              x: 0,
-              z: -600,
-              rotateY: 0,
-              scale: 0.3,
-              opacity: 0,
-              filter: 'blur(20px)',
-            }
-
-            // État animé : position finale du coverflow OU état initial si pas encore entré
-            const entranceAnimate = hasEntered ? {
-              x: translateX,
-              z: translateZ,
-              rotateY: rotateY,
-              scale: scale,
-              opacity: opacity,
-              filter: filterBlur,
-            } : entranceInitial
-
-            return (
-              <motion.div
-                key={project.id}
-                className="absolute top-0 bottom-0 flex flex-col items-center justify-center cursor-pointer"
-                style={{ zIndex }}
-                initial={entranceInitial}
-                animate={entranceAnimate}
-                transition={
-                  !hasEntered 
-                    ? { duration: 0.01 }
-                    : entranceComplete
-                      ? { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }
-                      : {
-                          duration: getEntranceDuration(),
-                          delay: staggerDelay,
-                          ease: [0.25, 0.46, 0.45, 0.94],
-                        }
-                }
-                onClick={() => handleCardClick(index)}
-              >
-                <motion.div
-                  className="w-[260px] h-[360px] md:w-[350px] md:h-[480px] rounded-2xl"
-                  animate={isActive && activeFlipped ? {
-                    y: -15,
-                    boxShadow: "0 40px 100px rgba(0,0,0,0.8), 0 0 80px rgba(255,255,255,0.06)"
-                  } : {
-                    y: 0,
-                    boxShadow: "0 0 0 rgba(0,0,0,0)"
-                  }}
-                  transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                >
-                  <FlipCard 
-                    key={`${project.id}-${isActive}`}
-                    className="w-full h-full cursor-pointer group"
-                    isFlippable={isActive}
-                    onFlipChange={(flipped) => handleFlipChange(flipped, index)}
-                    frontImage={project.coverPath}
-                    frontContent={
-                      <div className="absolute inset-0 flex items-center justify-center p-8 bg-black/40 backdrop-blur-[2px]">
-                        {project.logoPath ? (
-                          <div className="relative w-4/5 h-1/2 drop-shadow-2xl transition-transform duration-500 group-hover:scale-105">
-                            <Image src={project.logoPath} alt={`${project.title} logo`} fill className="object-contain" unoptimized />
-                          </div>
-                        ) : (
-                          <h3 className="font-serif text-3xl md:text-4xl text-white drop-shadow-2xl transition-transform duration-500 group-hover:scale-105">{project.title}</h3>
-                        )}
-                      </div>
-                    }
-                    backContent={
-                      <div className="absolute inset-0 w-full h-full overflow-hidden rounded-2xl">
-                        {/* Wrapper pour future vidéo. Actuellement une image. */}
-                        <Image 
-                          src={project.galleryPaths && project.galleryPaths.length > 0 ? project.galleryPaths[0] : project.coverPath} 
-                          alt={`${project.title} aperçu`} 
-                          fill 
-                          className="object-cover" 
-                          unoptimized 
-                        />
-                        {/* Overlay sombre très léger pour que l'image paraisse propre */}
-                        <div className="absolute inset-0 bg-black/10" />
-                      </div>
-                    }
-                  />
-                </motion.div>
-
-              </motion.div>
-            )
-          })}
-        </div>
-
-        {/* ─── PANNEAU ÉDITORIAL PREMIUM (Dark Card) ─── */}
-        <AnimatePresence>
-          {activeFlipped && activeProject && (
-            <motion.div
-              initial={{ opacity: 0, y: 30, height: 0 }}
-              animate={{ opacity: 1, y: 0, height: 'auto' }}
-              exit={{ opacity: 0, y: 30, height: 0 }}
+      <AnimatePresence>
+        {!activeFictionalFlipped && (
+          <motion.div 
+            key="section-realisations"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+            className="w-full max-w-6xl mx-auto px-4 flex flex-col items-center gap-12 relative z-10 overflow-hidden"
+          >
+            {/* Titre central */}
+            <motion.div 
+              className="text-center flex flex-col gap-4"
+              initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
+              animate={hasEntered ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="w-full max-w-5xl mx-auto overflow-hidden mt-12 md:mt-20"
             >
-              {/* ── Styles pour le dot animé et le ray ── */}
-              <style dangerouslySetInnerHTML={{ __html: `
-                @keyframes moveDotPanel {
-                  0%, 100% { top: 8%; right: 8%; }
-                  25% { top: 8%; right: calc(100% - 30px); }
-                  50% { top: calc(100% - 24px); right: calc(100% - 30px); }
-                  75% { top: calc(100% - 24px); right: 8%; }
+              <h1 className="font-serif text-4xl md:text-5xl text-ink">
+                {t('title')}
+              </h1>
+              <p className="text-ink-soft font-light text-sm md:text-base">{t('subtitle')}</p>
+            </motion.div>
+
+            {/* ─── CARROUSEL 3D COVERFLOW ─── */}
+            <div className="relative w-full h-[400px] md:h-[500px] flex items-center justify-center mt-8" style={{ perspective: '1200px' }}>
+              {projects.map((project, index) => {
+                const offset = index - activeIndex
+                const isActive = offset === 0
+
+                // Mathématiques du Coverflow
+                const isInactiveFlippedState = activeFlipped && !isActive
+                const translateX = offset * (typeof window !== 'undefined' && window.innerWidth < 768 ? 140 : 280)
+                const translateZ = Math.abs(offset) * -200 + (isInactiveFlippedState ? -150 : 0) + (isActive && activeFlipped ? 40 : 0)
+                const rotateY = offset * -25
+                const scale = 1 - Math.abs(offset) * 0.1
+                const opacity = isInactiveFlippedState 
+                  ? Math.max(0, 1 - Math.abs(offset) * 0.3 - 0.6)
+                  : 1 - Math.abs(offset) * 0.3
+                const zIndex = isActive && activeFlipped ? 100 : 50 - Math.abs(offset)
+                
+                const filterBlur = isInactiveFlippedState
+                  ? `blur(${Math.abs(offset) * 4 + 16}px) brightness(0.2)`
+                  : Math.abs(offset) > 0 ? `blur(${Math.abs(offset) * 4}px)` : 'blur(0px)'
+
+                const staggerDelay = getStaggerDelay(index)
+
+                // État initial : toutes les cartes partent du centre, invisibles, écrasées
+                const entranceInitial = prefersReducedMotion ? false : {
+                  x: 0,
+                  z: -600,
+                  rotateY: 0,
+                  scale: 0.3,
+                  opacity: 0,
+                  filter: 'blur(20px)',
                 }
-                .panel-dot {
-                  width: 5px;
-                  aspect-ratio: 1;
-                  position: absolute;
-                  background-color: #fff;
-                  box-shadow: 0 0 10px #ffffff, 0 0 20px rgba(255,255,255,0.3);
-                  border-radius: 100px;
-                  z-index: 20;
-                  animation: moveDotPanel 8s linear infinite;
-                }
-              `}} />
 
-              {/* Outer — Gradient border wrapper */}
-              <div 
-                className="mx-4 md:mx-0 relative"
-                style={{
-                  borderRadius: '16px',
-                  padding: '1px',
-                  background: 'radial-gradient(circle 600px at 0% 0%, #ffffff, #0c0d0d)',
-                }}
-              >
-                {/* Dot lumineux animé */}
-                <div className="panel-dot" />
+                // État animé : position finale du coverflow OU état initial si pas encore entré
+                const entranceAnimate = hasEntered ? {
+                  x: translateX,
+                  z: translateZ,
+                  rotateY: rotateY,
+                  scale: scale,
+                  opacity: opacity,
+                  filter: filterBlur,
+                } : entranceInitial
 
-                {/* Inner Card */}
-                <div 
-                  className="relative w-full overflow-hidden"
-                  style={{
-                    borderRadius: '15px',
-                    border: '1px solid #202222',
-                    background: 'radial-gradient(circle 800px at 0% 0%, #333333, #0c0d0d)',
-                  }}
-                >
-                  {/* Ray — faisceau lumineux */}
-                  <div 
-                    className="absolute pointer-events-none"
-                    style={{
-                      width: '280px',
-                      height: '50px',
-                      borderRadius: '100px',
-                      backgroundColor: '#c7c7c7',
-                      opacity: 0.3,
-                      boxShadow: '0 0 60px #fff',
-                      filter: 'blur(12px)',
-                      transformOrigin: '10%',
-                      top: '0%',
-                      left: '0',
-                      transform: 'rotate(40deg)',
-                      zIndex: 1,
-                    }}
-                  />
-
-                  {/* ── Lignes internes à ~8% — cadre de respiration ── */}
-                  {/* Ligne haute */}
-                  <div className="absolute pointer-events-none" style={{
-                    top: '8%', left: 0, right: 0, height: '1px',
-                    background: 'linear-gradient(90deg, #888888 30%, #1d1f1f 70%)',
-                  }} />
-                  {/* Ligne basse */}
-                  <div className="absolute pointer-events-none" style={{
-                    bottom: '8%', left: 0, right: 0, height: '1px',
-                    background: 'linear-gradient(90deg, #2c2c2c 30%, #1d1f1f 70%)',
-                  }} />
-                  {/* Ligne gauche */}
-                  <div className="absolute pointer-events-none" style={{
-                    left: '5%', top: 0, bottom: 0, width: '1px',
-                    background: 'linear-gradient(180deg, #747474 30%, #222424 70%)',
-                  }} />
-                  {/* Ligne droite */}
-                  <div className="absolute pointer-events-none" style={{
-                    right: '5%', top: 0, bottom: 0, width: '1px',
-                    background: 'linear-gradient(180deg, #2c2c2c 30%, #222424 70%)',
-                  }} />
-
-                  {/* ── Contenu à l'intérieur du cadre ── */}
-                  <div className="relative z-10 flex flex-col md:flex-row items-stretch"
-                    style={{ padding: '10% 7%' }}
+                return (
+                  <motion.div
+                    key={project.id}
+                    className="absolute top-0 bottom-0 flex flex-col items-center justify-center cursor-pointer"
+                    style={{ zIndex }}
+                    initial={entranceInitial}
+                    animate={entranceAnimate}
+                    transition={
+                      !hasEntered 
+                        ? { duration: 0.01 }
+                        : entranceComplete
+                          ? { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }
+                          : {
+                              duration: getEntranceDuration(),
+                              delay: staggerDelay,
+                              ease: [0.25, 0.46, 0.45, 0.94],
+                            }
+                    }
+                    onClick={() => handleCardClick(index)}
                   >
-                    
-                    {/* Bloc Texte */}
-                    <div className="flex-1 flex flex-col gap-8 md:gap-10 text-left pr-0 md:pr-12">
-                      
-                      {/* Titre principal */}
-                      <div className="flex flex-col gap-2 mb-2">
-                        <span className="font-sans text-[10px] md:text-xs uppercase tracking-widest text-white/40">{activeProject.category}</span>
-                        <h3 className="font-serif text-3xl md:text-4xl lg:text-5xl text-white leading-tight">{activeProject.title}</h3>
-                      </div>
+                    <motion.div
+                      className="w-[260px] h-[360px] md:w-[350px] md:h-[480px] rounded-2xl"
+                      animate={isActive && activeFlipped ? {
+                        y: -15,
+                        boxShadow: "0 40px 100px rgba(0,0,0,0.8), 0 0 80px rgba(255,255,255,0.06)"
+                      } : {
+                        y: 0,
+                        boxShadow: "0 0 0 rgba(0,0,0,0)"
+                      }}
+                      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                    >
+                      <FlipCard 
+                        key={`${project.id}-${isActive}`}
+                        className="w-full h-full cursor-pointer group"
+                        isFlippable={isActive}
+                        onFlipChange={(flipped) => handleFlipChange(flipped, index)}
+                        frontImage={project.coverPath}
+                        frontContent={
+                          <div className="absolute inset-0 flex items-center justify-center p-8 bg-black/40 backdrop-blur-[2px]">
+                            {project.logoPath ? (
+                              <div className="relative w-4/5 h-1/2 drop-shadow-2xl transition-transform duration-500 group-hover:scale-105">
+                                <Image src={project.logoPath} alt={`${project.title} logo`} fill className="object-contain" unoptimized />
+                              </div>
+                            ) : (
+                              <h3 className="font-serif text-3xl md:text-4xl text-white drop-shadow-2xl transition-transform duration-500 group-hover:scale-105">{project.title}</h3>
+                            )}
+                          </div>
+                        }
+                        backContent={
+                          <div className="absolute inset-0 w-full h-full overflow-hidden rounded-2xl">
+                            {/* Wrapper pour future vidéo. Actuellement une image. */}
+                            <Image 
+                              src={project.galleryPaths && project.galleryPaths.length > 0 ? project.galleryPaths[0] : project.coverPath} 
+                              alt={`${project.title} aperçu`} 
+                              fill 
+                              className="object-cover" 
+                              unoptimized 
+                            />
+                            {/* Overlay sombre très léger pour que l'image paraisse propre */}
+                            <div className="absolute inset-0 bg-black/10" />
+                          </div>
+                        }
+                      />
+                    </motion.div>
 
-                      <div className="w-8 h-px bg-white/20" />
+                  </motion.div>
+                )
+              })}
+            </div>
 
-                      {/* Le Problème */}
-                      <div className="flex flex-col gap-2">
-                        <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.25em] text-white/30">{t('challenge')}</span>
-                        <p className="font-sans text-xs md:text-sm text-white/70 leading-[1.8] font-light">
-                          {activeProject.problem}
-                        </p>
-                      </div>
+            {/* ─── PANNEAU ÉDITORIAL PREMIUM (Dark Card) ─── */}
+            <AnimatePresence>
+              {activeFlipped && activeProject && (
+                <motion.div
+                  initial={{ opacity: 0, y: 30, height: 0 }}
+                  animate={{ opacity: 1, y: 0, height: 'auto' }}
+                  exit={{ opacity: 0, y: 30, height: 0 }}
+                  transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  className="w-full max-w-5xl mx-auto overflow-hidden mt-12 md:mt-20"
+                >
+                  {/* ── Styles pour le dot animé et le ray ── */}
+                  <style dangerouslySetInnerHTML={{ __html: `
+                    @keyframes moveDotPanel {
+                      0%, 100% { top: 8%; right: 8%; }
+                      25% { top: 8%; right: calc(100% - 30px); }
+                      50% { top: calc(100% - 24px); right: calc(100% - 30px); }
+                      75% { top: calc(100% - 24px); right: 8%; }
+                    }
+                    .panel-dot {
+                      width: 5px;
+                      aspect-ratio: 1;
+                      position: absolute;
+                      background-color: #fff;
+                      box-shadow: 0 0 10px #ffffff, 0 0 20px rgba(255,255,255,0.3);
+                      border-radius: 100px;
+                      z-index: 20;
+                      animation: moveDotPanel 8s linear infinite;
+                    }
+                  `}} />
 
-                      {/* La Vision */}
-                      <div className="flex flex-col gap-2">
-                        <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.25em] text-white/30">{t('vision')}</span>
-                        <div className="space-y-4">
-                          <p className="font-serif text-sm md:text-base text-white/90 leading-[1.8]">
-                            {activeProject.solution}
-                          </p>
-                          <p className="font-sans text-[11px] md:text-xs text-white/50 leading-[1.9] font-light">
-                            {t('vision_text', { title: activeProject.title, material: activeProject.material })}
-                          </p>
+                  {/* Outer — Gradient border wrapper */}
+                  <div 
+                    className="mx-4 md:mx-0 relative"
+                    style={{
+                      borderRadius: '16px',
+                      padding: '1px',
+                      background: 'radial-gradient(circle 600px at 0% 0%, #ffffff, #0c0d0d)',
+                    }}
+                  >
+                    {/* Dot lumineux animé */}
+                    <div className="panel-dot" />
+
+                    {/* Inner Card */}
+                    <div 
+                      className="relative w-full overflow-hidden"
+                      style={{
+                        borderRadius: '15px',
+                        border: '1px solid #202222',
+                        background: 'radial-gradient(circle 800px at 0% 0%, #333333, #0c0d0d)',
+                      }}
+                    >
+                      {/* Ray — faisceau lumineux */}
+                      <div 
+                        className="absolute pointer-events-none"
+                        style={{
+                          width: '280px',
+                          height: '50px',
+                          borderRadius: '100px',
+                          backgroundColor: '#c7c7c7',
+                          opacity: 0.3,
+                          boxShadow: '0 0 60px #fff',
+                          filter: 'blur(12px)',
+                          transformOrigin: '10%',
+                          top: '0%',
+                          left: '0',
+                          transform: 'rotate(40deg)',
+                          zIndex: 1,
+                        }}
+                      />
+
+                      {/* ── Lignes internes à ~8% — cadre de respiration ── */}
+                      <div className="absolute pointer-events-none" style={{ top: '8%', left: 0, right: 0, height: '1px', background: 'linear-gradient(90deg, #888888 30%, #1d1f1f 70%)' }} />
+                      <div className="absolute pointer-events-none" style={{ bottom: '8%', left: 0, right: 0, height: '1px', background: 'linear-gradient(90deg, #2c2c2c 30%, #1d1f1f 70%)' }} />
+                      <div className="absolute pointer-events-none" style={{ left: '5%', top: 0, bottom: 0, width: '1px', background: 'linear-gradient(180deg, #747474 30%, #222424 70%)' }} />
+                      <div className="absolute pointer-events-none" style={{ right: '5%', top: 0, bottom: 0, width: '1px', background: 'linear-gradient(180deg, #2c2c2c 30%, #222424 70%)' }} />
+
+                      {/* ── Contenu à l'intérieur du cadre ── */}
+                      <div className="relative z-10 flex flex-col md:flex-row items-stretch" style={{ padding: '10% 7%' }}>
+                        
+                        {/* Bloc Texte */}
+                        <div className="flex-1 flex flex-col gap-8 md:gap-10 text-left pr-0 md:pr-12">
+                          <div className="flex flex-col gap-2 mb-2">
+                            <span className="font-sans text-[10px] md:text-xs uppercase tracking-widest text-white/40">{activeProject.category}</span>
+                            <h3 className="font-serif text-3xl md:text-4xl lg:text-5xl text-white leading-tight">{activeProject.title}</h3>
+                          </div>
+
+                          <div className="w-8 h-px bg-white/20" />
+
+                          {/* Le Problème */}
+                          <div className="flex flex-col gap-2">
+                            <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.25em] text-white/30">{t('challenge')}</span>
+                            <p className="font-sans text-xs md:text-sm text-white/70 leading-[1.8] font-light">
+                              {activeProject.problem}
+                            </p>
+                          </div>
+
+                          {/* La Vision */}
+                          <div className="flex flex-col gap-2">
+                            <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.25em] text-white/30">{t('vision')}</span>
+                            <div className="space-y-4">
+                              <p className="font-serif text-sm md:text-base text-white/90 leading-[1.8]">
+                                {activeProject.solution}
+                              </p>
+                              <p className="font-sans text-[11px] md:text-xs text-white/50 leading-[1.9] font-light">
+                                {t('vision_text', { title: activeProject.title, material: activeProject.material })}
+                              </p>
+                            </div>
+                          </div>
+                          
+                          <div className="w-10 h-px bg-white/10" />
+
+                          {/* Badges Deliverables */}
+                          <div className="flex flex-wrap gap-2.5">
+                            {activeProject.deliverables.map(d => (
+                              <span 
+                                key={d} 
+                                className="font-sans text-[8px] md:text-[9px] uppercase tracking-[0.15em] text-white/60"
+                                style={{
+                                  padding: '7px 16px',
+                                  borderRadius: '100px',
+                                  border: '1px solid rgba(255,255,255,0.1)',
+                                  background: 'rgba(255,255,255,0.04)',
+                                }}
+                              >
+                                {d}
+                              </span>
+                            ))}
+                          </div>
+
+                          {activeProject.isConceptual && (
+                            <p className="text-[10px] text-white/25 italic mt-1 font-light">
+                              {t('conceptual_note')}
+                            </p>
+                          )}
+                        </div>
+
+                        {/* Bloc Image */}
+                        <div className="w-full md:w-[44%] flex items-center justify-center mt-8 md:mt-0">
+                          <ProjectMiniCarousel 
+                            images={activeProject.galleryPaths.length > 0 ? activeProject.galleryPaths : [activeProject.coverPath]} 
+                          />
                         </div>
                       </div>
-                      
-                      {/* Séparateur */}
-                      <div className="w-10 h-px bg-white/10" />
 
-                      {/* Badges Deliverables */}
-                      <div className="flex flex-wrap gap-2.5">
-                        {activeProject.deliverables.map(d => (
-                          <span 
-                            key={d} 
-                            className="font-sans text-[8px] md:text-[9px] uppercase tracking-[0.15em] text-white/60"
-                            style={{
-                              padding: '7px 16px',
-                              borderRadius: '100px',
-                              border: '1px solid rgba(255,255,255,0.1)',
-                              background: 'rgba(255,255,255,0.04)',
-                            }}
-                          >
-                            {d}
-                          </span>
-                        ))}
-                      </div>
-
-                      {activeProject.isConceptual && (
-                        <p className="text-[10px] text-white/25 italic mt-1 font-light">
-                          {t('conceptual_note')}
-                        </p>
-                      )}
-                    </div>
-
-                    {/* Bloc Image */}
-                    <div className="w-full md:w-[44%] flex items-center justify-center mt-8 md:mt-0">
-                      <ProjectMiniCarousel 
-                        images={activeProject.galleryPaths.length > 0 ? activeProject.galleryPaths : [activeProject.coverPath]} 
-                      />
                     </div>
                   </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-                </div>
+      <AnimatePresence>
+        {!activeFlipped && !activeFictionalFlipped && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="w-full flex justify-center py-40"
+          >
+            {/* Grand séparateur stylisé */}
+            <div className="relative flex flex-col items-center justify-center gap-6">
+              <div className="w-px h-32 bg-gradient-to-b from-transparent via-ink/20 to-transparent" />
+              <div className="px-8 py-3 rounded-full border border-ink/10 bg-ink/[0.02] backdrop-blur-sm shadow-[0_4px_30px_rgba(0,0,0,0.02)] flex items-center gap-3">
+                <span className="w-1.5 h-1.5 rounded-full bg-ink/30" />
+                <span className="font-sans uppercase tracking-[0.2em] text-[10px] text-ink-soft">Exploration Continues</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-ink/30" />
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+              <div className="w-px h-32 bg-gradient-to-b from-transparent via-ink/20 to-transparent" />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      <div className="w-full max-w-6xl mx-auto px-4 flex flex-col items-center gap-12 relative z-10 mt-32">
-        {/* Titre central Fictif */}
-        <motion.div 
-          className="text-center flex flex-col gap-4"
-          initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-        >
-          <h1 className="font-serif text-4xl md:text-5xl text-ink">
+      <AnimatePresence>
+        {!activeFlipped && (
+          <motion.div 
+            key="section-fictif"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+            className="w-full max-w-6xl mx-auto px-4 flex flex-col items-center gap-12 relative z-10 overflow-hidden pb-32"
+          >
+            {/* Titre central Fictif */}
+            <motion.div 
+              className="text-center flex flex-col gap-4"
+              initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+            >
+              <h1 className="font-serif text-4xl md:text-5xl text-ink">
             Visions Fictives
           </h1>
           <p className="text-ink-soft font-light text-sm md:text-base">Exploration conceptuelle des matières à travers des marques mondiales.</p>
@@ -631,8 +651,9 @@ export default function RealisationsPage() {
             </motion.div>
           )}
         </AnimatePresence>
-
-      </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </main>
   )
 }
