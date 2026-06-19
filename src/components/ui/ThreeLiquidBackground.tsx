@@ -66,9 +66,11 @@ const fragmentShader = `
     vec3 finalColor = mix(color1, color2, fluid);
     finalColor = mix(finalColor, color3, n2);
 
-    gl_FragColor = vec4(finalColor, 1.0);
+    // Alpha dynamique pour laisser passer la "planche de luminosité" derrière
+    float alpha = mix(0.4, 0.9, fluid);
+    gl_FragColor = vec4(finalColor, alpha);
   }
-`
+\`
 
 function LiquidPlane() {
   const materialRef = useRef<THREE.ShaderMaterial>(null)
@@ -98,6 +100,7 @@ function LiquidPlane() {
         vertexShader={vertexShader}
         fragmentShader={fragmentShader}
         uniforms={uniforms}
+        transparent={true}
       />
     </mesh>
   )

@@ -73,6 +73,8 @@ export default async function RootLayout({
       </head>
       <body className="glass-bg transition-colors duration-700 ease-in-out">
         <NextIntlClientProvider messages={messages}>
+          {/* Planche de luminosité animée en arrière-plan extrême */}
+          <div className="fixed inset-0 -z-30 pointer-events-none moving-light-board" />
           <ThreeLiquidBackground />
           <ThemeProvider />
           <RainBackground />
