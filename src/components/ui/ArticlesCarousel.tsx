@@ -1,14 +1,17 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { motion, useReducedMotion } from 'framer-motion'
+import { motion, useReducedMotion, AnimatePresence } from 'framer-motion'
 import { FlipCard } from '@/components/ui/FlipCard'
 import Image from 'next/image'
+import { GlassPanel } from '@/components/ui/GlassPanel'
 
 export interface Article {
   id: string | number
   title: string
   coverPath: string
+  content?: string
+  image?: string
 }
 
 export function ArticlesCarousel({ articles }: { articles: Article[] }) {
@@ -17,6 +20,8 @@ export function ArticlesCarousel({ articles }: { articles: Article[] }) {
   const [hasEntered, setHasEntered] = useState(false)
   const [entranceComplete, setEntranceComplete] = useState(false)
   const prefersReducedMotion = useReducedMotion()
+
+  const activeArticle = articles[activeIndex]
 
   useEffect(() => {
     const startTimer = setTimeout(() => setHasEntered(true), 100)
@@ -50,102 +55,138 @@ export function ArticlesCarousel({ articles }: { articles: Article[] }) {
   if (!articles || articles.length === 0) return null
 
   return (
-    <div className="relative w-full h-[400px] md:h-[500px] flex items-center justify-center mt-8" style={{ perspective: '1200px' }}>
-      {articles.map((article, index) => {
-        const offset = index - activeIndex
-        const isActive = offset === 0
+    <div className="w-full flex flex-col items-center">
+      <div className="relative w-full h-[400px] md:h-[500px] flex items-center justify-center mt-8" style={{ perspective: '1200px' }}>
+        {articles.map((article, index) => {
+          const offset = index - activeIndex
+          const isActive = offset === 0
 
-        const isInactiveFlippedState = activeFlipped && !isActive
-        const translateX = offset * (typeof window !== 'undefined' && window.innerWidth < 768 ? 120 : 240)
-        const translateZ = Math.abs(offset) * -200 + (isInactiveFlippedState ? -150 : 0) + (isActive && activeFlipped ? 40 : 0)
-        const rotateY = offset * -25
-        const scale = 1 - Math.abs(offset) * 0.1
-        const opacity = isInactiveFlippedState 
-          ? Math.max(0, 1 - Math.abs(offset) * 0.3 - 0.6)
-          : 1 - Math.abs(offset) * 0.3
-        const zIndex = isActive && activeFlipped ? 100 : 50 - Math.abs(offset)
-        
-        const filterBlur = isInactiveFlippedState
-            ? `blur(${Math.abs(offset) * 4 + 16}px) brightness(0.2)`
-            : Math.abs(offset) > 0 ? `blur(${Math.abs(offset) * 4}px)` : 'blur(0px)'
+          const isInactiveFlippedState = activeFlipped && !isActive
+          const translateX = offset * (typeof window !== 'undefined' && window.innerWidth < 768 ? 120 : 240)
+          const translateZ = Math.abs(offset) * -200 + (isInactiveFlippedState ? -150 : 0) + (isActive && activeFlipped ? 40 : 0)
+          const rotateY = offset * -25
+          const scale = 1 - Math.abs(offset) * 0.1
+          const opacity = isInactiveFlippedState 
+            ? Math.max(0, 1 - Math.abs(offset) * 0.3 - 0.6)
+            : 1 - Math.abs(offset) * 0.3
+          const zIndex = isActive && activeFlipped ? 100 : 50 - Math.abs(offset)
+          
+          const filterBlur = isInactiveFlippedState
+              ? `blur(${Math.abs(offset) * 4 + 16}px) brightness(0.2)`
+              : Math.abs(offset) > 0 ? `blur(${Math.abs(offset) * 4}px)` : 'blur(0px)'
 
-        const staggerDelay = getStaggerDelay(index)
+          const staggerDelay = getStaggerDelay(index)
 
-        const entranceInitial = prefersReducedMotion ? false : {
-          x: 0,
-          z: -600,
-          rotateY: 0,
-          scale: 0.3,
-          opacity: 0,
-          filter: 'blur(20px)',
-        }
+          const entranceInitial = prefersReducedMotion ? false : {
+            x: 0,
+            z: -600,
+            rotateY: 0,
+            scale: 0.3,
+            opacity: 0,
+            filter: 'blur(20px)',
+          }
 
-        const entranceAnimate = hasEntered ? {
-          x: translateX,
-          z: translateZ,
-          rotateY: rotateY,
-          scale: scale,
-          opacity: opacity,
-          filter: filterBlur,
-        } : entranceInitial
+          const entranceAnimate = hasEntered ? {
+            x: translateX,
+            z: translateZ,
+            rotateY: rotateY,
+            scale: scale,
+            opacity: opacity,
+            filter: filterBlur,
+          } : entranceInitial
 
-        return (
-          <motion.div
-            key={article.id}
-            className="absolute top-0 bottom-0 flex flex-col items-center justify-center cursor-pointer"
-            style={{ zIndex }}
-            initial={entranceInitial as any}
-            animate={entranceAnimate as any}
-            transition={
-              !hasEntered 
-                ? { duration: 0.01 }
-                : entranceComplete
-                  ? { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }
-                  : {
-                      duration: getEntranceDuration(),
-                      delay: staggerDelay,
-                      ease: [0.25, 0.46, 0.45, 0.94],
-                    }
-            }
-            onClick={() => handleCardClick(index)}
-          >
+          return (
             <motion.div
-              className="w-[240px] h-[340px] md:w-[300px] md:h-[420px] rounded-2xl"
-              animate={isActive && activeFlipped ? {
-                y: -15,
-                boxShadow: "0 40px 100px rgba(0,0,0,0.8), 0 0 80px rgba(255,255,255,0.06)"
-              } : {
-                y: 0,
-                boxShadow: "0 0 0 rgba(0,0,0,0)"
-              }}
-              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+              key={article.id}
+              className="absolute top-0 bottom-0 flex flex-col items-center justify-center cursor-pointer"
+              style={{ zIndex }}
+              initial={entranceInitial as any}
+              animate={entranceAnimate as any}
+              transition={
+                !hasEntered 
+                  ? { duration: 0.01 }
+                  : entranceComplete
+                    ? { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }
+                    : {
+                        duration: getEntranceDuration(),
+                        delay: staggerDelay,
+                        ease: [0.25, 0.46, 0.45, 0.94],
+                      }
+              }
+              onClick={() => handleCardClick(index)}
             >
-              <FlipCard 
-                key={`${article.id}-${isActive}`}
-                className="w-full h-full cursor-pointer group"
-                isFlippable={isActive}
-                onFlipChange={(flipped) => handleFlipChange(flipped, index)}
-                frontImage={article.coverPath}
-                frontContent={
-                  <div className="absolute inset-0 flex items-center justify-center p-8 bg-black/40 backdrop-blur-[2px]">
-                    <h3 className="font-serif text-2xl md:text-3xl text-white drop-shadow-2xl transition-transform duration-500 group-hover:scale-105 text-center">
-                      {article.title}
-                    </h3>
-                  </div>
-                }
-                backContent={
-                  <div className="absolute inset-0 w-full h-full overflow-hidden rounded-2xl bg-black flex flex-col items-center justify-center p-6 text-center">
-                    <p className="text-white/80 text-sm mb-4">Read Article</p>
-                    <div className="px-6 py-2 border border-white/20 rounded-full text-white text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-colors">
-                      Discover
+              <motion.div
+                className="w-[240px] h-[340px] md:w-[300px] md:h-[420px] rounded-2xl"
+                animate={isActive && activeFlipped ? {
+                  y: -15,
+                  boxShadow: "0 40px 100px rgba(0,0,0,0.8), 0 0 80px rgba(255,255,255,0.06)"
+                } : {
+                  y: 0,
+                  boxShadow: "0 0 0 rgba(0,0,0,0)"
+                }}
+                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+              >
+                <FlipCard 
+                  key={`${article.id}-${isActive}`}
+                  className="w-full h-full cursor-pointer group"
+                  isFlippable={isActive}
+                  onFlipChange={(flipped) => handleFlipChange(flipped, index)}
+                  frontImage={article.coverPath}
+                  frontContent={
+                    <div className="absolute inset-0 flex items-center justify-center p-8 bg-black/40 backdrop-blur-[2px]">
+                      <h3 className="font-serif text-2xl md:text-3xl text-white drop-shadow-2xl transition-transform duration-500 group-hover:scale-105 text-center">
+                        {article.title}
+                      </h3>
                     </div>
-                  </div>
-                }
-              />
+                  }
+                  backContent={
+                    <div className="absolute inset-0 w-full h-full overflow-hidden rounded-2xl bg-black flex flex-col items-center justify-center p-6 text-center">
+                      <p className="text-white/80 text-sm mb-4">Read Article</p>
+                      <div className="px-6 py-2 border border-white/20 rounded-full text-white text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-colors">
+                        Discover
+                      </div>
+                    </div>
+                  }
+                />
+              </motion.div>
             </motion.div>
+          )
+        })}
+      </div>
+
+      {/* ─── DÉTAIL DE L'ARTICLE (S'AFFICHE QUAND LA CARTE EST RETOURNÉE) ─── */}
+      <AnimatePresence>
+        {activeFlipped && activeArticle && (
+          <motion.div
+            initial={prefersReducedMotion ? false : { opacity: 0, height: 0, y: -20 }}
+            animate={{ opacity: 1, height: 'auto', y: 0 }}
+            exit={{ opacity: 0, height: 0, y: -20, transition: { duration: 0.3 } }}
+            transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+            className="w-full max-w-5xl mx-auto mt-16 px-4"
+          >
+            <GlassPanel className="p-8 md:p-12 border-ink/5 w-full flex flex-col md:flex-row gap-10">
+              <div className="flex-1 text-left flex flex-col gap-6">
+                <h2 className="font-serif text-3xl md:text-4xl text-ink leading-tight">{activeArticle.title}</h2>
+                <div className="w-16 h-[1px] bg-ink/20" />
+                <p className="text-sm md:text-base text-ink-soft leading-relaxed font-light whitespace-pre-wrap">
+                  {activeArticle.content}
+                </p>
+              </div>
+              {activeArticle.image && (
+                <div className="w-full md:w-1/2 aspect-[4/3] relative rounded-2xl overflow-hidden shadow-2xl">
+                  <Image 
+                    src={activeArticle.image}
+                    alt={activeArticle.title}
+                    fill
+                    className="object-cover"
+                    unoptimized
+                  />
+                </div>
+              )}
+            </GlassPanel>
           </motion.div>
-        )
-      })}
+        )}
+      </AnimatePresence>
     </div>
   )
 }

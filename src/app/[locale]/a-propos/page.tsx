@@ -15,11 +15,41 @@ export default function AboutPage() {
   const t = useTranslations('About')
 
   const mockArticles = [
-    { id: 1, title: 'Article 1', coverPath: '/images/mascot_placeholder.png' },
-    { id: 2, title: 'Article 2', coverPath: '/images/mascot_placeholder.png' },
-    { id: 3, title: 'Article 3', coverPath: '/images/mascot_placeholder.png' },
-    { id: 4, title: 'Article 4', coverPath: '/images/mascot_placeholder.png' },
-    { id: 5, title: 'Article 5', coverPath: '/images/mascot_placeholder.png' },
+    { 
+      id: 1, 
+      title: 'Identité Numérique', 
+      coverPath: '/images/mascot_placeholder.png',
+      image: '/images/mascot_placeholder.png',
+      content: "La présence digitale n'est plus un simple canal de diffusion, elle est devenue l'extension virtuelle de l'âme de votre marque.\n\nChez GRIFZ studio, nous abordons la création de sites web non pas comme du simple code, mais comme la sculpture d'une matière vivante. Chaque pixel, chaque interaction est pensée pour refléter l'essence même de ce que vous représentez. Nous forgeons des expériences qui marquent les esprits et transforment les visiteurs en ambassadeurs."
+    },
+    { 
+      id: 2, 
+      title: 'Le Web 3D', 
+      coverPath: '/images/mascot_placeholder.png',
+      image: '/images/mascot_placeholder.png',
+      content: "L'immersion est la nouvelle norme de l'expérience utilisateur premium.\n\nL'intégration de la 3D en temps réel via WebGL et Three.js permet de briser la barrière de l'écran plat. Nous ne concevons plus des pages, mais des environnements spatiaux où la lumière, la texture et la physique répondent aux actions de l'utilisateur. Cette approche sensorielle crée un lien émotionnel instantané entre le produit digital et son public."
+    },
+    { 
+      id: 3, 
+      title: 'Matière & Lumière', 
+      coverPath: '/images/mascot_placeholder.png',
+      image: '/images/mascot_placeholder.png',
+      content: "Le design web moderne trouve son inspiration dans le monde physique.\n\nNos interfaces s'inspirent du verre, du métal, de l'eau et de la lumière. En maîtrisant les shaders et la réfraction en temps réel, nous parvenons à donner un poids, une épaisseur et une chaleur aux éléments numériques. C'est ce mariage entre brutalité de la matière et pureté du code qui définit l'esthétique unique de GRIFZ studio."
+    },
+    { 
+      id: 4, 
+      title: 'Performance', 
+      coverPath: '/images/mascot_placeholder.png',
+      image: '/images/mascot_placeholder.png',
+      content: "Une expérience premium exige une vélocité sans faille.\n\nDerrière chaque animation fluide à 60 images par seconde se cache une ingénierie rigoureuse. L'utilisation de technologies de pointe comme Next.js et Framer Motion nous permet d'orchestrer des chorégraphies visuelles complexes tout en conservant des temps de chargement imperceptibles et un référencement optimal."
+    },
+    { 
+      id: 5, 
+      title: 'Vision Studio', 
+      coverPath: '/images/mascot_placeholder.png',
+      image: '/images/mascot_placeholder.png',
+      content: "L'artisanat digital est notre philosophie fondamentale.\n\nNous refusons les templates préfabriqués et l'industrialisation du design. Chaque projet qui sort du studio est traité comme une pièce unique, sculptée à la main. Notre méthodologie fusionne le design avant-gardiste et l'ingénierie logicielle pour donner naissance à des plateformes qui transcendent les standards habituels d'Internet."
+    },
   ]
 
   return (
