@@ -70,7 +70,7 @@ const fragmentShader = `
     float alpha = mix(0.4, 0.9, fluid);
     gl_FragColor = vec4(finalColor, alpha);
   }
-\`
+`
 
 function LiquidPlane() {
   const materialRef = useRef<THREE.ShaderMaterial>(null)
