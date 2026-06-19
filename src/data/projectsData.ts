@@ -22,7 +22,7 @@ export const projects: Project[] = [
     title: 'U.O.H.S',
     category: 'Concept interne',
     material: 'charbon',
-    rainColor: '#cd7f32', // Bronze métal
+    rainColor: '#d2c8bc', // Argent et bronze léger
     isConceptual: true,
     problem: 'Créer une identité forte, ancrée dans un univers texturé et mystérieux, pour un concept institutionnel fictif.',
     solution: 'Développement d\'une iconographie riche et sombre, exploitant des matières brutes et un design éditorial sophistiqué.',
