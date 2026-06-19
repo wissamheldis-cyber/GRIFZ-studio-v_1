@@ -123,7 +123,7 @@ export default function Header() {
             </div>
             
             {/* Dynamic Label */}
-            <div className="absolute top-[100%] mt-2 left-1/2 -translate-x-1/2 whitespace-nowrap h-[24px] flex items-center justify-center pointer-events-none">
+            <div className="absolute top-[100%] mt-16 left-1/2 -translate-x-1/2 whitespace-nowrap h-[24px] flex items-center justify-center pointer-events-none">
               <AnimatePresence mode="wait">
                 {(hoveredLabel || (showCurrent && currentLabel)) && (
                   <motion.span
