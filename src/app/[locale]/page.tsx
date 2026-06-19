@@ -47,7 +47,13 @@ export default function HomePage() {
             {...fadeUp(0.25)}
             className="w-full flex justify-center"
           >
-            <WireframeSphere size={240} items={24} />
+            <WireframeSphere 
+              size={240} 
+              items={24} 
+              color="rgba(0, 0, 0, 0.4)" 
+              glow1="rgba(0, 0, 0, 0.05)" 
+              glow2="rgba(0, 0, 0, 0.1)" 
+            />
           </motion.div>
 
           <style dangerouslySetInnerHTML={{ __html: `

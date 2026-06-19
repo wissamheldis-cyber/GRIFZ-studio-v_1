@@ -16,6 +16,7 @@ interface WireframeSphereProps {
 export default function WireframeSphere({
   size = 333,
   items = 32,
+  color = 'transparent',
   glow1 = 'rgba(255, 255, 255, 0.1)',
   glow2 = 'rgba(255, 255, 255, 0.2)',
   duration = 16,
@@ -46,6 +47,7 @@ export default function WireframeSphere({
           top: 0;
           left: 0;
           border-radius: 50%;
+          border: 1px solid ${color};
           transform-style: preserve-3d;
           backface-visibility: visible;
           box-shadow: 0 0 ${size/4}px 0 ${glow1}, inset 0 0 ${size/4}px 0 ${glow2};
