@@ -17,15 +17,15 @@ export default function Header() {
 
   /* ─── Navigation ─────────────────────────────────────────── */
   const LEFT_LINKS = [
-    { href: '/',            label: t('nav_home') },
-    { href: '/realisations', label: t('nav_works') },
-    { href: '/catalogue',   label: t('nav_catalog') },
+    { href: '/',            label: t('nav_home'),    image: '/orb/home.png' },
+    { href: '/realisations', label: t('nav_works'),   image: '/orb/works.png' },
+    { href: '/catalogue',   label: t('nav_catalog'), image: '/orb/catalog.png' },
   ]
 
   const RIGHT_LINKS = [
-    { href: '/reservation', label: t('nav_reservation') },
-    { href: '/a-propos',    label: t('nav_about') },
-    { href: '/compte',      label: t('nav_account') },
+    { href: '/reservation', label: t('nav_reservation'), image: '/orb/booking.png' },
+    { href: '/a-propos',    label: t('nav_about'),       image: '/orb/about.png' },
+    { href: '/compte',      label: t('nav_account'),     image: '/orb/account.png' },
   ]
 
   return (
@@ -119,19 +119,11 @@ export default function Header() {
                   href={link.href}
                   className={`group whitespace-nowrap flex items-center gap-2 md:gap-[10px] no-underline transition-all duration-300 ${curveClass}`}
                 >
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-header)',
-                      fontWeight: active ? 400 : 300,
-                      color: active ? 'var(--ink)' : 'var(--muted)',
-                      letterSpacing: '0.05em',
-                      transition: 'all 0.3s ease',
-                      textTransform: active ? 'uppercase' : 'none',
-                    }}
-                    className="text-[11px] md:text-[14px] lg:text-[15px] group-hover:text-ink"
+                  <div
+                    className={`transition-all duration-300 ${active ? 'scale-110 drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]' : 'opacity-70 group-hover:opacity-100 group-hover:scale-105'}`}
                   >
-                    {link.label}
-                  </span>
+                    <Image src={link.image} alt={link.label} width={36} height={36} className="object-contain" unoptimized />
+                  </div>
                   <span
                     className="text-[14px] md:text-[18px] w-[8px] md:w-[12px] flex items-center justify-center transition-colors duration-300 group-hover:text-ink"
                     style={{
@@ -168,19 +160,11 @@ export default function Header() {
                   >
                     {active ? '•' : '·'}
                   </span>
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-header)',
-                      fontWeight: active ? 400 : 300,
-                      color: active ? 'var(--ink)' : 'var(--muted)',
-                      letterSpacing: '0.05em',
-                      transition: 'all 0.3s ease',
-                      textTransform: active ? 'uppercase' : 'none',
-                    }}
-                    className="text-[11px] md:text-[14px] lg:text-[15px] group-hover:text-ink"
+                  <div
+                    className={`transition-all duration-300 ${active ? 'scale-110 drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]' : 'opacity-70 group-hover:opacity-100 group-hover:scale-105'}`}
                   >
-                    {link.label}
-                  </span>
+                    <Image src={link.image} alt={link.label} width={36} height={36} className="object-contain" unoptimized />
+                  </div>
                 </Link>
               )
             })}
