@@ -43,6 +43,38 @@ export default function AboutPage() {
           <h3 className="font-serif text-2xl text-ink mt-12 mb-4">5. Vers l'évolution 360</h3>
           <p>Créer un site vitrine n'est que la première étape. L'objectif final est la 360 Digital Evolution. Cela signifie que la marque doit exister de manière cohérente à travers tous ses points de contact numériques. Le site web agit comme le soleil central de ce système solaire, irradiant sa qualité et ses codes esthétiques vers l'ensemble de votre communication.</p>
           <p>C'est la promesse de GRIFZ studio : ne pas vous livrer un simple outil de communication, mais l'arme absolue de votre domination numérique.</p>
+
+          <h3 className="font-serif text-2xl text-ink mt-12 mb-4">6. La chorégraphie des pixels</h3>
+          <p>Le mouvement est le langage universel de l'interaction. Une transition abrupte brise l'immersion, tandis qu'une animation fluide, calée sur une courbe de Bézier parfaitement étudiée, guide l'œil et l'esprit. Chez GRIFZ studio, chaque élément qui entre ou sort de l'écran suit une chorégraphie stricte.</p>
+          <p>Nous passons des heures à peaufiner la physique de nos animations pour qu'elles semblent naturelles. Un bouton ne se contente pas de changer de couleur, il respire, il s'enfonce avec une inertie réaliste. C'est dans ce niveau obsessionnel de micro-détails que réside le véritable luxe digital.</p>
+
+          <h3 className="font-serif text-2xl text-ink mt-12 mb-4">7. L'acoustique visuelle</h3>
+          <p>Bien que le web soit principalement un médium visuel, nous concevons nos interfaces avec ce que nous appelons une "acoustique visuelle". Chaque interaction doit résonner dans l'esprit de l'utilisateur comme un son clair et pur. L'espacement, le rythme typographique et le contraste agissent comme des notes de musique.</p>
+          <p>Un design silencieux est un design mort. Nos interfaces murmurent à travers des halos lumineux subtils, et s'expriment à pleine voix lors des défilements parallaxe. Le résultat est une symphonie numérique où rien n'est laissé au hasard.</p>
+
+          <div className="w-full relative h-[300px] md:h-[400px] rounded-2xl overflow-hidden shadow-xl mt-16 mb-12">
+            <Image 
+              src="/images/mascot_placeholder.png" 
+              alt="Immersion Digitale" 
+              fill 
+              className="object-cover"
+              unoptimized
+            />
+            <div className="absolute inset-0 bg-black/10 backdrop-blur-[2px]" />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="font-sans text-white/50 tracking-widest uppercase text-sm">GRIFZ Vision</span>
+            </div>
+          </div>
+
+          <div className="flex justify-center mt-12 pb-12">
+            <Link 
+              href="/realisations"
+              className="group relative px-8 py-4 bg-ink text-white rounded-full overflow-hidden transition-all duration-500 hover:shadow-2xl hover:scale-105"
+            >
+              <span className="relative z-10 font-sans uppercase tracking-[0.15em] text-sm font-medium">Nos réalisations</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-in-out" />
+            </Link>
+          </div>
         </>
       )
     },
