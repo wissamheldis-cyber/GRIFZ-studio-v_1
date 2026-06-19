@@ -6,6 +6,7 @@ export interface Project {
   title: string;
   category: ProjectCategory;
   material: MaterialTheme;
+  rainColor?: string;
   isConceptual: boolean;
   problem: string;
   solution: string;
@@ -21,6 +22,7 @@ export const projects: Project[] = [
     title: 'U.O.H.S',
     category: 'Concept interne',
     material: 'charbon',
+    rainColor: '#cd7f32', // Bronze métal
     isConceptual: true,
     problem: 'Créer une identité forte, ancrée dans un univers texturé et mystérieux, pour un concept institutionnel fictif.',
     solution: 'Développement d\'une iconographie riche et sombre, exploitant des matières brutes et un design éditorial sophistiqué.',
@@ -38,6 +40,7 @@ export const projects: Project[] = [
     title: 'Redthorn',
     category: 'Concept interne',
     material: 'cuir',
+    rainColor: '#e60000', // Rouge pétant
     isConceptual: true,
     problem: 'Explorer les limites de la direction artistique autour d\'une esthétique organique et luxueuse.',
     solution: 'Création d\'un branding complet intégrant des textures de cuir et des teintes chaudes, évoquant un héritage intemporel.',
@@ -51,6 +54,7 @@ export const projects: Project[] = [
     title: 'SHOU games tv',
     category: 'Contenu',
     material: 'emeraude',
+    rainColor: '#d4af37', // Doré qui tend vers le noir
     isConceptual: true,
     problem: 'Imaginer un univers visuel pour du contenu gaming alliant élégance et dynamisme.',
     solution: 'Un système visuel basé sur l\'émeraude, avec des contrastes profonds et des typographies lisibles pour les miniatures et le contenu.',
@@ -67,6 +71,7 @@ export const projects: Project[] = [
     title: 'SHOU edition',
     category: 'Direction artistique',
     material: 'verre',
+    rainColor: '#d4af37', // Encore une fois la même couleur dorée
     isConceptual: true,
     problem: 'Concevoir l\'identité visuelle d\'une maison d\'édition au positionnement premium et épuré.',
     solution: 'Utilisation de l\'esthétique du verre, jouant sur la transparence, les espaces blancs et une typographie minimale.',
@@ -75,30 +80,12 @@ export const projects: Project[] = [
     coverPath: '/works realisations/SHOU edition/am articles.png',
     galleryPaths: []
   },
-  /* {
-    id: 'pick-a-trip',
-    title: 'Pick a trip',
-    category: 'Direction artistique',
-    material: 'cuivre',
-    isConceptual: true,
-    problem: 'Redéfinir la découverte visuelle dans le domaine du voyage à travers une UI moderne.',
-    solution: 'Une direction artistique chaleureuse (cuivre) et immersive, mettant en avant la photographie et le storytelling.',
-    deliverables: ['UI/UX Design', 'Composants visuels'],
-    logoPath: undefined,
-    coverPath: '/works realisations/Pick a trip/19.png',
-    galleryPaths: [
-      '/works realisations/Pick a trip/20.png',
-      '/works realisations/Pick a trip/21.png',
-      '/works realisations/Pick a trip/22.png',
-      '/works realisations/Pick a trip/23.png',
-      '/works realisations/Pick a trip/24.png'
-    ]
-  }, */
   {
     id: 'heynouth',
     title: 'Heynouth',
     category: 'Identité',
     material: 'grifz',
+    rainColor: '#04d960', // Vert émeraude
     isConceptual: true,
     problem: 'Créer un marquage fort et reconnaissable pour une entité créative.',
     solution: 'Design d\'un logotype impactant accompagné d\'une icône moderne pour les supports digitaux.',
@@ -112,6 +99,7 @@ export const projects: Project[] = [
     title: 'DANGUSHOP - Benzen',
     category: 'Site web',
     material: 'bois-de-cerisier',
+    rainColor: '#4a4a4a', // Noir métal brossé, espèce de gris
     isConceptual: true,
     problem: 'Imaginer une plateforme e-commerce fusionnant luxe et approche organique.',
     solution: 'Création d\'une interface épurée avec des textures subtiles évoquant le bois de cerisier pour une navigation apaisante.',
@@ -125,6 +113,7 @@ export const projects: Project[] = [
     title: 'DAG DATA',
     category: 'Concept interne',
     material: 'verre',
+    rainColor: '#c0c0c0', // Métal brossé argent, gris clair
     isConceptual: true,
     problem: 'Visualiser la donnée de manière esthétique, technique et architecturale.',
     solution: 'Une série de visuels 4K exploitant les reflets du verre et des structures géométriques complexes.',
@@ -138,6 +127,7 @@ export const projects: Project[] = [
     title: 'Alert Eleves',
     category: 'Concept interne',
     material: 'charbon',
+    rainColor: 'rainbow', // Dégradé de noir et blanc avec bleu, rose et rouge
     isConceptual: true,
     problem: 'Illustrer un système de notification d\'urgence avec une interface sérieuse et contrastée.',
     solution: 'Une direction sombre (charbon) accentuée par des éléments signalétiques forts.',

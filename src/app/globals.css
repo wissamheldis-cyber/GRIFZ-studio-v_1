@@ -351,7 +351,8 @@ body.theme-dark.glass-bg::before {
   inset: 0;
   width: 100%;
   height: 100%;
-  --c: #09f;
+  --rain-color: #09f;
+  --c: var(--rain-color);
   background-color: #000;
   background-image: 
     radial-gradient(4px 100px at 0px 235px, var(--c), #0000),
@@ -412,7 +413,7 @@ body.theme-dark.glass-bg::before {
   inset: 0;
   z-index: 1;
   --f: blur(1em) brightness(6);
-  backdrop-filter: var(--f) hue-rotate(0deg);
+  backdrop-filter: var(--f);
   background-image: radial-gradient(
     circle at 50% 50%,
     #0000 0,
@@ -420,6 +421,9 @@ body.theme-dark.glass-bg::before {
     hsl(0 0 4%) 2px
   );
   background-size: 8px 8px;
+}
+
+.rain-pattern.rainbow::after {
   animation: hii 10s linear infinite;
 }
 

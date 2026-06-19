@@ -110,7 +110,12 @@ export default function RealisationsPage() {
     if (activeIndex === index) {
       setActiveFlipped(isFlipped)
       // On dispatch l'event pour le composant RainBackground
-      window.dispatchEvent(new CustomEvent('card-flip', { detail: { isFlipped } }))
+      window.dispatchEvent(new CustomEvent('card-flip', { 
+        detail: { 
+          isFlipped,
+          color: projects[index].rainColor 
+        } 
+      }))
     }
   }
 
