@@ -463,17 +463,19 @@ export default function RealisationsPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="w-full flex justify-center py-40"
+            className="w-full flex justify-center py-32"
           >
-            {/* Grand séparateur stylisé */}
-            <div className="relative flex flex-col items-center justify-center gap-6">
-              <div className="w-px h-32 bg-gradient-to-b from-transparent via-ink/20 to-transparent" />
-              <div className="px-8 py-3 rounded-full border border-ink/10 bg-ink/[0.02] backdrop-blur-sm shadow-[0_4px_30px_rgba(0,0,0,0.02)] flex items-center gap-3">
-                <span className="w-1.5 h-1.5 rounded-full bg-ink/30" />
-                <span className="font-sans uppercase tracking-[0.2em] text-[10px] text-ink-soft">Exploration Continues</span>
-                <span className="w-1.5 h-1.5 rounded-full bg-ink/30" />
-              </div>
-              <div className="w-px h-32 bg-gradient-to-b from-transparent via-ink/20 to-transparent" />
+            {/* Indicateur visuel simple (Flèche) */}
+            <div className="flex flex-col items-center justify-center gap-4 opacity-60">
+              <span className="font-sans uppercase tracking-[0.25em] text-[10px] text-ink-soft">
+                Concepts Fictifs
+              </span>
+              <svg 
+                width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                className="text-ink-soft/70 animate-bounce"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+              </svg>
             </div>
           </motion.div>
         )}
