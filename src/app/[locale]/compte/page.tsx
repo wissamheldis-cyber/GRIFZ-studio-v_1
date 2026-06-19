@@ -74,7 +74,7 @@ export default function ComptePage() {
 
       {/* ─── 3D Wireframe Sphere ─── */}
       <div className="mt-24 mb-12 flex flex-col items-center w-full">
-        <WireframeSphere size={333} items={32} />
+        <WireframeSphere size={333} items={32} glow2="rgba(180, 180, 180, 0.25)" />
       </div>
 
     </section>
