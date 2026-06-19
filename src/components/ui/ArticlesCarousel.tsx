@@ -10,7 +10,7 @@ export interface Article {
   id: string | number
   title: string
   coverPath: string
-  content?: string
+  content?: React.ReactNode
   image?: string
 }
 
@@ -164,23 +164,25 @@ export function ArticlesCarousel({ articles }: { articles: Article[] }) {
             transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
             className="w-full max-w-5xl mx-auto mt-16 px-4"
           >
-            <GlassPanel className="p-8 md:p-12 border-ink/5 w-full flex flex-col md:flex-row gap-10">
+            <GlassPanel className="p-8 md:p-12 border-ink/5 w-full flex flex-col md:flex-row gap-10 relative">
               <div className="flex-1 text-left flex flex-col gap-6">
                 <h2 className="font-serif text-3xl md:text-4xl text-ink leading-tight">{activeArticle.title}</h2>
                 <div className="w-16 h-[1px] bg-ink/20" />
-                <p className="text-sm md:text-base text-ink-soft leading-relaxed font-light whitespace-pre-wrap">
+                <div className="text-sm md:text-base text-ink-soft leading-relaxed font-light space-y-6">
                   {activeArticle.content}
-                </p>
+                </div>
               </div>
               {activeArticle.image && (
-                <div className="w-full md:w-1/2 aspect-[4/3] relative rounded-2xl overflow-hidden shadow-2xl">
-                  <Image 
-                    src={activeArticle.image}
-                    alt={activeArticle.title}
-                    fill
-                    className="object-cover"
-                    unoptimized
-                  />
+                <div className="w-full md:w-1/3 flex-shrink-0">
+                  <div className="sticky top-32 w-full aspect-[4/3] relative rounded-2xl overflow-hidden shadow-2xl">
+                    <Image 
+                      src={activeArticle.image}
+                      alt={activeArticle.title}
+                      fill
+                      className="object-cover"
+                      unoptimized
+                    />
+                  </div>
                 </div>
               )}
             </GlassPanel>
