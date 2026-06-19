@@ -208,7 +208,7 @@ export default function CataloguePage() {
       <div className="w-full max-w-7xl mx-auto px-4 flex flex-col items-center relative z-10">
         
         {/* Titre central de la page */}
-        <div className="text-center flex flex-col gap-4 mb-8 md:mb-16">
+        <div className="text-center flex flex-col gap-4 mb-16 md:mb-24">
           <h1 className="font-serif text-4xl md:text-6xl text-ink">
             {t('title')}
           </h1>
@@ -218,7 +218,7 @@ export default function CataloguePage() {
         </div>
 
         {/* Tabs de Sélection */}
-        <div className="flex flex-wrap justify-center gap-6 md:gap-12 mb-12 relative z-20">
+        <div className="flex flex-wrap justify-center gap-6 md:gap-12 mb-16 md:mb-20 relative z-20">
           {categories.map(cat => (
             <button
               key={cat}
