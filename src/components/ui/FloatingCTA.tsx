@@ -47,7 +47,7 @@ export function FloatingCTA() {
     >
       <Link href={ctaHref}>
         <div 
-          className="flex items-center justify-center gap-[24px] font-sans text-[13px] font-semibold uppercase tracking-[0.2em] text-[#7e97b8] bg-[#e0e8ef] border-[3px] border-[rgba(255,255,255,0.333)] rounded-full px-[80px] py-[28px] min-h-[76px] transition-all duration-200 shadow-[-8px_-4px_32px_0px_#ffffff,8px_4px_32px_0px_rgba(95,157,231,0.48)] hover:text-[#516d91] hover:bg-[#E5EDF5] hover:shadow-[-4px_-2px_16px_0px_#ffffff,4px_2px_16px_0px_rgba(95,157,231,0.48)] active:shadow-none"
+          className="flex items-center justify-center gap-[24px] font-sans text-[13px] font-semibold uppercase tracking-[0.2em] text-[#7e97b8] bg-[#e0e8ef] border-[3px] border-[rgba(255,255,255,0.333)] rounded-full px-[140px] py-[28px] min-h-[76px] transition-all duration-200 shadow-[-8px_-4px_32px_0px_#ffffff,8px_4px_32px_0px_rgba(95,157,231,0.48)] hover:text-[#516d91] hover:bg-[#E5EDF5] hover:shadow-[-4px_-2px_16px_0px_#ffffff,4px_2px_16px_0px_rgba(95,157,231,0.48)] active:shadow-none"
         >
           <span>
             {ctaText}
