@@ -216,10 +216,10 @@ export default function AboutPage() {
 
       {/* ─── TEASER MASCOTTE ───────────────────────────────────── */}
       <div className="w-full max-w-5xl mx-auto px-6 mt-64 mb-[400px] z-10 relative">
-        <GlassPanel strong className="p-12 md:p-16 flex flex-col md:flex-row gap-10 items-center md:items-start text-center md:text-left bg-ink border-ink/20 shadow-2xl overflow-hidden relative">
+        <div className="p-12 md:p-16 flex flex-col md:flex-row gap-10 items-center md:items-start text-center md:text-left bg-[#0A0A0A] border border-white/10 rounded-3xl shadow-2xl overflow-hidden relative">
           
           {/* Lueur blanche radiale subtile dans le fond de l'encadré noir */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-white/5 blur-[100px] rounded-full pointer-events-none z-0" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-white/5 blur-[100px] rounded-full pointer-events-none z-0" />
 
           {/* Partie Gauche : Textes */}
           <div className="flex-1 flex flex-col gap-4 items-center md:items-start relative z-10">
@@ -239,12 +239,12 @@ export default function AboutPage() {
                 src="/images/mascot_placeholder.png" 
                 alt="Mascot Placeholder" 
                 fill 
-                className="object-contain opacity-80"
+                className="object-contain opacity-80 filter drop-shadow-[0_10px_20px_rgba(255,255,255,0.05)]"
                 unoptimized
               />
             </div>
           </div>
-        </GlassPanel>
+        </div>
       </div>
 
       {/* ─── CARROUSEL D'ARTICLES ───────────────────────────────────── */}
