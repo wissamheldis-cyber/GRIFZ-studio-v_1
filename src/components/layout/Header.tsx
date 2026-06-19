@@ -107,63 +107,45 @@ export default function Header() {
 
           {/* Navigation Gauche */}
           {/* Padding géré par la classe custom CSS garantie */}
-          <nav className="w-1/2 flex flex-col items-end gap-3 md:gap-4 left-nav-spacing">
+          <nav className="w-1/2 flex flex-col items-end gap-1 md:gap-2 left-nav-spacing">
             {LEFT_LINKS.map((link, index) => {
               const active = isActive(link.href)
               // Courbe inversée : Le milieu s'éloigne, les bords sont proches de l'orb
-              const curveClass = index === 1 ? '-translate-x-3 md:-translate-x-6' : 'translate-x-0'
+              const curveClass = index === 1 ? '-translate-x-2 md:-translate-x-4' : 'translate-x-0'
               
               return (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`group whitespace-nowrap flex items-center gap-2 md:gap-[10px] no-underline transition-all duration-300 ${curveClass}`}
+                  className={`group no-underline transition-all duration-500 ${curveClass}`}
                 >
                   <div
-                    className={`transition-all duration-300 ${active ? 'scale-110 drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]' : 'opacity-70 group-hover:opacity-100 group-hover:scale-105'}`}
+                    className={`transition-all duration-500 ${active ? 'scale-125 translate-x-2 md:translate-x-5 drop-shadow-[0_0_12px_rgba(255,255,255,0.4)]' : 'opacity-60 group-hover:opacity-100 group-hover:scale-125 group-hover:translate-x-2 md:group-hover:translate-x-5'}`}
                   >
-                    <Image src={link.image} alt={link.label} width={48} height={48} className="object-contain" unoptimized />
+                    <Image src={link.image} alt={link.label} width={58} height={58} className="object-contain" unoptimized />
                   </div>
-                  <span
-                    className="text-[14px] md:text-[18px] w-[8px] md:w-[12px] flex items-center justify-center transition-colors duration-300 group-hover:text-ink"
-                    style={{
-                      color: active ? 'var(--ink)' : 'var(--muted)',
-                      lineHeight: 1,
-                    }}
-                  >
-                    {active ? '•' : '·'}
-                  </span>
                 </Link>
               )
             })}
           </nav>
 
           {/* Navigation Droite */}
-          <nav className="w-1/2 flex flex-col items-start gap-3 md:gap-4 right-nav-spacing">
+          <nav className="w-1/2 flex flex-col items-start gap-1 md:gap-2 right-nav-spacing">
             {RIGHT_LINKS.map((link, index) => {
               const active = isActive(link.href)
               // Courbe inversée : Le milieu s'éloigne, les bords sont proches de l'orb
-              const curveClass = index === 1 ? 'translate-x-3 md:translate-x-6' : 'translate-x-0'
+              const curveClass = index === 1 ? 'translate-x-2 md:translate-x-4' : 'translate-x-0'
               
               return (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`group whitespace-nowrap flex items-center gap-2 md:gap-[10px] no-underline transition-all duration-300 ${curveClass}`}
+                  className={`group no-underline transition-all duration-500 ${curveClass}`}
                 >
-                  <span
-                    className="text-[14px] md:text-[18px] w-[8px] md:w-[12px] flex items-center justify-center transition-colors duration-300 group-hover:text-ink"
-                    style={{
-                      color: active ? 'var(--ink)' : 'var(--muted)',
-                      lineHeight: 1,
-                    }}
-                  >
-                    {active ? '•' : '·'}
-                  </span>
                   <div
-                    className={`transition-all duration-300 ${active ? 'scale-110 drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]' : 'opacity-70 group-hover:opacity-100 group-hover:scale-105'}`}
+                    className={`transition-all duration-500 ${active ? 'scale-125 -translate-x-2 md:-translate-x-5 drop-shadow-[0_0_12px_rgba(255,255,255,0.4)]' : 'opacity-60 group-hover:opacity-100 group-hover:scale-125 group-hover:-translate-x-2 md:group-hover:-translate-x-5'}`}
                   >
-                    <Image src={link.image} alt={link.label} width={48} height={48} className="object-contain" unoptimized />
+                    <Image src={link.image} alt={link.label} width={58} height={58} className="object-contain" unoptimized />
                   </div>
                 </Link>
               )
