@@ -82,7 +82,8 @@ export const fictionalConcepts: FictionalConcept[] = [
     materials: ['Céréales'],
     coverPath: '/materials paysage + palette matiere/Cereales/GRIFZ x PEPSI.co04_4K.png',
     galleryPaths: [],
-    rainColor: '#e5ca9a' // Céréales
+    rainColor: '#e5ca9a' ,
+    logoPath: '/works/logo brands/pepsi.png'// Céréales
   },
   {
     id: 'coca-cola',
@@ -108,7 +109,8 @@ export const fictionalConcepts: FictionalConcept[] = [
     materials: ['Bois'],
     coverPath: '/materials paysage + palette matiere/Bois/GRIFZ x IKEA02_4K.png',
     galleryPaths: [],
-    rainColor: '#deb887' // Bois
+    rainColor: '#deb887' ,
+    logoPath: '/works/logo brands/ikea.png'// Bois
   },
   {
     id: 'zara',
@@ -116,7 +118,8 @@ export const fictionalConcepts: FictionalConcept[] = [
     materials: ['Coton'],
     coverPath: '/materials paysage + palette matiere/Coton/GRIFZ x ZARA04_4K.png',
     galleryPaths: [],
-    rainColor: '#ffffff' // Coton
+    rainColor: '#ffffff' ,
+    logoPath: '/works/logo brands/zara.png'// Coton
   },
   {
     id: 'leroy-merlin',
@@ -124,7 +127,8 @@ export const fictionalConcepts: FictionalConcept[] = [
     materials: ['PVC'],
     coverPath: '/materials paysage + palette matiere/PVC/GRIFZ x LEROY MERLIN03_4K.png',
     galleryPaths: [],
-    rainColor: '#7db928' // Vert Leroy Merlin
+    rainColor: '#7db928' ,
+    logoPath: '/works/logo brands/leroy merlin.png'// Vert Leroy Merlin
   },
   {
     id: 'boeing',
