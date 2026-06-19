@@ -41,7 +41,7 @@ export default function HomePage() {
         }}
       >
         {/* Bloc Sphere + Label superposé */}
-        <div className="relative flex justify-center items-center -mt-16 mb-8 w-full">
+        <div className="relative flex justify-center items-center -mt-40 mb-12 w-full">
           {/* Sphere 3D */}
           <motion.div
             {...fadeUp(0.25)}
