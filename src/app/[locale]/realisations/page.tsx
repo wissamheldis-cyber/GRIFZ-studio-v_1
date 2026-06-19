@@ -564,7 +564,7 @@ export default function RealisationsPage() {
                     frontContent={
                       <div className="absolute inset-0 flex flex-col items-center justify-center p-8 bg-black/40 backdrop-blur-[2px] text-center z-10 pointer-events-none">
                         {project.logoPath ? (
-                          <div className="relative w-48 h-24 md:w-64 md:h-32 mb-6">
+                          <div className="relative w-72 h-36 md:w-[340px] md:h-[180px] mb-6">
                             <Image 
                               src={project.logoPath} 
                               alt={`${project.brandName} logo`}
