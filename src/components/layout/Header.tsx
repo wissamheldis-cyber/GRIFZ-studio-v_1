@@ -5,6 +5,8 @@ import { useLocale, useTranslations } from 'next-intl'
 import Orb from '@/components/ui/Orb'
 import { useHeaderContext } from '@/context/HeaderContext'
 import Image from 'next/image'
+import { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 
 export default function Header() {
   const pathname = usePathname()
@@ -14,6 +16,18 @@ export default function Header() {
   const isActive = (href: string) => href === '/' ? pathname === '/' : pathname.startsWith(href)
   const { activeOrbImage } = useHeaderContext()
   const t = useTranslations('Header')
+
+  /* ─── State for Dynamic Label ────────────────────────────── */
+  const [hoveredLabel, setHoveredLabel] = useState<string | null>(null)
+  const [showCurrent, setShowCurrent] = useState(true)
+
+  useEffect(() => {
+    setShowCurrent(true)
+    const timer = setTimeout(() => {
+      setShowCurrent(false)
+    }, 3000)
+    return () => clearTimeout(timer)
+  }, [pathname])
 
   /* ─── Navigation ─────────────────────────────────────────── */
   const LEFT_LINKS = [
@@ -27,6 +41,10 @@ export default function Header() {
     { href: '/a-propos',    label: t('nav_about'),       image: '/orb/about.png' },
     { href: '/compte',      label: t('nav_account'),     image: '/orb/account.png' },
   ]
+
+  const ALL_LINKS = [...LEFT_LINKS, ...RIGHT_LINKS]
+  const currentLink = ALL_LINKS.find(link => isActive(link.href))
+  const currentLabel = currentLink ? currentLink.label : ''
 
   return (
     <>
@@ -92,7 +110,7 @@ export default function Header() {
           </div>
 
           {/* L'Orb Centrale - En absolu pour garantir le centre parfait */}
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex items-center justify-center pointer-events-none w-[120px] h-[120px]">
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex flex-col items-center justify-center pointer-events-none w-[120px] h-[120px]">
             <div className="relative transition-all duration-300 pointer-events-auto scale-[0.66] md:scale-[0.83] lg:scale-100 flex items-center justify-center drop-shadow-[0_12px_25px_rgba(0,0,0,0.4)] hover:drop-shadow-[0_15px_30px_rgba(0,0,0,0.5)]">
               <Orb
                 material="grifz"
@@ -102,6 +120,24 @@ export default function Header() {
                 animated={true}
                 intensity={0.15}
               />
+            </div>
+            
+            {/* Dynamic Label */}
+            <div className="absolute top-[100%] mt-4 left-1/2 -translate-x-1/2 whitespace-nowrap h-[24px] flex items-center justify-center pointer-events-none">
+              <AnimatePresence mode="wait">
+                {(hoveredLabel || (showCurrent && currentLabel)) && (
+                  <motion.span
+                    key={hoveredLabel || currentLabel}
+                    initial={{ opacity: 0, y: -5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 5 }}
+                    transition={{ duration: 0.3 }}
+                    className="font-serif text-ink tracking-[0.15em] uppercase text-[10px] md:text-sm drop-shadow-[0_2px_10px_rgba(255,255,255,0.8)]"
+                  >
+                    {hoveredLabel || currentLabel}
+                  </motion.span>
+                )}
+              </AnimatePresence>
             </div>
           </div>
 
@@ -117,6 +153,8 @@ export default function Header() {
                 <Link
                   key={link.href}
                   href={link.href}
+                  onMouseEnter={() => setHoveredLabel(link.label)}
+                  onMouseLeave={() => setHoveredLabel(null)}
                   className={`group no-underline transition-all duration-500 ${curveClass}`}
                 >
                   <div
@@ -140,6 +178,8 @@ export default function Header() {
                 <Link
                   key={link.href}
                   href={link.href}
+                  onMouseEnter={() => setHoveredLabel(link.label)}
+                  onMouseLeave={() => setHoveredLabel(null)}
                   className={`group no-underline transition-all duration-500 ${curveClass}`}
                 >
                   <div
