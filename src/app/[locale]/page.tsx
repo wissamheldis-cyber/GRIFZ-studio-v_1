@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from '@/i18n/routing'
 import { useTranslations } from 'next-intl'
@@ -24,6 +25,26 @@ const fadeUp = (delay = 0) => ({
 export default function HomePage() {
   const t = useTranslations('Home')
 
+  // Easter egg: 3 clics rapides sur la sphère pour relancer l'intro
+  const [clickCount, setClickCount] = useState(0)
+  
+  const handleSphereClick = () => {
+    const newCount = clickCount + 1
+    if (newCount >= 3) {
+      // 3ème clic = reset et reload
+      if (typeof window !== 'undefined') {
+        sessionStorage.removeItem('grifz-intro-seen')
+        window.location.reload()
+      }
+    } else {
+      setClickCount(newCount)
+      // Reset si pas de clic supplémentaire dans la seconde
+      setTimeout(() => {
+        setClickCount(prev => (prev === newCount ? 0 : prev))
+      }, 1500)
+    }
+  }
+
   return (
     <>
       {/* ─── Hero ───────────────────────────────────────── */}
@@ -42,10 +63,16 @@ export default function HomePage() {
       >
         {/* Bloc Sphere + Label superposé */}
         <div className="relative flex justify-center items-center mt-[-80px] mb-[60px] w-full">
-          {/* Sphere 3D */}
+          {/* Sphere 3D avec Easter Egg */}
           <motion.div
             {...fadeUp(0.25)}
-            className="w-full flex justify-center"
+            className="w-full flex justify-center cursor-pointer relative z-20"
+            onClick={handleSphereClick}
+            animate={{
+              scale: 1 + clickCount * 0.08,
+              filter: `drop-shadow(0 0 ${clickCount * 20}px rgba(255,255,255, ${clickCount * 0.4}))`
+            }}
+            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
           >
             <WireframeSphere 
               size={240} 
