@@ -213,7 +213,7 @@ export default function AboutPage() {
       </div>
 
       {/* ─── CARROUSEL D'ARTICLES ───────────────────────────────────── */}
-      <div className="w-full max-w-6xl mx-auto px-4 mt-20 mb-32 relative z-10 flex flex-col items-center">
+      <div className="w-full max-w-6xl mx-auto px-4 mt-20 mb-[800px] relative z-10 flex flex-col items-center">
         <div className="text-center mb-8">
           <h2 className="font-serif text-3xl md:text-4xl text-ink">Articles</h2>
           <p className="text-ink-soft text-sm mt-2 uppercase tracking-widest">À lire prochainement</p>

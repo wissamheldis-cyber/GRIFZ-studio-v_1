@@ -13,6 +13,7 @@ export default function Footer() {
       style={{
         position: 'relative',
         zIndex: 1,
+        marginTop: '240px', // Règle : Toujours une marge conséquente avant le footer
         borderTop: '1px solid rgba(255,255,255,0.5)',
         padding: '60px 28px',
         background: 'rgba(255, 255, 255, 0.3)',
