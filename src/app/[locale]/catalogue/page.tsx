@@ -218,7 +218,7 @@ export default function CataloguePage() {
         </div>
 
         {/* Bloc d'espacement strict (> 190 pixels) */}
-        <div style={{ height: '200px', width: '100%' }} />
+        <div style={{ height: '100px', width: '100%' }} />
 
         {/* Tabs de Sélection */}
         <div className="flex flex-wrap justify-center gap-6 md:gap-12 mb-16 md:mb-20 relative z-20">
