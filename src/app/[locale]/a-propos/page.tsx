@@ -98,37 +98,34 @@ export default function AboutPage() {
 
       </div>
 
-      {/* ─── TEASER MASCOTTE (Encadré Noir 3D) ───────────────────────────────────── */}
+      {/* ─── TEASER MASCOTTE (Mêmes specs que Le choix de la matière) ───────────────────────────────────── */}
       <div className="w-full max-w-5xl mx-auto px-6 mt-64 mb-32 z-10 relative">
-        <LiquidCard variant="dark" hoverable padding="0" className="overflow-hidden border-white/10">
-          <div className="flex flex-col md:flex-row items-center w-full min-h-[400px]">
-            {/* Partie Gauche : Textes */}
-            <div className="flex-1 p-12 md:p-16 flex flex-col justify-center items-start text-left z-10">
-              <h2 className="font-serif text-3xl md:text-5xl mb-6 font-light text-white leading-tight">
-                {t('teaser_title_1')}<br/>{t('teaser_title_2')}
-              </h2>
-              <div className="w-12 h-px bg-white/30 mb-6" />
-              <p className="text-sm md:text-base text-white/50 font-sans tracking-widest leading-relaxed uppercase">
-                {t('teaser_text_1')}<br/>
-                {t('teaser_text_2')}
-              </p>
-            </div>
+        <GlassPanel strong className="p-12 md:p-16 flex flex-col md:flex-row gap-10 items-center md:items-start text-center md:text-left border-ink/5">
+          {/* Partie Gauche : Textes */}
+          <div className="flex-1 flex flex-col gap-4 items-center md:items-start">
+            <h3 className="font-sans text-[11px] uppercase tracking-[0.15em] text-ink font-medium">Coming soon</h3>
+            <h2 className="font-serif text-3xl md:text-4xl text-ink leading-tight">
+              {t('teaser_title_1')} {t('teaser_title_2')}
+            </h2>
+            <p className="text-sm md:text-base text-ink-soft leading-relaxed font-light mt-2 uppercase tracking-widest">
+              {t('teaser_text_1')} {t('teaser_text_2')}
+            </p>
+          </div>
 
-            {/* Partie Droite : Image Invisible Container */}
-            <div className="w-full md:w-[45%] h-[300px] md:h-[500px] relative flex-shrink-0 bg-transparent flex items-center justify-center p-8">
-              <div className="relative w-full h-full transform hover:scale-105 transition-transform duration-700 ease-in-out">
-                {/* L'image PNG au fond transparent s'insérera ici sans fond propre */}
-                <Image 
-                  src="/images/mascot_placeholder.png" 
-                  alt="Mascot Placeholder" 
-                  fill 
-                  className="object-contain drop-shadow-2xl opacity-80"
-                  unoptimized
-                />
-              </div>
+          {/* Partie Droite : Image Invisible Container */}
+          <div className="w-64 h-64 md:w-80 md:h-80 relative flex-shrink-0 bg-transparent flex items-center justify-center">
+            <div className="relative w-full h-full transform hover:scale-105 transition-transform duration-700 ease-in-out">
+              {/* L'image PNG au fond transparent s'insérera ici sans fond propre */}
+              <Image 
+                src="/images/mascot_placeholder.png" 
+                alt="Mascot Placeholder" 
+                fill 
+                className="object-contain opacity-80"
+                unoptimized
+              />
             </div>
           </div>
-        </LiquidCard>
+        </GlassPanel>
       </div>
 
     </main>
