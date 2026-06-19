@@ -562,14 +562,23 @@ export default function RealisationsPage() {
                     onFlipChange={(flipped) => handleFictionalFlipChange(flipped, index)}
                     frontImage={project.coverPath}
                     frontContent={
-                      <div className="absolute inset-0 flex items-center justify-center p-8 bg-black/40 backdrop-blur-[2px]">
-                        {/* Logo Vectoriel Typographique Luxueux */}
-                        <h3 className="font-serif text-3xl md:text-5xl text-white tracking-widest uppercase drop-shadow-2xl transition-transform duration-500 group-hover:scale-105"
-                            style={{ 
-                              textShadow: '0 4px 20px rgba(0,0,0,0.8), 0 0 30px rgba(255,255,255,0.2)' 
-                            }}>
-                          {project.brandName}
-                        </h3>
+                      <div className="absolute inset-0 flex flex-col items-center justify-center p-8 bg-black/40 backdrop-blur-[2px] text-center z-10 pointer-events-none">
+                        {project.logoPath ? (
+                          <div className="relative w-48 h-24 md:w-64 md:h-32 mb-6">
+                            <Image 
+                              src={project.logoPath} 
+                              alt={`${project.brandName} logo`}
+                              fill
+                              className="object-contain filter drop-shadow-[0_10px_30px_rgba(0,0,0,0.9)]"
+                            />
+                          </div>
+                        ) : (
+                          <h3 className="font-serif text-5xl md:text-6xl lg:text-7xl text-white tracking-widest uppercase drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)]"
+                              style={{ textShadow: '0 4px 30px rgba(0,0,0,0.8), 0 2px 10px rgba(255,255,255,0.2)' }}
+                          >
+                            {project.brandName}
+                          </h3>
+                        )}
                       </div>
                     }
                     backContent={

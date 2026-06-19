@@ -5,6 +5,7 @@ export interface FictionalConcept {
   coverPath: string;
   galleryPaths: string[];
   rainColor?: string;
+  logoPath?: string;
 }
 
 export const fictionalConcepts: FictionalConcept[] = [
@@ -19,7 +20,8 @@ export const fictionalConcepts: FictionalConcept[] = [
       '/materials paysage + palette matiere/Graphite/GRIFZ x TESLA24_4K.png',
       '/materials paysage + palette matiere/Lithium/GRIFZ x TESLA25_4K.png'
     ],
-    rainColor: '#b87333' // Cuivre
+    rainColor: '#b87333' ,
+    logoPath: '/works/logo brands/tesla.png'// Cuivre
   },
   {
     id: 'apple',
@@ -31,7 +33,8 @@ export const fictionalConcepts: FictionalConcept[] = [
       '/materials paysage + palette matiere/Tungstene/GRIFZ x APPLE17_4K.png',
       '/materials paysage + palette matiere/Tungstene/GRIFZ x APPLE18_4K.png'
     ],
-    rainColor: '#d3d3d3' // Gris métal/Gallium
+    rainColor: '#d3d3d3' ,
+    logoPath: '/works/logo brands/apple.png'// Gris métal/Gallium
   },
   {
     id: 'lvmh',
@@ -43,7 +46,8 @@ export const fictionalConcepts: FictionalConcept[] = [
       '/materials paysage + palette matiere/Cuir ( variantes )/Cuir vert/GRIFZ x LVMH07_4K.png',
       '/materials paysage + palette matiere/Cuir ( variantes )/Cuire beige/GRIFZ x LVMH08_4K.png'
     ],
-    rainColor: '#8b4513' // Cuir SaddleBrown
+    rainColor: '#8b4513' ,
+    logoPath: '/works/logo brands/LVMH.png'// Cuir SaddleBrown
   },
   {
     id: 'toyota',
@@ -54,7 +58,8 @@ export const fictionalConcepts: FictionalConcept[] = [
       '/materials paysage + palette matiere/Palladium/GRIFZ x TOYOTA19_4K.png',
       '/materials paysage + palette matiere/Chrome/GRIFZ x TOYOTA24_4K.png'
     ],
-    rainColor: '#36454f' // Charbon
+    rainColor: '#36454f' ,
+    logoPath: '/works/logo brands/toyota.png'// Charbon
   },
   {
     id: 'samsung',
@@ -68,7 +73,8 @@ export const fictionalConcepts: FictionalConcept[] = [
       '/materials paysage + palette matiere/Indium/GRIFZ x SAMSUNG05_4K.png',
       '/materials paysage + palette matiere/Indium/GRIFZ x SAMSUNG06_4K.png'
     ],
-    rainColor: '#0057b7' // Samsung Blue (Indium ref)
+    rainColor: '#0057b7' ,
+    logoPath: '/works/logo brands/Samsung.png'// Samsung Blue (Indium ref)
   },
   {
     id: 'pepsico',
@@ -84,7 +90,8 @@ export const fictionalConcepts: FictionalConcept[] = [
     materials: ['PET'],
     coverPath: '/materials paysage + palette matiere/PET/GRIFZ x COCA COLA04_4K.png',
     galleryPaths: [],
-    rainColor: '#ff0000' // Rouge
+    rainColor: '#ff0000' ,
+    logoPath: '/works/logo brands/cocacola.png'// Rouge
   },
   {
     id: 'michelin',
@@ -92,7 +99,8 @@ export const fictionalConcepts: FictionalConcept[] = [
     materials: ['Caoutchouc naturel'],
     coverPath: '/materials paysage + palette matiere/Caoutchouc naturel/GRIFZ x MICHELIN03_4K.png',
     galleryPaths: [],
-    rainColor: '#2b2b2b' // Caoutchouc
+    rainColor: '#2b2b2b' ,
+    logoPath: '/works/logo brands/michelin.png'// Caoutchouc
   },
   {
     id: 'ikea',
@@ -124,6 +132,7 @@ export const fictionalConcepts: FictionalConcept[] = [
     materials: ['Titane'],
     coverPath: '/materials paysage + palette matiere/Titane/GRIFZ x BOEING02_4K.png',
     galleryPaths: [],
-    rainColor: '#878681' // Titane
+    rainColor: '#878681' ,
+    logoPath: '/works/logo brands/boeing.png'// Titane
   }
 ];
