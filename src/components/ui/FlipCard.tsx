@@ -1,7 +1,8 @@
 'use client'
 
-import React, { HTMLAttributes } from 'react'
+import React, { HTMLAttributes, useRef } from 'react'
 import Image from 'next/image'
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
 
 export interface FlipCardProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
   title?: React.ReactNode
@@ -33,6 +34,15 @@ export function FlipCard({
   ...props
 }: FlipCardProps) {
   const [isFlipped, setIsFlipped] = React.useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  // Parallax Effect
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"]
+  })
+  const y = useTransform(scrollYProgress, [0, 1], [30, -30])
+  const springY = useSpring(y, { stiffness: 100, damping: 30 })
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (isFlippable) {
@@ -85,6 +95,7 @@ export function FlipCard({
           justify-content: center;
           display: flex;
           align-items: center;
+          transform: rotateY(180deg);
         }
 
         .flip-card-back::before {
@@ -98,26 +109,24 @@ export function FlipCard({
           opacity: 0.3;
         }
 
-        .flip-card-back-content {
+        .flip-card-front-content {
           position: absolute;
-          width: calc(100% - 2px);
-          height: calc(100% - 2px);
-          background-color: rgba(10, 10, 10, 0.3);
-          backdrop-filter: blur(24px);
-          -webkit-backdrop-filter: blur(24px);
-          border-radius: 11px;
-          color: white;
+          inset: 0;
+          padding: 20px;
           display: flex;
           flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          gap: 20px;
-          padding: 20px;
-          text-align: center;
-          z-index: 10;
+          justify-content: space-between;
+          z-index: 2;
+          transform: translateZ(30px);
         }
 
-        .flip-card.is-flipped .flip-card-content {
+        .flip-card-back-content {
+          position: relative;
+          z-index: 2;
+          transform: translateZ(30px);
+        }
+
+        .is-flipped .flip-card-content {
           transform: rotateY(180deg);
         }
 
@@ -129,24 +138,10 @@ export function FlipCard({
         .flip-card-front {
           transform: rotateY(0deg);
         }
-        .flip-card-back {
-          transform: rotateY(180deg);
-        }
-
-        .flip-card-front-content {
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          padding: 20px;
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-          z-index: 2;
-        }
 
         .flip-card-front .badge {
-          background-color: rgba(0,0,0,0.5);
-          padding: 4px 12px;
+          background-color: rgba(0,0,0,0.4);
+          padding: 4px 10px;
           border-radius: 20px;
           backdrop-filter: blur(4px);
           width: fit-content;
@@ -227,10 +222,12 @@ export function FlipCard({
         }
       ` }} />
 
-      <div 
+      <motion.div 
+        ref={ref}
+        style={{ y: springY }}
         className={`flip-card ${isFlipped && isFlippable ? 'is-flipped' : ''} ${className}`} 
         onClick={handleClick}
-        {...props}
+        {...(props as any)}
       >
         <div className="flip-card-content">
           
@@ -264,7 +261,7 @@ export function FlipCard({
           </div>
 
         </div>
-      </div>
+      </motion.div>
     </>
   )
 }

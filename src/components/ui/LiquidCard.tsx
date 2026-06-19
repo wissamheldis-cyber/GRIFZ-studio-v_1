@@ -1,7 +1,7 @@
 'use client'
 
-import { motion } from 'framer-motion'
-import { ReactNode } from 'react'
+import { motion, useScroll, useTransform, useSpring, useMotionValue } from 'framer-motion'
+import { ReactNode, useRef } from 'react'
 
 /* ─── Types ─────────────────────────────────────────────────
    Panel liquid glass — utilisable partout sur le site.
@@ -30,6 +30,40 @@ export default function LiquidCard({
   hoverable = false,
   onClick,
 }: LiquidCardProps) {
+  const ref = useRef<HTMLDivElement>(null)
+
+  // 1. Parallax Effect
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"]
+  })
+  const y = useTransform(scrollYProgress, [0, 1], [40, -40])
+  const springY = useSpring(y, { stiffness: 100, damping: 30 })
+
+  // 2. 3D Hover Effect
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!hoverable) return
+    const rect = ref.current?.getBoundingClientRect()
+    if (rect) {
+      const x = e.clientX - rect.left - rect.width / 2
+      const y = e.clientY - rect.top - rect.height / 2
+      mouseX.set(x)
+      mouseY.set(y)
+    }
+  }
+
+  const handleMouseLeave = () => {
+    if (!hoverable) return
+    mouseX.set(0)
+    mouseY.set(0)
+  }
+
+  const rotateX = useTransform(mouseY, [-200, 200], [5, -5])
+  const rotateY = useTransform(mouseX, [-200, 200], [-5, 5])
+
   const variantStyles = {
     default: {
       background: 'rgba(255, 255, 255, 0.52)',
@@ -62,7 +96,10 @@ export default function LiquidCard({
 
   return (
     <motion.div
+      ref={ref}
       onClick={onClick}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
       style={{
         ...styles,
         padding,
@@ -70,10 +107,15 @@ export default function LiquidCard({
         backdropFilter: 'blur(24px) saturate(1.3)',
         WebkitBackdropFilter: 'blur(24px) saturate(1.3)',
         cursor: onClick ? 'pointer' : 'default',
+        y: springY,
+        rotateX: hoverable ? rotateX : 0,
+        rotateY: hoverable ? rotateY : 0,
+        transformStyle: 'preserve-3d',
+        perspective: 1000,
       }}
       className={className}
       whileHover={hoverable ? {
-        y: -4,
+        scale: 1.02,
         boxShadow: `
           inset 0 1px 0 rgba(255,255,255,0.92),
           0 40px 100px rgba(20,20,20,0.14)
@@ -84,7 +126,9 @@ export default function LiquidCard({
         ease: [0.25, 0.46, 0.45, 0.94],
       }}
     >
-      {children}
+      <div style={{ transform: 'translateZ(40px)', width: '100%', height: '100%' }}>
+        {children}
+      </div>
     </motion.div>
   )
 }
