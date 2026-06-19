@@ -123,7 +123,7 @@ export default function RealisationsPage() {
       if (isFlipped) {
         setActiveFictionalFlipped(false)
         setTimeout(() => {
-          realisationsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+          window.scrollTo({ top: 0, behavior: 'smooth' })
         }, 150)
       }
       
@@ -152,7 +152,7 @@ export default function RealisationsPage() {
       if (isFlipped) {
         setActiveFlipped(false)
         setTimeout(() => {
-          fictionalRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+          window.scrollTo({ top: 0, behavior: 'smooth' })
         }, 150)
       }
       
