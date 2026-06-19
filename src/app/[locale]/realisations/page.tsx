@@ -565,11 +565,23 @@ export default function RealisationsPage() {
                       <div className="absolute inset-0 flex flex-col items-center justify-center p-8 bg-black/40 backdrop-blur-[2px] text-center z-10 pointer-events-none">
                         {project.logoPath ? (
                           <div className="relative w-72 h-36 md:w-[340px] md:h-[180px] mb-6">
+                            {/* Effet de flou (Bloom) modelé exactement sur la forme du PNG */}
+                            <div className="absolute inset-0 opacity-50 mix-blend-screen filter blur-[20px] transform scale-105 z-0">
+                              <Image 
+                                src={project.logoPath} 
+                                alt=""
+                                fill
+                                className="object-contain"
+                              />
+                            </div>
+                            {/* Halo supplémentaire doux en arrière-plan */}
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2/3 h-2/3 bg-white/10 blur-[40px] rounded-full z-0" />
+                            
                             <Image 
                               src={project.logoPath} 
                               alt={`${project.brandName} logo`}
                               fill
-                              className="object-contain filter drop-shadow-[0_10px_30px_rgba(0,0,0,0.9)]"
+                              className="object-contain filter drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] relative z-10"
                             />
                           </div>
                         ) : (
