@@ -216,32 +216,51 @@ export default function AboutPage() {
 
       {/* ─── TEASER MASCOTTE ───────────────────────────────────── */}
       <div className="w-full max-w-5xl mx-auto px-6 mt-64 z-10 relative">
-        <div className="p-12 md:p-16 flex flex-col md:flex-row gap-10 items-center md:items-start text-center md:text-left bg-[#0A0A0A] border border-white/10 rounded-3xl shadow-2xl overflow-hidden relative">
-          
-          {/* Lueur blanche radiale subtile dans le fond de l'encadré noir */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-white/5 blur-[100px] rounded-full pointer-events-none z-0" />
+        <div 
+          className="relative w-full shadow-2xl"
+          style={{
+            borderRadius: '24px',
+            padding: '1px',
+            background: 'radial-gradient(circle 800px at 0% 0%, rgba(255,255,255,0.8), #0c0d0d)',
+          }}
+        >
+          <div 
+            className="relative w-full overflow-hidden flex flex-col md:flex-row gap-10 items-center md:items-start text-center md:text-left"
+            style={{
+              borderRadius: '23px',
+              border: '1px solid #202222',
+              background: 'radial-gradient(circle 1000px at 0% 0%, #222222, #0c0d0d)',
+              padding: '64px',
+            }}
+          >
+            {/* Lignes internes fixes — cadre de respiration */}
+            <div className="absolute pointer-events-none z-10" style={{ top: '32px', left: 0, right: 0, height: '1px', background: 'linear-gradient(90deg, #888888 30%, #1d1f1f 70%)' }} />
+            <div className="absolute pointer-events-none z-10" style={{ bottom: '32px', left: 0, right: 0, height: '1px', background: 'linear-gradient(90deg, #2c2c2c 30%, #1d1f1f 70%)' }} />
+            <div className="absolute pointer-events-none z-10" style={{ left: '32px', top: 0, bottom: 0, width: '1px', background: 'linear-gradient(180deg, #747474 30%, #222424 70%)' }} />
+            <div className="absolute pointer-events-none z-10" style={{ right: '32px', top: 0, bottom: 0, width: '1px', background: 'linear-gradient(180deg, #2c2c2c 30%, #222424 70%)' }} />
 
-          {/* Partie Gauche : Textes */}
-          <div className="flex-1 flex flex-col gap-4 items-center md:items-start relative z-10">
-            <h3 className="font-sans text-[11px] uppercase tracking-[0.15em] text-white/50 font-medium">Coming soon</h3>
-            <h2 className="font-serif text-3xl md:text-4xl text-white leading-tight">
-              {t('teaser_title_1')}<br/>{t('teaser_title_2')}
-            </h2>
-            <p className="text-sm md:text-base text-white/70 leading-relaxed font-light mt-2 uppercase tracking-widest">
-              {t('teaser_text_1')} {t('teaser_text_2')}
-            </p>
-          </div>
+            {/* Partie Gauche : Textes */}
+            <div className="flex-1 flex flex-col gap-4 items-center md:items-start relative z-20">
+              <h3 className="font-sans text-[11px] uppercase tracking-[0.15em] text-white/50 font-medium">Coming soon</h3>
+              <h2 className="font-serif text-3xl md:text-4xl text-white leading-tight">
+                {t('teaser_title_1')}<br/>{t('teaser_title_2')}
+              </h2>
+              <p className="text-sm md:text-base text-white/70 leading-relaxed font-light mt-2 uppercase tracking-widest">
+                {t('teaser_text_1')} {t('teaser_text_2')}
+              </p>
+            </div>
 
-          {/* Partie Droite : Image Invisible Container */}
-          <div className="w-64 h-64 md:w-80 md:h-80 relative flex-shrink-0 bg-transparent flex items-center justify-center relative z-10">
-            <div className="relative w-full h-full transform hover:scale-105 transition-transform duration-700 ease-in-out">
-              <Image 
-                src="/images/mascot_placeholder.png" 
-                alt="Mascot Placeholder" 
-                fill 
-                className="object-contain opacity-80 filter drop-shadow-[0_10px_20px_rgba(255,255,255,0.05)]"
-                unoptimized
-              />
+            {/* Partie Droite : Image Invisible Container */}
+            <div className="w-64 h-64 md:w-80 md:h-80 relative flex-shrink-0 bg-transparent flex items-center justify-center z-20">
+              <div className="relative w-full h-full transform hover:scale-105 transition-transform duration-700 ease-in-out">
+                <Image 
+                  src="/images/mascot_placeholder.png" 
+                  alt="Mascot Placeholder" 
+                  fill 
+                  className="object-contain opacity-80 filter drop-shadow-[0_10px_20px_rgba(255,255,255,0.05)]"
+                  unoptimized
+                />
+              </div>
             </div>
           </div>
         </div>
