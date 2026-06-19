@@ -9,9 +9,19 @@ import { Link } from '@/i18n/routing'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import LiquidCard from '@/components/ui/LiquidCard'
+import { ArticlesCarousel } from '@/components/ui/ArticlesCarousel'
 
 export default function AboutPage() {
   const t = useTranslations('About')
+
+  const mockArticles = [
+    { id: 1, title: 'Article 1', coverPath: '/images/mascot_placeholder.png' },
+    { id: 2, title: 'Article 2', coverPath: '/images/mascot_placeholder.png' },
+    { id: 3, title: 'Article 3', coverPath: '/images/mascot_placeholder.png' },
+    { id: 4, title: 'Article 4', coverPath: '/images/mascot_placeholder.png' },
+    { id: 5, title: 'Article 5', coverPath: '/images/mascot_placeholder.png' },
+  ]
+
   return (
     <main className="min-h-screen pt-40 pb-[400px] flex flex-col items-center relative overflow-hidden">
       
@@ -126,6 +136,15 @@ export default function AboutPage() {
             </div>
           </div>
         </GlassPanel>
+      </div>
+
+      {/* ─── CARROUSEL D'ARTICLES ───────────────────────────────────── */}
+      <div className="w-full max-w-6xl mx-auto px-4 mt-20 mb-32 relative z-10 flex flex-col items-center">
+        <div className="text-center mb-8">
+          <h2 className="font-serif text-3xl md:text-4xl text-ink">Articles</h2>
+          <p className="text-ink-soft text-sm mt-2 uppercase tracking-widest">À lire prochainement</p>
+        </div>
+        <ArticlesCarousel articles={mockArticles} />
       </div>
 
     </main>
