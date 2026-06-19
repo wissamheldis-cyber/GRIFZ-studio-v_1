@@ -34,6 +34,13 @@ export default function WireframeSphere({
         @keyframes sphere-rot {
           to { transform: rotateY(360deg) rotateZ(360deg); }
         }
+        @keyframes glow-shift {
+          0%   { color: rgba(180, 180, 180, 0.25); }
+          25%  { color: rgba(100, 200, 255, 0.3); }
+          50%  { color: rgba(200, 100, 255, 0.3); }
+          75%  { color: rgba(100, 255, 200, 0.3); }
+          100% { color: rgba(180, 180, 180, 0.25); }
+        }
         .wireframe-sphere {
           position: relative;
           border-radius: 50%;
@@ -48,7 +55,8 @@ export default function WireframeSphere({
           border-radius: 50%;
           transform-style: preserve-3d;
           backface-visibility: visible;
-          box-shadow: 0 0 ${size/4}px 0 ${glow1}, inset 0 0 ${size/4}px 0 ${glow2};
+          box-shadow: 0 0 ${size/4}px 0 ${glow1}, inset 0 0 ${size/4}px 0 currentColor;
+          animation: glow-shift 8s ease-in-out infinite;
         }
       `}</style>
 

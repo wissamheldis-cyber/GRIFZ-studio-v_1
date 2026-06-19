@@ -47,13 +47,39 @@ export default function HomePage() {
             {...fadeUp(0.25)}
             className="w-full flex justify-center"
           >
-            <WireframeSphere size={240} items={24} glow2="rgba(180, 180, 180, 0.25)" />
+            <WireframeSphere size={240} items={24} />
           </motion.div>
+
+          <style dangerouslySetInnerHTML={{ __html: `
+            @keyframes liquid-mirror {
+              0% { background-position: 0% center; }
+              100% { background-position: 200% center; }
+            }
+            .liquid-glass-text {
+              background: linear-gradient(
+                to right, 
+                #ffffff 0%, 
+                #888888 15%, 
+                #ffffff 30%, 
+                #444444 50%, 
+                #ffffff 70%, 
+                #888888 85%, 
+                #ffffff 100%
+              );
+              background-size: 200% auto;
+              color: transparent;
+              -webkit-background-clip: text;
+              background-clip: text;
+              animation: liquid-mirror 6s linear infinite;
+              filter: drop-shadow(0px 4px 15px rgba(0,0,0,0.8));
+              font-weight: 700;
+            }
+          `}} />
 
           {/* Label */}
           <motion.p
             {...fadeUp(0.2)}
-            className="label absolute z-10 pointer-events-none drop-shadow-[0_4px_10px_rgba(0,0,0,0.5)]"
+            className="label absolute z-10 pointer-events-none liquid-glass-text"
           >
             {t('label_studio')}
           </motion.p>
