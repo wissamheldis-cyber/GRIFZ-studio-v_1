@@ -117,8 +117,8 @@
   "Realisations": {
     "title": "Nos Réalisations",
     "subtitle": "Naviguez pour explorer nos projets, cliquez au centre pour les détails.",
-    "challenge": "Le Défi",
-    "vision": "La Vision",
+    "challenge": "Périmètre d'intervention",
+    "vision": "L'intervention",
     "vision_text": "L'approche visuelle choisie pour {title} repose sur une étude approfondie de leur identité. Nous avons défini une direction artistique autour de la matière {material} pour capter l'essence de leur ambition. Chaque détail, des textures aux polices, a été pensé pour sublimer l'expérience.",
     "conceptual_note": "* Exploration conceptuelle interne GRIFZ Studio."
   },

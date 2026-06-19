@@ -407,9 +407,6 @@ export default function RealisationsPage() {
                               <p className="font-serif text-sm md:text-base text-white/90 leading-[1.8]">
                                 {activeProject.solution}
                               </p>
-                              <p className="font-sans text-[11px] md:text-xs text-white/50 leading-[1.9] font-light">
-                                {t('vision_text', { title: activeProject.title, material: activeProject.material })}
-                              </p>
                             </div>
                           </div>
                           

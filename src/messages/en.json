@@ -117,9 +117,9 @@
   "Realisations": {
     "title": "Our Works",
     "subtitle": "Navigate to explore our projects, click the center card for details.",
-    "challenge": "The Challenge",
-    "vision": "The Vision",
-    "vision_text": "The visual approach chosen for {title} is based on an in-depth study of their identity. We defined an art direction around the {material} material to capture the essence of their ambition. Every detail, from textures to fonts, was designed to elevate the experience.",
+    "challenge": "Scope of work",
+    "vision": "The Intervention",
+    "vision_text": "The visual approach for {title} is based on an in-depth study of their identity. We defined an art direction around the material {material} to capture the essence of their ambition. Every detail, from textures to typography, was designed to elevate the experience.",
     "conceptual_note": "* Internal conceptual exploration by GRIFZ Studio."
   },
   "Account": {
