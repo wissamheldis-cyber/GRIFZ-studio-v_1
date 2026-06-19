@@ -9,6 +9,7 @@ import { MagicButton } from '@/components/ui/MagicButton'
 import { GlassPanel } from '@/components/ui/GlassPanel'
 import { ParallaxWrapper } from '@/components/ui/ParallaxWrapper'
 import { FlipCard } from '@/components/ui/FlipCard'
+import WireframeSphere from '@/components/ui/WireframeSphere'
 
 /* ─── Animations ──────────────────────────────────────────── */
 const EASE = [0.25, 0.46, 0.45, 0.94] as [number, number, number, number]
@@ -47,6 +48,14 @@ export default function HomePage() {
         >
           {t('label_studio')}
         </motion.p>
+
+        {/* Sphere 3D */}
+        <motion.div
+          {...fadeUp(0.25)}
+          className="relative w-full flex justify-center mb-8"
+        >
+          <WireframeSphere size={240} items={24} glow2="rgba(180, 180, 180, 0.25)" />
+        </motion.div>
 
         {/* Grand titre */}
         <motion.h1
