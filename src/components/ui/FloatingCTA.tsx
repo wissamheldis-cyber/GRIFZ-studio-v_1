@@ -65,17 +65,38 @@ export function FloatingCTA() {
           transition={{ duration: 0.8, delay: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
           className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[150] pointer-events-auto"
         >
+          <style>{`
+            @keyframes rainbow-border {
+              0% { background-position: 0% 50%; }
+              50% { background-position: 100% 50%; }
+              100% { background-position: 0% 50%; }
+            }
+            .rainbow-glow-wrapper {
+              background: linear-gradient(90deg, #00f2fe, #4facfe, #00f2fe, #ff0844, #ffb199, #00f2fe);
+              background-size: 300% 300%;
+              animation: rainbow-border 4s ease infinite;
+            }
+          `}</style>
           <Link href={ctaHref}>
-            <MagicButton className="px-10 group">
-              <span className="flex items-center gap-3">
-                <span className="font-sans text-xs tracking-[0.2em] uppercase font-medium">
-                  {ctaText}
+            <div className="relative group flex items-center justify-center rounded-[56px]">
+              {/* Flou externe (Glow) multicolore */}
+              <div className="absolute -inset-[3px] rounded-[60px] rainbow-glow-wrapper blur-xl opacity-60 group-hover:opacity-100 transition-opacity duration-700"></div>
+              
+              {/* Bordure fine multicolore nette */}
+              <div className="absolute -inset-[1px] rounded-[58px] rainbow-glow-wrapper opacity-100"></div>
+
+              {/* Le bouton MagicButton par-dessus */}
+              <MagicButton className="relative px-10 group" style={{ border: 'none' }}>
+                <span className="flex items-center gap-3">
+                  <span className="font-sans text-xs tracking-[0.2em] uppercase font-medium">
+                    {ctaText}
+                  </span>
+                  <span className="group-hover:translate-x-2 transition-transform duration-300">
+                    →
+                  </span>
                 </span>
-                <span className="group-hover:translate-x-2 transition-transform duration-300">
-                  →
-                </span>
-              </span>
-            </MagicButton>
+              </MagicButton>
+            </div>
           </Link>
         </motion.div>
       )}
