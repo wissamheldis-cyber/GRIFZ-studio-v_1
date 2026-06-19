@@ -186,10 +186,10 @@ export default function RealisationsPage() {
           <motion.div 
             ref={realisationsRef}
             key="section-realisations"
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.6 }}
             className="w-full max-w-6xl mx-auto px-4 flex flex-col items-center gap-12 relative z-10 overflow-hidden"
           >
             {/* Titre central */}
@@ -272,12 +272,11 @@ export default function RealisationsPage() {
                       className="w-[260px] h-[360px] md:w-[350px] md:h-[480px] rounded-2xl"
                       animate={isActive && activeFlipped ? {
                         y: -15,
-                        boxShadow: "0 40px 100px rgba(0,0,0,0.8), 0 0 80px rgba(255,255,255,0.06)"
                       } : {
                         y: 0,
-                        boxShadow: "0 0 0 rgba(0,0,0,0)"
                       }}
                       transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                      style={{ willChange: 'transform' }}
                     >
                       <FlipCard 
                         key={`${project.id}-${isActive}`}
@@ -288,11 +287,11 @@ export default function RealisationsPage() {
                         frontContent={
                           <div className="absolute inset-0 flex items-center justify-center p-8 bg-black/40 backdrop-blur-[2px]">
                             {project.logoPath ? (
-                              <div className="relative w-4/5 h-1/2 drop-shadow-2xl transition-transform duration-500 group-hover:scale-105">
+                              <div className="relative w-4/5 h-1/2 transition-transform duration-500 group-hover:scale-105">
                                 <Image src={project.logoPath} alt={`${project.title} logo`} fill className="object-contain" unoptimized />
                               </div>
                             ) : (
-                              <h3 className="font-serif text-3xl md:text-4xl text-white drop-shadow-2xl transition-transform duration-500 group-hover:scale-105">{project.title}</h3>
+                              <h3 className="font-serif text-3xl md:text-4xl text-white transition-transform duration-500 group-hover:scale-105">{project.title}</h3>
                             )}
                           </div>
                         }
@@ -322,9 +321,9 @@ export default function RealisationsPage() {
             <AnimatePresence>
               {activeFlipped && activeProject && (
                 <motion.div
-                  initial={{ opacity: 0, y: 30, height: 0 }}
-                  animate={{ opacity: 1, y: 0, height: 'auto' }}
-                  exit={{ opacity: 0, y: 30, height: 0 }}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 30 }}
                   transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
                   className="w-full max-w-5xl mx-auto overflow-hidden mt-12 md:mt-20"
                 >
@@ -341,7 +340,6 @@ export default function RealisationsPage() {
                       aspect-ratio: 1;
                       position: absolute;
                       background-color: #fff;
-                      box-shadow: 0 0 10px #ffffff, 0 0 20px rgba(255,255,255,0.3);
                       border-radius: 100px;
                       z-index: 20;
                       animation: moveDotPanel 8s linear infinite;
@@ -378,7 +376,6 @@ export default function RealisationsPage() {
                           borderRadius: '100px',
                           backgroundColor: '#c7c7c7',
                           opacity: 0.3,
-                          boxShadow: '0 0 60px #fff',
                           filter: 'blur(12px)',
                           transformOrigin: '10%',
                           top: '0%',
@@ -497,10 +494,10 @@ export default function RealisationsPage() {
           <motion.div 
             ref={fictionalRef}
             key="section-fictif"
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.6 }}
             className="w-full max-w-6xl mx-auto px-4 flex flex-col items-center gap-12 relative z-10 overflow-hidden pb-32"
           >
             {/* Titre central Fictif */}
@@ -534,9 +531,9 @@ export default function RealisationsPage() {
               : 1 - Math.abs(offset) * 0.3
             const zIndex = isActive && activeFictionalFlipped ? 100 : 50 - Math.abs(offset)
             
-            const filterBlur = isInactiveFlippedState
-               ? `blur(${Math.abs(offset) * 4 + 16}px) brightness(0.2)`
-               : Math.abs(offset) > 0 ? `blur(${Math.abs(offset) * 4}px)` : 'blur(0px)'
+            const filterValue = isInactiveFlippedState
+               ? `brightness(0.2)`
+               : 'brightness(1)'
 
             // Pour simplifier l'animation d'entrée du second carrousel, on utilise whileInView
             const entranceAnimate = {
@@ -545,14 +542,14 @@ export default function RealisationsPage() {
               rotateY: rotateY,
               scale: scale,
               opacity: opacity,
-              filter: filterBlur,
+              filter: filterValue,
             }
 
             return (
               <motion.div
                 key={project.id}
                 className="absolute top-0 bottom-0 flex flex-col items-center justify-center cursor-pointer"
-                style={{ zIndex }}
+                style={{ zIndex, willChange: 'transform, opacity' }}
                 initial={{ opacity: 0 }}
                 whileInView={entranceAnimate}
                 viewport={{ once: false, margin: "-50px" }}
@@ -563,12 +560,11 @@ export default function RealisationsPage() {
                   className="w-[260px] h-[360px] md:w-[350px] md:h-[480px] rounded-2xl"
                   animate={isActive && activeFictionalFlipped ? {
                     y: -15,
-                    boxShadow: "0 40px 100px rgba(0,0,0,0.8), 0 0 80px rgba(255,255,255,0.06)"
                   } : {
                     y: 0,
-                    boxShadow: "0 0 0 rgba(0,0,0,0)"
                   }}
                   transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                  style={{ willChange: 'transform' }}
                 >
                   <FlipCard 
                     key={`${project.id}-${isActive}`}
@@ -580,23 +576,15 @@ export default function RealisationsPage() {
                       <div className="absolute inset-0 flex flex-col items-center justify-center p-8 bg-black/40 backdrop-blur-[2px] text-center z-10 pointer-events-none">
                         {project.logoPath ? (
                           <div className="relative w-72 h-36 md:w-[340px] md:h-[180px] mb-6">
-                            {/* Effet de flou (Bloom) modelé exactement sur la forme du PNG */}
-                            <div className="absolute inset-0 opacity-50 mix-blend-screen filter blur-[20px] transform scale-105 z-0">
-                              <Image 
-                                src={project.logoPath} 
-                                alt=""
-                                fill
-                                className="object-contain"
-                              />
-                            </div>
-                            {/* Halo supplémentaire doux en arrière-plan */}
-                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2/3 h-2/3 bg-white/10 blur-[40px] rounded-full z-0" />
+                            {/* Halo simple */}
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-white/10 blur-[30px] rounded-full z-0 pointer-events-none" />
                             
                             <Image 
                               src={project.logoPath} 
                               alt={`${project.brandName} logo`}
                               fill
-                              className="object-contain filter drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] relative z-10"
+                              sizes="(max-width: 768px) 300px, 400px"
+                              className="object-contain relative z-10"
                             />
                           </div>
                         ) : (
