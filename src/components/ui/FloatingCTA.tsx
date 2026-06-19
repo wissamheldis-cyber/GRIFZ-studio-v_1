@@ -46,29 +46,27 @@ export function FloatingCTA() {
       className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[150] pointer-events-auto"
     >
       <Link href={ctaHref}>
-        <motion.div
-          whileHover={{ scale: 1.05, y: -5 }}
-          whileTap={{ scale: 0.95 }}
-          className="relative group overflow-hidden rounded-full p-[1px]"
+        <div 
+          className="flex items-center justify-center gap-[10px] font-sans text-[13px] font-medium uppercase tracking-[0.4px] text-[#7e97b8] bg-[#e0e8ef] border-2 border-[rgba(255,255,255,0.333)] rounded-[40px] pl-[28px] pr-[24px] py-[16px] transition-all duration-200 shadow-[-4px_-2px_16px_0px_#ffffff,4px_2px_16px_0px_rgba(95,157,231,0.48)] hover:text-[#516d91] hover:bg-[#E5EDF5] hover:shadow-[-2px_-1px_8px_0px_#ffffff,2px_1px_8px_0px_rgba(95,157,231,0.48)] active:shadow-none"
         >
-          {/* Animated gradient border */}
-          <div className="absolute inset-0 bg-gradient-to-r from-white/10 via-white/40 to-white/10 opacity-50 group-hover:opacity-100 transition-opacity duration-500 rounded-full blur-[2px]" />
-          
-          {/* Glassmorphism Button Background */}
-          <div className="relative px-8 py-4 bg-black/40 backdrop-blur-xl border border-white/10 rounded-full flex items-center justify-center gap-3 shadow-[0_10px_40px_rgba(0,0,0,0.5)] group-hover:shadow-[0_15px_50px_rgba(255,255,255,0.1)] transition-all duration-500">
-            
-            {/* Subtle inner glow */}
-            <div className="absolute inset-0 rounded-full bg-gradient-to-b from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            
-            <span className="font-sans text-[11px] md:text-xs uppercase tracking-[0.2em] font-medium text-white/90 group-hover:text-white transition-colors relative z-10">
-              {ctaText}
-            </span>
-            
-            <span className="text-white/50 group-hover:text-white group-hover:translate-x-1 transition-all duration-300 relative z-10 text-sm">
-              →
-            </span>
-          </div>
-        </motion.div>
+          <span>
+            {ctaText}
+          </span>
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            width="16" 
+            height="16" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            stroke="currentColor" 
+            strokeWidth="2" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+          >
+            <path d="M5 12h14"></path>
+            <path d="m12 5 7 7-7 7"></path>
+          </svg>
+        </div>
       </Link>
     </motion.div>
   )
