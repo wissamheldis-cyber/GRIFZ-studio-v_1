@@ -208,7 +208,7 @@ export default function CataloguePage() {
       <div className="w-full max-w-7xl mx-auto px-4 flex flex-col items-center relative z-10">
         
         {/* Titre central de la page */}
-        <div className="text-center flex flex-col gap-4 mb-[200px]">
+        <div className="text-center flex flex-col gap-4">
           <h1 className="font-serif text-4xl md:text-6xl text-ink">
             {t('title')}
           </h1>
@@ -216,6 +216,9 @@ export default function CataloguePage() {
             {t('subtitle')}
           </p>
         </div>
+
+        {/* Bloc d'espacement strict (> 190 pixels) */}
+        <div style={{ height: '200px', width: '100%' }} />
 
         {/* Tabs de Sélection */}
         <div className="flex flex-wrap justify-center gap-6 md:gap-12 mb-16 md:mb-20 relative z-20">
