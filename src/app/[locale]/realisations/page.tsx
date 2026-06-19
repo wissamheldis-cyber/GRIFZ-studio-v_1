@@ -83,12 +83,15 @@ function ProjectMiniCarousel({ images }: { images: string[] }) {
 
 
 export default function RealisationsPage() {
-  const [activeIndex, setActiveIndex] = useState(2)
+  const [activeIndex, setActiveIndex] = useState(0)
   const [activeFlipped, setActiveFlipped] = useState(false)
   
   // Nouveaux états pour le carrousel Fictif
-  const [activeFictionalIndex, setActiveFictionalIndex] = useState(2)
+  const [activeFictionalIndex, setActiveFictionalIndex] = useState(0)
   const [activeFictionalFlipped, setActiveFictionalFlipped] = useState(false)
+
+  const realisationsRef = useRef<HTMLDivElement>(null)
+  const fictionalRef = useRef<HTMLDivElement>(null)
   
   const [hasEntered, setHasEntered] = useState(false)
   const [entranceComplete, setEntranceComplete] = useState(false)
@@ -117,7 +120,12 @@ export default function RealisationsPage() {
     if (activeIndex === index) {
       setActiveFlipped(isFlipped)
       // Désactiver le flip de l'autre carrousel si activé
-      if (isFlipped) setActiveFictionalFlipped(false)
+      if (isFlipped) {
+        setActiveFictionalFlipped(false)
+        setTimeout(() => {
+          realisationsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        }, 150)
+      }
       
       // On dispatch l'event pour le composant RainBackground
       window.dispatchEvent(new CustomEvent('card-flip', { 
@@ -141,7 +149,12 @@ export default function RealisationsPage() {
     if (activeFictionalIndex === index) {
       setActiveFictionalFlipped(isFlipped)
       // Désactiver le flip de l'autre carrousel si activé
-      if (isFlipped) setActiveFlipped(false)
+      if (isFlipped) {
+        setActiveFlipped(false)
+        setTimeout(() => {
+          fictionalRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        }, 150)
+      }
       
       window.dispatchEvent(new CustomEvent('card-flip', { 
         detail: { 
@@ -171,6 +184,7 @@ export default function RealisationsPage() {
       <AnimatePresence>
         {!activeFictionalFlipped && (
           <motion.div 
+            ref={realisationsRef}
             key="section-realisations"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
@@ -481,6 +495,7 @@ export default function RealisationsPage() {
       <AnimatePresence>
         {!activeFlipped && (
           <motion.div 
+            ref={fictionalRef}
             key="section-fictif"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
