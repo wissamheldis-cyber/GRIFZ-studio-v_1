@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { motion, useInView, useReducedMotion } from 'framer-motion'
+import { motion, useInView, useReducedMotion, AnimatePresence } from 'framer-motion'
 import { FlipCard } from '@/components/ui/FlipCard'
 import Image from 'next/image'
 import { materials, MaterialData } from '@/data/materialsData'
@@ -78,13 +78,13 @@ function CategoryCarousel({
       </motion.h2>
       
       {/* Carrousel 3D de la Catégorie */}
-      <div className="relative w-full h-[320px] md:h-[400px] flex items-center justify-center mt-4" style={{ perspective: '1200px' }}>
+      <div className="relative w-full h-[400px] md:h-[550px] flex items-center justify-center mt-4" style={{ perspective: '1200px' }}>
         {categoryMaterials.map((mat, index) => {
           const offset = index - activeIndex
           const isActive = offset === 0
 
-          // Mathématiques du Coverflow
-          const translateX = offset * (typeof window !== 'undefined' && window.innerWidth < 768 ? 140 : 280)
+          // Mathématiques du Coverflow (Écartement plus large pour les grandes cartes)
+          const translateX = offset * (typeof window !== 'undefined' && window.innerWidth < 768 ? 160 : 380)
           const translateZ = Math.abs(offset) * -200
           const rotateY = offset * -25
           const scale = 1 - Math.abs(offset) * 0.1
@@ -131,7 +131,7 @@ function CategoryCarousel({
               onClick={() => handleCardClick(index)}
             >
               <motion.div
-                className="w-[240px] h-[240px] md:w-[320px] md:h-[320px]"
+                className="w-[300px] h-[300px] md:w-[450px] md:h-[450px]"
                 transition={{ type: 'spring', stiffness: 300, damping: 20 }}
               >
                 <FlipCard 
@@ -186,6 +186,7 @@ function CategoryCarousel({
 export default function CataloguePage() {
   const { setActiveOrbImage } = useHeaderContext()
   const t = useTranslations('Catalogue')
+  const [activeCategory, setActiveCategory] = useState(categories[0])
 
   // Map des catégories internes vers les clés de traduction
   const categoryTranslations: Record<string, string> = {
@@ -216,20 +217,38 @@ export default function CataloguePage() {
           </p>
         </div>
 
-        {/* Section par Catégorie */}
-        <div className="w-full flex flex-col">
-          {categories.map((catTitle, catIndex) => {
-            const catMaterials = materials.filter(m => m.category === catTitle)
-            return (
+        {/* Tabs de Sélection */}
+        <div className="flex flex-wrap justify-center gap-6 md:gap-12 mb-12 relative z-20">
+          {categories.map(cat => (
+            <button
+              key={cat}
+              onClick={() => setActiveCategory(cat)}
+              className={`text-sm md:text-base font-sans tracking-[0.15em] uppercase transition-all duration-300 pb-2 border-b-2 ${activeCategory === cat ? 'border-ink text-ink font-medium drop-shadow-md' : 'border-transparent text-ink-soft hover:text-ink hover:border-ink/30'}`}
+            >
+              {categoryTranslations[cat] || cat}
+            </button>
+          ))}
+        </div>
+
+        {/* Section par Catégorie (une seule affichée à la fois) */}
+        <div className="w-full flex flex-col min-h-[600px] relative">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeCategory}
+              initial={{ opacity: 0, y: 20, filter: 'blur(10px)' }}
+              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+              exit={{ opacity: 0, y: -20, filter: 'blur(10px)' }}
+              transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+              className="w-full"
+            >
               <CategoryCarousel 
-                key={catTitle} 
-                title={categoryTranslations[catTitle] || catTitle} 
-                categoryMaterials={catMaterials} 
+                title="" // Titre masqué car remplacé par les tabs
+                categoryMaterials={materials.filter(m => m.category === activeCategory)} 
                 onCardActivate={(orbPath) => setActiveOrbImage(orbPath || null)}
-                categoryIndex={catIndex}
+                categoryIndex={0}
               />
-            )
-          })}
+            </motion.div>
+          </AnimatePresence>
         </div>
 
       </div>

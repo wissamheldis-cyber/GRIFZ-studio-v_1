@@ -7,6 +7,7 @@ import { ThemeProvider } from '@/components/layout/ThemeProvider'
 import RainBackground from '@/components/layout/RainBackground'
 import ThreeLiquidBackground from '@/components/ui/ThreeLiquidBackground'
 import { GrifzLoadingIntro } from '@/components/ui/GrifzLoadingIntro'
+import { FloatingCTA } from '@/components/ui/FloatingCTA'
 
 /* ─── Métadonnées SEO ────────────────────────────────────── */
 export const metadata: Metadata = {
@@ -81,6 +82,7 @@ export default async function RootLayout({
             <main style={{ paddingTop: 200 }}>
               {children}
             </main>
+            <FloatingCTA />
             <Footer />
           </HeaderProvider>
         </NextIntlClientProvider>

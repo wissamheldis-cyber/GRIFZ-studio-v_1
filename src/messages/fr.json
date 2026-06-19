@@ -141,5 +141,11 @@
   "Legal": {
     "title": "Mentions légales.",
     "text": "Les mentions légales seront complétées avant la mise en ligne du site."
+  },
+  "CTA": {
+    "book_call": "Réserver un appel",
+    "start_project": "Démarrer un projet",
+    "discover_materials": "Découvrir nos matières",
+    "explore_projects": "Explorer nos projets"
   }
 }

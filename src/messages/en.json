@@ -141,5 +141,11 @@
   "Legal": {
     "title": "Legal Mentions.",
     "text": "Legal mentions will be completed before the website goes live."
+  },
+  "CTA": {
+    "book_call": "Book a Call",
+    "start_project": "Start a Project",
+    "discover_materials": "Discover Materials",
+    "explore_projects": "Explore Projects"
   }
 }
