@@ -33,15 +33,15 @@ export default function HomePage() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          justifyContent: 'center',
-          padding: '80px 28px',
+          justifyContent: 'flex-start',
+          padding: '20px 28px 80px', // Less padding top
           position: 'relative',
           overflow: 'hidden',
           textAlign: 'center',
         }}
       >
         {/* Bloc Sphere + Label superposé */}
-        <div className="relative flex justify-center items-center -mt-40 mb-12 w-full">
+        <div className="relative flex justify-center items-center mt-[-80px] mb-[60px] w-full">
           {/* Sphere 3D */}
           <motion.div
             {...fadeUp(0.25)}
