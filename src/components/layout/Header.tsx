@@ -21,6 +21,24 @@ export default function Header() {
   const [hoveredLabel, setHoveredLabel] = useState<string | null>(null)
   const [showCurrent, setShowCurrent] = useState(true)
 
+  // Easter egg: 3 clics rapides sur l'orbe du header pour relancer l'intro
+  const [clickCount, setClickCount] = useState(0)
+  
+  const handleOrbClick = () => {
+    const newCount = clickCount + 1
+    if (newCount >= 3) {
+      if (typeof window !== 'undefined') {
+        sessionStorage.removeItem('grifz-intro-seen')
+        window.location.reload()
+      }
+    } else {
+      setClickCount(newCount)
+      setTimeout(() => {
+        setClickCount(prev => (prev === newCount ? 0 : prev))
+      }, 1500)
+    }
+  }
+
   useEffect(() => {
     setShowCurrent(true)
     const timer = setTimeout(() => {
@@ -110,7 +128,15 @@ export default function Header() {
 
           {/* L'Orb Centrale - En absolu pour garantir le centre parfait */}
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex flex-col items-center justify-center pointer-events-none w-[120px] h-[120px]">
-            <div className="relative transition-all duration-300 pointer-events-auto scale-[0.66] md:scale-[0.83] lg:scale-100 flex items-center justify-center drop-shadow-[0_12px_25px_rgba(0,0,0,0.4)] hover:drop-shadow-[0_15px_30px_rgba(0,0,0,0.5)]">
+            <motion.div 
+              className="relative transition-all duration-300 pointer-events-auto scale-[0.66] md:scale-[0.83] lg:scale-100 flex items-center justify-center cursor-pointer"
+              onClick={handleOrbClick}
+              animate={{
+                scale: 1 + clickCount * 0.05,
+                filter: `drop-shadow(0 0 ${clickCount * 15 + 10}px rgba(255,255,255, ${clickCount * 0.3}))`
+              }}
+              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+            >
               <Orb
                 material="grifz"
                 customImage={activeOrbImage}
@@ -119,7 +145,7 @@ export default function Header() {
                 animated={true}
                 intensity={0.15}
               />
-            </div>
+            </motion.div>
             
             {/* Dynamic Label */}
             <div className="absolute top-[100%] mt-48 left-1/2 -translate-x-1/2 whitespace-nowrap h-[24px] flex items-center justify-center pointer-events-none">
