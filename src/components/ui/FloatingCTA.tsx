@@ -66,24 +66,24 @@ export function FloatingCTA() {
           className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[150] pointer-events-auto"
         >
           <style>{`
-            @keyframes rainbow-border {
+            @keyframes white-glow-anim {
               0% { background-position: 0% 50%; }
               50% { background-position: 100% 50%; }
               100% { background-position: 0% 50%; }
             }
-            .rainbow-glow-wrapper {
-              background: linear-gradient(90deg, #00f2fe, #4facfe, #00f2fe, #ff0844, #ffb199, #00f2fe);
-              background-size: 300% 300%;
-              animation: rainbow-border 4s ease infinite;
+            .white-glow-wrapper {
+              background: linear-gradient(90deg, rgba(255,255,255,0.1), rgba(255,255,255,0.8), rgba(255,255,255,0.1));
+              background-size: 200% 200%;
+              animation: white-glow-anim 4s linear infinite;
             }
           `}</style>
           <Link href={ctaHref}>
             <div className="relative group flex items-center justify-center rounded-[56px]">
-              {/* Flou externe (Glow) multicolore */}
-              <div className="absolute -inset-[3px] rounded-[60px] rainbow-glow-wrapper blur-xl opacity-60 group-hover:opacity-100 transition-opacity duration-700"></div>
+              {/* Flou externe (Glow) blanc */}
+              <div className="absolute -inset-[3px] rounded-[60px] white-glow-wrapper blur-xl opacity-40 group-hover:opacity-80 transition-opacity duration-700"></div>
               
-              {/* Bordure fine multicolore nette */}
-              <div className="absolute -inset-[1px] rounded-[58px] rainbow-glow-wrapper opacity-100"></div>
+              {/* Bordure fine blanche nette */}
+              <div className="absolute -inset-[1px] rounded-[58px] white-glow-wrapper opacity-60 group-hover:opacity-100 transition-opacity duration-700"></div>
 
               {/* Le bouton MagicButton par-dessus */}
               <MagicButton className="relative px-10 group" style={{ border: 'none' }}>
