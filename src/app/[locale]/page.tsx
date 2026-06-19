@@ -50,9 +50,9 @@ export default function HomePage() {
             <WireframeSphere 
               size={240} 
               items={24} 
-              color="rgba(0, 0, 0, 0.4)" 
-              glow1="rgba(0, 0, 0, 0.05)" 
-              glow2="rgba(0, 0, 0, 0.1)" 
+              color="rgba(0, 0, 0, 0.5)" 
+              glow1="rgba(255, 255, 255, 0.3)" 
+              glow2="rgba(255, 255, 255, 0.5)" 
             />
           </motion.div>
 
@@ -76,8 +76,9 @@ export default function HomePage() {
               color: transparent;
               -webkit-background-clip: text;
               background-clip: text;
+              -webkit-text-stroke: 1px rgba(0,0,0,0.25);
               animation: liquid-mirror 6s linear infinite;
-              filter: drop-shadow(0px 4px 15px rgba(0,0,0,0.8));
+              filter: drop-shadow(0px 0px 4px rgba(0,0,0,0.6)) drop-shadow(0px 4px 15px rgba(0,0,0,0.8));
               font-weight: 700;
             }
           `}} />
