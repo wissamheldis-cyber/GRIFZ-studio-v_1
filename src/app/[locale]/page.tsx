@@ -65,11 +65,11 @@ export default function HomePage() {
               background: linear-gradient(
                 to right, 
                 #ffffff 0%, 
-                #888888 15%, 
+                #f5f5f5 15%, 
                 #ffffff 30%, 
-                #444444 50%, 
+                #e0e0e0 50%, 
                 #ffffff 70%, 
-                #888888 85%, 
+                #f5f5f5 85%, 
                 #ffffff 100%
               );
               background-size: 200% auto;
