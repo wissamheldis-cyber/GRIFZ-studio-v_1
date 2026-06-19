@@ -1,27 +1,31 @@
 'use client'
 
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { Link, usePathname } from '@/i18n/routing'
+import { useLocale, useTranslations } from 'next-intl'
 import Orb from '@/components/ui/Orb'
 import { useHeaderContext } from '@/context/HeaderContext'
 
-/* ─── Navigation ─────────────────────────────────────────── */
-const LEFT_LINKS = [
-  { href: '/',            label: 'accueil' },
-  { href: '/realisations', label: 'réalisations' },
-  { href: '/catalogue',   label: 'catalogue' },
-]
-
-const RIGHT_LINKS = [
-  { href: '/reservation', label: 'réservation' },
-  { href: '/a-propos',    label: 'à propos' },
-  { href: '/compte',      label: 'compte' },
-]
-
 export default function Header() {
   const pathname = usePathname()
+  const locale = useLocale()
+  
+  // usePathname from next-intl already returns the path without the locale prefix!
   const isActive = (href: string) => href === '/' ? pathname === '/' : pathname.startsWith(href)
   const { activeOrbImage } = useHeaderContext()
+  const t = useTranslations('Header')
+
+  /* ─── Navigation ─────────────────────────────────────────── */
+  const LEFT_LINKS = [
+    { href: '/',            label: t('nav_home') },
+    { href: '/realisations', label: t('nav_works') },
+    { href: '/catalogue',   label: t('nav_catalog') },
+  ]
+
+  const RIGHT_LINKS = [
+    { href: '/reservation', label: t('nav_reservation') },
+    { href: '/a-propos',    label: t('nav_about') },
+    { href: '/compte',      label: t('nav_account') },
+  ]
 
   return (
     <>
@@ -64,6 +68,30 @@ export default function Header() {
         {/* Conteneur très large - passe en z-10 pour être au dessus de l'animation */}
         <div className="w-full max-w-6xl flex items-center justify-center relative min-h-[70px] md:min-h-[120px] z-10 mx-auto">
           
+          {/* Switcher EN (gauche) */}
+          <div className="absolute left-6 md:left-12 top-1/2 -translate-y-1/2 z-20">
+            <Link 
+              href={pathname} 
+              locale="en" 
+              style={{ fontFamily: 'var(--font-sans)' }}
+              className={`text-xs md:text-sm transition-all duration-300 ${locale === 'en' ? 'text-ink font-semibold' : 'text-muted hover:text-ink'}`}
+            >
+              EN
+            </Link>
+          </div>
+
+          {/* Switcher FR (droite) */}
+          <div className="absolute right-6 md:right-12 top-1/2 -translate-y-1/2 z-20">
+            <Link 
+              href={pathname} 
+              locale="fr" 
+              style={{ fontFamily: 'var(--font-sans)' }}
+              className={`text-xs md:text-sm transition-all duration-300 ${locale === 'fr' ? 'text-ink font-semibold' : 'text-muted hover:text-ink'}`}
+            >
+              FR
+            </Link>
+          </div>
+
           {/* L'Orb Centrale - En absolu pour garantir le centre parfait */}
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex items-center justify-center pointer-events-none w-[120px] h-[120px]">
             <div className="relative transition-all duration-300 pointer-events-auto scale-[0.66] md:scale-[0.83] lg:scale-100 flex items-center justify-center drop-shadow-[0_12px_25px_rgba(0,0,0,0.4)] hover:drop-shadow-[0_15px_30px_rgba(0,0,0,0.5)]">
@@ -94,11 +122,12 @@ export default function Header() {
                 >
                   <span
                     style={{
-                      fontFamily: 'var(--font-sans)',
+                      fontFamily: 'var(--font-header)',
                       fontWeight: active ? 400 : 300,
                       color: active ? 'var(--ink)' : 'var(--muted)',
-                      letterSpacing: '0.02em',
-                      transition: 'color 0.3s ease',
+                      letterSpacing: '0.05em',
+                      transition: 'all 0.3s ease',
+                      textTransform: active ? 'uppercase' : 'none',
                     }}
                     className="text-[11px] md:text-[14px] lg:text-[15px] group-hover:text-ink"
                   >
@@ -142,11 +171,12 @@ export default function Header() {
                   </span>
                   <span
                     style={{
-                      fontFamily: 'var(--font-sans)',
+                      fontFamily: 'var(--font-header)',
                       fontWeight: active ? 400 : 300,
                       color: active ? 'var(--ink)' : 'var(--muted)',
-                      letterSpacing: '0.02em',
-                      transition: 'color 0.3s ease',
+                      letterSpacing: '0.05em',
+                      transition: 'all 0.3s ease',
+                      textTransform: active ? 'uppercase' : 'none',
                     }}
                     className="text-[11px] md:text-[14px] lg:text-[15px] group-hover:text-ink"
                   >

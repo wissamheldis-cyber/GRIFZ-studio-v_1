@@ -5,9 +5,11 @@ import { GlassPanel } from '@/components/ui/GlassPanel'
 import { GlassPill } from '@/components/ui/GlassPill'
 import { ParallaxWrapper } from '@/components/ui/ParallaxWrapper'
 import Orb from '@/components/ui/Orb'
-import Link from 'next/link'
+import { Link } from '@/i18n/routing'
+import { useTranslations } from 'next-intl'
 
 export default function AboutPage() {
+  const t = useTranslations('About')
   return (
     <main className="min-h-screen pt-40 pb-0 flex flex-col items-center relative overflow-hidden">
       
@@ -21,7 +23,7 @@ export default function AboutPage() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            Le Studio.
+            {t('title')}
           </motion.h1>
           <motion.p 
             className="text-base md:text-lg text-ink-soft font-light"
@@ -29,7 +31,7 @@ export default function AboutPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
           >
-            Nous sommes un studio de design indépendant. Nous croyons que chaque marque possède une matière fondamentale qui dicte son rythme, sa typographie, son interaction et sa crédibilité.
+            {t('intro')}
           </motion.p>
         </div>
 
@@ -43,10 +45,10 @@ export default function AboutPage() {
               transition={{ delay: 0.2 }}
             >
               <GlassPanel className="p-12 md:p-14 h-full flex flex-col gap-6">
-              <h3 className="font-sans text-[11px] uppercase tracking-[0.15em] text-muted font-medium">01 — Indépendance</h3>
-              <h2 className="font-serif text-2xl text-ink">Studio Indépendant</h2>
+              <h3 className="font-sans text-[11px] uppercase tracking-[0.15em] text-muted font-medium">{t('block1_label')}</h3>
+              <h2 className="font-serif text-2xl text-ink">{t('block1_title')}</h2>
               <p className="text-sm text-ink-soft leading-relaxed font-light mt-auto pt-4">
-                Nous ne sommes pas une usine à sites web. Nous sélectionnons nos projets avec soin (5 à 10 par mois maximum) pour garantir une implication totale et une qualité artisanale sur chaque réalisation.
+                {t('block1_text')}
               </p>
             </GlassPanel>
           </motion.div>
@@ -59,10 +61,10 @@ export default function AboutPage() {
               transition={{ delay: 0.3 }}
             >
               <GlassPanel className="p-12 md:p-14 h-full flex flex-col gap-6">
-              <h3 className="font-sans text-[11px] uppercase tracking-[0.15em] text-muted font-medium">02 — Expertise</h3>
-              <h2 className="font-serif text-2xl text-ink">Évolution 360</h2>
+              <h3 className="font-sans text-[11px] uppercase tracking-[0.15em] text-muted font-medium">{t('block2_label')}</h3>
+              <h2 className="font-serif text-2xl text-ink">{t('block2_title')}</h2>
               <p className="text-sm text-ink-soft leading-relaxed font-light mt-auto pt-4">
-                Nous ne nous arrêtons pas au web design. De l'identité visuelle à la direction artistique globale, nous sculptons votre présence digitale de manière cohérente, premium et durable.
+                {t('block2_text')}
               </p>
             </GlassPanel>
           </motion.div>
@@ -77,10 +79,10 @@ export default function AboutPage() {
             >
               <GlassPanel strong className="p-12 md:p-16 h-full flex flex-col md:flex-row gap-10 items-center md:items-start text-center md:text-left border-ink/5">
               <div className="flex-1 flex flex-col gap-4">
-                <h3 className="font-sans text-[11px] uppercase tracking-[0.15em] text-ink font-medium">03 — Confidentialité & Méthode</h3>
-                <h2 className="font-serif text-2xl md:text-3xl text-ink">Le choix de la matière</h2>
+                <h3 className="font-sans text-[11px] uppercase tracking-[0.15em] text-ink font-medium">{t('block3_label')}</h3>
+                <h2 className="font-serif text-2xl md:text-3xl text-ink">{t('block3_title')}</h2>
                 <p className="text-sm md:text-base text-ink-soft leading-relaxed font-light mt-2">
-                  Notre méthode commence toujours par la sélection de votre matière. Est-ce le Verre, clinique et pur ? Le Cuivre, chaleureux et texturé ? Le Charbon, brut et puissant ? Ce choix dicte toutes nos décisions de design. Par ailleurs, nous garantissons une stricte confidentialité sur les projets en cours de refonte.
+                  {t('block3_text')}
                 </p>
               </div>
               <div className="w-32 h-32 flex-shrink-0 relative pointer-events-none opacity-50">
@@ -115,11 +117,11 @@ export default function AboutPage() {
             transition={{ duration: 1, delay: 0.2 }}
           >
             <h2 className="font-serif text-3xl md:text-5xl mb-6 font-light">
-              Dans 100 jours,<br/>la matière prendra corps.
+              {t('teaser_title_1')}<br/>{t('teaser_title_2')}
             </h2>
             <p className="text-sm md:text-base text-[#f7f3ed]/60 font-light uppercase tracking-widest leading-relaxed">
-              Un objet manifeste issu de l'univers GRIFZ.<br/>
-              Plus d'informations bientôt.
+              {t('teaser_text_1')}<br/>
+              {t('teaser_text_2')}
             </p>
           </motion.div>
 

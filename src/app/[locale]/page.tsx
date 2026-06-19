@@ -1,7 +1,8 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import Link from 'next/link'
+import { Link } from '@/i18n/routing'
+import { useTranslations } from 'next-intl'
 import Orb from '@/components/ui/Orb'
 import LiquidCard from '@/components/ui/LiquidCard'
 import { MagicButton } from '@/components/ui/MagicButton'
@@ -20,6 +21,8 @@ const fadeUp = (delay = 0) => ({
 
 /* ─── Page Accueil ───────────────────────────────────────── */
 export default function HomePage() {
+  const t = useTranslations('Home')
+
   return (
     <>
       {/* ─── Hero ───────────────────────────────────────── */}
@@ -42,7 +45,7 @@ export default function HomePage() {
           className="label"
           style={{ marginBottom: 20 }}
         >
-          Studio d'évolution digitale 360
+          {t('label_studio')}
         </motion.p>
 
         {/* Grand titre */}
@@ -59,7 +62,7 @@ export default function HomePage() {
             marginBottom: 28,
           }}
         >
-          Présence digitale sculptée par la matière.
+          {t('hero_title')}
         </motion.h1>
 
         {/* Sous-titre */}
@@ -74,7 +77,7 @@ export default function HomePage() {
             marginBottom: 56,
           }}
         >
-          GRIFZ Studio conçoit des identités, sites et expériences digitales premium pour marques, entreprises et créatifs exigeants.
+          {t('hero_subtitle')}
         </motion.p>
 
         {/* CTA */}
@@ -91,7 +94,7 @@ export default function HomePage() {
           <Link href="/reservation">
             <MagicButton className="group">
               <span className="flex items-center justify-center gap-3">
-                Réserver un appel
+                {t('cta_reserve')}
                 <span className="transition-transform duration-300 group-hover:translate-x-2">→</span>
               </span>
             </MagicButton>
@@ -99,7 +102,7 @@ export default function HomePage() {
           <Link href="/catalogue">
             <MagicButton className="px-10 group" onClick={() => window.location.href = '#catalogue'}>
               <span className="flex items-center gap-3">
-                <span className="font-sans text-xs tracking-[0.2em] uppercase font-medium">Découvrir l'univers</span>
+                <span className="font-sans text-xs tracking-[0.2em] uppercase font-medium">{t('cta_catalog')}</span>
                 <span className="group-hover:translate-x-2 transition-transform duration-300">→</span>
               </span>
             </MagicButton>
@@ -122,7 +125,7 @@ export default function HomePage() {
             gap: 8,
           }}
         >
-          <span className="label" style={{ fontSize: '10px' }}>Découvrir</span>
+          <span className="label" style={{ fontSize: '10px' }}>{t('scroll_discover')}</span>
           <motion.div
             animate={{ y: [0, 8, 0] }}
             transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
@@ -151,9 +154,13 @@ export default function HomePage() {
         >
           <ParallaxWrapper offset={40} direction="up">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {PROMISES.map((p, i) => (
+            {[
+              { icon: '◈', titleKey: 'promise_bespoke', descKey: 'promise_bespoke_desc' },
+              { icon: '◎', titleKey: 'promise_materials', descKey: 'promise_materials_desc' },
+              { icon: '◉', titleKey: 'promise_impact', descKey: 'promise_impact_desc' },
+            ].map((p, i) => (
               <motion.div
-                key={p.title}
+                key={p.titleKey}
                 initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -166,13 +173,13 @@ export default function HomePage() {
                       <div className="w-20 h-20 rounded-full bg-gradient-to-b from-white/80 to-white/20 shadow-[inset_0_2px_4px_rgba(255,255,255,1),0_8px_16px_rgba(0,0,0,0.05)] border border-white/60 flex items-center justify-center relative">
                         <span className="text-2xl text-ink relative z-10">{p.icon}</span>
                       </div>
-                      <h3 className="font-serif text-2xl text-white">{p.title}</h3>
+                      <h3 className="font-serif text-2xl text-white">{t(p.titleKey)}</h3>
                     </div>
                   }
                   backContent={
                     <div className="flex flex-col items-center justify-center text-center h-full p-4">
                       <p className="font-sans text-sm text-white/80 leading-relaxed">
-                        {p.description}
+                        {t(p.descKey)}
                       </p>
                     </div>
                   }
@@ -202,9 +209,9 @@ export default function HomePage() {
           transition={{ duration: 0.8 }}
           style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '12px 40px' }}
         >
-          {PROOF_POINTS.map((point) => (
+          {(['proof_call', 'proof_duration', 'proof_confidential', 'proof_projects', 'proof_response'] as const).map((key) => (
             <span
-              key={point}
+              key={key}
               style={{
                 fontFamily: 'var(--font-sans)',
                 fontSize: '12px',
@@ -214,7 +221,7 @@ export default function HomePage() {
                 color: 'var(--muted)',
               }}
             >
-              {point}
+              {t(key)}
             </span>
           ))}
         </motion.div>
@@ -237,7 +244,7 @@ export default function HomePage() {
               letterSpacing: '-0.02em',
             }}
           >
-            Chaque marque a une matière.
+            {t('brand_title')}
           </p>
           <p
             style={{
@@ -247,13 +254,13 @@ export default function HomePage() {
               maxWidth: 440,
             }}
           >
-            Vous pouvez choisir une matière, ou nous laisser la trouver pour vous.
+            {t('brand_subtitle')}
           </p>
           <div style={{ marginTop: 16 }}>
             <Link href="/catalogue">
               <MagicButton className="group">
                 <span className="flex items-center justify-center gap-3">
-                  Explorer les matières
+                  {t('brand_cta')}
                   <span className="transition-transform duration-300 group-hover:translate-x-2">→</span>
                 </span>
               </MagicButton>
@@ -266,29 +273,3 @@ export default function HomePage() {
   )
 }
 
-/* ─── Data ───────────────────────────────────────────────── */
-const PROMISES = [
-  {
-    icon: '◈',
-    title: 'Sur-mesure',
-    description: 'Chaque projet est pensé comme une pièce unique, au service de votre vision et de votre marque.',
-  },
-  {
-    icon: '◎',
-    title: 'Matières premium',
-    description: 'Une direction visuelle construite autour de la matière qui représente votre marque.',
-  },
-  {
-    icon: '◉',
-    title: 'Impact durable',
-    description: 'Des expériences digitales qui clarifient, rassurent et marquent dans le temps.',
-  },
-]
-
-const PROOF_POINTS = [
-  'Appel offert',
-  '30 minutes',
-  'Confidentiel',
-  '5–10 projets / mois',
-  'Réponse sous 24h',
-]

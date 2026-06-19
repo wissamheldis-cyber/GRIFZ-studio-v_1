@@ -1,17 +1,19 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform, useMotionTemplate } from 'framer-motion'
 import { GlassPanel } from '@/components/ui/GlassPanel'
 
 
 import { ParallaxWrapper } from '@/components/ui/ParallaxWrapper'
 import Orb from '@/components/ui/Orb'
-import Link from 'next/link'
+import { Link } from '@/i18n/routing'
 
 export default function ReservationPage() {
   const [selectedDay, setSelectedDay] = useState<number | null>(null)
   const [selectedTime, setSelectedTime] = useState<string | null>(null)
+  const t = useTranslations('Reservation')
 
   // -- Mock Data pour Juin 2026 --
   const daysInMonth = 30
@@ -77,7 +79,7 @@ export default function ReservationPage() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            Réservez votre appel gratuit.
+            {t('title')}
           </motion.h1>
           <motion.p 
             className="text-base md:text-lg text-ink-soft font-light"
@@ -85,7 +87,7 @@ export default function ReservationPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
           >
-            30 minutes pour définir la meilleure matière, le bon périmètre et la direction digitale adaptée à votre marque.
+            {t('subtitle')}
           </motion.p>
         </div>
 
@@ -159,12 +161,12 @@ export default function ReservationPage() {
                 <div className="relative z-20 w-full flex flex-col">
                   <div className="flex justify-between items-center mb-6 px-2">
                     <button className="text-white/60 hover:text-white transition-colors">&lt;</button>
-                    <span className="font-sans font-medium tracking-widest uppercase text-sm text-white/90">Juin 2026</span>
+                    <span className="font-sans font-medium tracking-widest uppercase text-sm text-white/90">{t('month')}</span>
                     <button className="text-white/60 hover:text-white transition-colors">&gt;</button>
                   </div>
                   
                   <div className="grid grid-cols-7 gap-2 mb-4 text-center">
-                    {['L', 'M', 'M', 'J', 'V', 'S', 'D'].map((d, i) => (
+                    {t('days_short').split(',').map((d, i) => (
                       <div key={i} className="text-[10px] uppercase tracking-widest text-white/40">{d}</div>
                     ))}
                   </div>
@@ -258,7 +260,7 @@ export default function ReservationPage() {
                             ))}
                           </div>
                         ) : (
-                          <p className="text-center text-sm text-white/40">Aucun horaire disponible à cette date.</p>
+                          <p className="text-center text-sm text-white/40">{t('no_slots')}</p>
                         )}
                       </div>
                     </div>
@@ -282,7 +284,7 @@ export default function ReservationPage() {
                     onClick={() => alert('Validation...')}
                   >
                     <span className="flex items-center justify-center gap-3 w-full">
-                      <span className="text-sm font-sans tracking-[0.2em] font-medium text-black">VALIDER LA RÉSERVATION</span>
+                      <span className="text-sm font-sans tracking-[0.2em] font-medium text-black">{t('confirm')}</span>
                       <span className="transition-transform duration-300 group-hover:translate-x-2 text-black">→</span>
                     </span>
                   </button>
@@ -301,8 +303,8 @@ export default function ReservationPage() {
         <ParallaxWrapper offset={40} direction="up" className="w-full">
           <div className="w-full max-w-6xl flex flex-col items-center gap-20 pb-16">
             <div className="text-center flex flex-col gap-6">
-              <h2 className="font-serif text-4xl md:text-5xl text-ink">Nos Offres & Packs</h2>
-              <p className="text-lg text-ink-soft font-light">Des interventions de haute précision pour sculpter votre présence.</p>
+              <h2 className="font-serif text-4xl md:text-5xl text-ink">{t('offers_title')}</h2>
+              <p className="text-lg text-ink-soft font-light">{t('offers_subtitle')}</p>
             </div>
 
             <div className="flex flex-col gap-8 w-full max-w-4xl mx-auto perspective-1000 px-4 md:px-0">
@@ -315,9 +317,9 @@ export default function ReservationPage() {
                   </div>
                   
                   <div className="flex flex-col relative z-10 transition-transform duration-300 group-hover:translate-x-2 w-full md:w-2/3">
-                    <h4 className="text-[10px] uppercase tracking-[0.2em] text-muted mb-2 font-semibold">Pack Initio</h4>
-                    <h3 className="font-serif text-3xl md:text-4xl text-ink mb-4">Refonte Logo</h3>
-                    <p className="text-sm md:text-base text-ink-soft font-light leading-relaxed">Modernisation et alignement pur de votre logotype avec votre matière fondamentale.</p>
+                    <h4 className="text-[10px] uppercase tracking-[0.2em] text-muted mb-2 font-semibold">{t('pack1_label')}</h4>
+                    <h3 className="font-serif text-3xl md:text-4xl text-ink mb-4">{t('pack1_title')}</h3>
+                    <p className="text-sm md:text-base text-ink-soft font-light leading-relaxed">{t('pack1_desc')}</p>
                   </div>
                   
                   <div className="flex flex-row md:flex-col items-center md:items-end justify-between w-full md:w-auto mt-6 md:mt-0 relative z-10 transition-transform duration-300 group-hover:-translate-x-2">
@@ -335,9 +337,9 @@ export default function ReservationPage() {
                   </div>
                   
                   <div className="flex flex-col relative z-10 transition-transform duration-300 group-hover:translate-x-2 w-full md:w-2/3">
-                    <h4 className="text-[10px] uppercase tracking-[0.2em] text-muted mb-2 font-semibold">Pack Visuel</h4>
-                    <h3 className="font-serif text-3xl md:text-4xl text-ink mb-4">Palette</h3>
-                    <p className="text-sm md:text-base text-ink-soft font-light leading-relaxed">Création d'un système couleur, typographique et iconographique complet et cohérent.</p>
+                    <h4 className="text-[10px] uppercase tracking-[0.2em] text-muted mb-2 font-semibold">{t('pack2_label')}</h4>
+                    <h3 className="font-serif text-3xl md:text-4xl text-ink mb-4">{t('pack2_title')}</h3>
+                    <p className="text-sm md:text-base text-ink-soft font-light leading-relaxed">{t('pack2_desc')}</p>
                   </div>
                   
                   <div className="flex flex-row md:flex-col items-center md:items-end justify-between w-full md:w-auto mt-6 md:mt-0 relative z-10 transition-transform duration-300 group-hover:-translate-x-2">
@@ -355,16 +357,16 @@ export default function ReservationPage() {
                   </div>
                   
                   <div className="absolute top-0 right-8 transform -translate-y-1/2 z-20 hidden md:block">
-                    <span className="bg-ink text-white text-[9px] uppercase tracking-widest px-3 py-1 rounded-full shadow-lg">Populaire</span>
+                    <span className="bg-ink text-white text-[9px] uppercase tracking-widest px-3 py-1 rounded-full shadow-lg">{t('popular')}</span>
                   </div>
                   <div className="absolute top-4 right-4 z-20 md:hidden">
-                    <span className="bg-ink text-white text-[9px] uppercase tracking-widest px-2 py-1 rounded-full shadow-lg">Populaire</span>
+                    <span className="bg-ink text-white text-[9px] uppercase tracking-widest px-2 py-1 rounded-full shadow-lg">{t('popular')}</span>
                   </div>
                   
                   <div className="flex flex-col relative z-10 transition-transform duration-300 group-hover:translate-x-2 w-full md:w-2/3">
-                    <h4 className="text-[10px] uppercase tracking-[0.2em] text-ink mb-2 font-semibold">Pack Visuel</h4>
-                    <h3 className="font-serif text-3xl md:text-4xl text-ink mb-4">Identité</h3>
-                    <p className="text-sm md:text-base text-ink-soft font-light leading-relaxed">De la création du logo profond aux supports de communication digitaux et imprimés.</p>
+                    <h4 className="text-[10px] uppercase tracking-[0.2em] text-ink mb-2 font-semibold">{t('pack3_label')}</h4>
+                    <h3 className="font-serif text-3xl md:text-4xl text-ink mb-4">{t('pack3_title')}</h3>
+                    <p className="text-sm md:text-base text-ink-soft font-light leading-relaxed">{t('pack3_desc')}</p>
                   </div>
                   
                   <div className="flex flex-row md:flex-col items-center md:items-end justify-between w-full md:w-auto mt-6 md:mt-0 relative z-10 transition-transform duration-300 group-hover:-translate-x-2">
@@ -382,13 +384,13 @@ export default function ReservationPage() {
                   </div>
                   
                   <div className="flex flex-col relative z-10 transition-transform duration-300 group-hover:translate-x-2 w-full md:w-2/3">
-                    <h4 className="text-[10px] uppercase tracking-[0.2em] text-muted mb-2 font-semibold">Sur Devis</h4>
-                    <h3 className="font-serif text-3xl md:text-4xl text-ink mb-4">Évol. 360</h3>
-                    <p className="text-sm md:text-base text-ink-soft font-light leading-relaxed">Création de site web premium, direction artistique totale et stratégie digitale complète.</p>
+                    <h4 className="text-[10px] uppercase tracking-[0.2em] text-muted mb-2 font-semibold">{t('pack4_label')}</h4>
+                    <h3 className="font-serif text-3xl md:text-4xl text-ink mb-4">{t('pack4_title')}</h3>
+                    <p className="text-sm md:text-base text-ink-soft font-light leading-relaxed">{t('pack4_desc')}</p>
                   </div>
                   
                   <div className="flex flex-row md:flex-col items-center md:items-end justify-between w-full md:w-auto mt-6 md:mt-0 relative z-10 transition-transform duration-300 group-hover:-translate-x-2">
-                    <span className="font-serif text-2xl md:text-3xl text-ink italic opacity-70">Sur mesure</span>
+                    <span className="font-serif text-2xl md:text-3xl text-ink italic opacity-70">{t('pack4_price')}</span>
                     <span className="text-ink/50 group-hover:text-ink transition-colors mt-2 text-2xl hidden md:block">→</span>
                   </div>
                 </GlassPanel>

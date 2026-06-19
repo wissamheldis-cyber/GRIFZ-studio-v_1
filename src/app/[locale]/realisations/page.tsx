@@ -6,6 +6,7 @@ import { FlipCard } from '@/components/ui/FlipCard'
 import Orb from '@/components/ui/Orb'
 import Image from 'next/image'
 import { projects, Project } from '@/data/projectsData'
+import { useTranslations } from 'next-intl'
 
 // --- Composant Mini Carrousel d'images ---
 function ProjectMiniCarousel({ images }: { images: string[] }) {
@@ -86,6 +87,11 @@ export default function RealisationsPage() {
   const [hasEntered, setHasEntered] = useState(false)
   const [entranceComplete, setEntranceComplete] = useState(false)
   const prefersReducedMotion = useReducedMotion()
+  const t = useTranslations('Realisations')
+  const [activeFlipped, setActiveFlipped] = useState(false)
+  const [hasEntered, setHasEntered] = useState(false)
+  const [entranceComplete, setEntranceComplete] = useState(false)
+  const prefersReducedMotion = useReducedMotion()
 
   const activeProject = projects[activeIndex]
 
@@ -138,9 +144,9 @@ export default function RealisationsPage() {
           transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
         >
           <h1 className="font-serif text-4xl md:text-5xl text-ink">
-            Nos Réalisations
+            {t('title')}
           </h1>
-          <p className="text-ink-soft font-light text-sm md:text-base">Naviguez pour explorer nos projets, cliquez au centre pour les détails.</p>
+          <p className="text-ink-soft font-light text-sm md:text-base">{t('subtitle')}</p>
         </motion.div>
 
         {/* ─── CARROUSEL 3D COVERFLOW ─── */}
@@ -366,7 +372,7 @@ export default function RealisationsPage() {
 
                       {/* Le Problème */}
                       <div className="flex flex-col gap-2">
-                        <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.25em] text-white/30">Le Défi</span>
+                        <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.25em] text-white/30">{t('challenge')}</span>
                         <p className="font-sans text-xs md:text-sm text-white/70 leading-[1.8] font-light">
                           {activeProject.problem}
                         </p>
@@ -374,13 +380,13 @@ export default function RealisationsPage() {
 
                       {/* La Vision */}
                       <div className="flex flex-col gap-2">
-                        <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.25em] text-white/30">La Vision</span>
+                        <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.25em] text-white/30">{t('vision')}</span>
                         <div className="space-y-4">
                           <p className="font-serif text-sm md:text-base text-white/90 leading-[1.8]">
                             {activeProject.solution}
                           </p>
                           <p className="font-sans text-[11px] md:text-xs text-white/50 leading-[1.9] font-light">
-                            L'approche visuelle choisie pour {activeProject.title} repose sur une étude approfondie de leur identité. Nous avons défini une direction artistique autour de la matière {activeProject.material} pour capter l'essence de leur ambition. Chaque détail, des textures aux polices, a été pensé pour sublimer l'expérience.
+                            {t('vision_text', { title: activeProject.title, material: activeProject.material })}
                           </p>
                         </div>
                       </div>
@@ -408,7 +414,7 @@ export default function RealisationsPage() {
 
                       {activeProject.isConceptual && (
                         <p className="text-[10px] text-white/25 italic mt-1 font-light">
-                          * Exploration conceptuelle interne GRIFZ Studio.
+                          {t('conceptual_note')}
                         </p>
                       )}
                     </div>

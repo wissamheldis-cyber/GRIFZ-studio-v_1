@@ -6,6 +6,7 @@ import { FlipCard } from '@/components/ui/FlipCard'
 import Image from 'next/image'
 import { materials, MaterialData } from '@/data/materialsData'
 import { useHeaderContext } from '@/context/HeaderContext'
+import { useTranslations } from 'next-intl'
 
 const categories = [
   'Métaux & Alliages', 
@@ -186,6 +187,15 @@ function CategoryCarousel({
 
 export default function CataloguePage() {
   const { setActiveOrbImage } = useHeaderContext()
+  const t = useTranslations('Catalogue')
+
+  // Map des catégories internes vers les clés de traduction
+  const categoryTranslations: Record<string, string> = {
+    'Métaux & Alliages': t('cat_metals'),
+    'Organiques & Naturels': t('cat_organic'),
+    'Minéraux & Carbone': t('cat_minerals'),
+    'Polymères & Synthétiques': t('cat_polymers'),
+  }
 
   // S'assurer que l'orbe est réinitialisée quand on quitte le catalogue
   useEffect(() => {
@@ -201,10 +211,10 @@ export default function CataloguePage() {
         {/* Titre central de la page */}
         <div className="text-center flex flex-col gap-4 mb-8 md:mb-16">
           <h1 className="font-serif text-4xl md:text-6xl text-ink">
-            Catalogue des Matières
+            {t('title')}
           </h1>
           <p className="text-ink-soft font-light text-sm md:text-base max-w-2xl mx-auto">
-            Découvrez nos essences à travers différentes collections. Cliquez sur les cartes au centre pour en révéler les palettes.
+            {t('subtitle')}
           </p>
         </div>
 
@@ -215,7 +225,7 @@ export default function CataloguePage() {
             return (
               <CategoryCarousel 
                 key={catTitle} 
-                title={catTitle} 
+                title={categoryTranslations[catTitle] || catTitle} 
                 categoryMaterials={catMaterials} 
                 onCardActivate={(orbPath) => setActiveOrbImage(orbPath || null)}
               />

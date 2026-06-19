@@ -1,8 +1,12 @@
-import Link from 'next/link'
+'use client'
+
+import { Link } from '@/i18n/routing'
+import { useTranslations } from 'next-intl'
 
 /* ─── Footer ─────────────────────────────────────────────── */
 export default function Footer() {
   const year = new Date().getFullYear()
+  const t = useTranslations('Footer')
 
   return (
     <footer
@@ -58,7 +62,7 @@ export default function Footer() {
                 letterSpacing: '0.02em',
               }}
             >
-              Studio d'évolution digitale 360
+              {t('subtitle')}
             </span>
           </div>
 
@@ -71,11 +75,11 @@ export default function Footer() {
               alignItems: 'flex-start',
             }}
           >
-            <Link href="/realisations" style={linkStyle}>Réalisations</Link>
-            <Link href="/catalogue" style={linkStyle}>Catalogue</Link>
-            <Link href="/reservation" style={linkStyle}>Réservation</Link>
-            <Link href="/a-propos" style={linkStyle}>À propos</Link>
-            <Link href="/contact" style={linkStyle}>Contact</Link>
+            <Link href="/realisations" style={linkStyle}>{t('nav_works')}</Link>
+            <Link href="/catalogue" style={linkStyle}>{t('nav_catalog')}</Link>
+            <Link href="/reservation" style={linkStyle}>{t('nav_reservation')}</Link>
+            <Link href="/a-propos" style={linkStyle}>{t('nav_about')}</Link>
+            <Link href="/contact" style={linkStyle}>{t('nav_contact')}</Link>
           </nav>
         </div>
 
@@ -93,12 +97,12 @@ export default function Footer() {
           }}
         >
           <span style={{ ...smallStyle, color: 'var(--muted)' }}>
-            © {year} GRIFZ Studio. Tous droits réservés.
+            © {year} GRIFZ Studio. {t('rights')}
           </span>
           <div style={{ display: 'flex', gap: 24 }}>
-            <Link href="/mentions-legales" style={smallLinkStyle}>Mentions légales</Link>
-            <Link href="/confidentialite" style={smallLinkStyle}>Confidentialité</Link>
-            <Link href="/cgv" style={smallLinkStyle}>CGV</Link>
+            <Link href="/mentions-legales" style={smallLinkStyle}>{t('legal_mentions')}</Link>
+            <Link href="/confidentialite" style={smallLinkStyle}>{t('privacy')}</Link>
+            <Link href="/cgv" style={smallLinkStyle}>{t('cgv')}</Link>
           </div>
         </div>
       </div>

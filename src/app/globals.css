@@ -1,5 +1,5 @@
 /* Google Fonts — doit précéder toutes les autres règles */
-@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Audiowide&family=Handjet:wght@300;400;500;600;700&family=Text+Me+One&display=swap");
 
 @import "tailwindcss";
 
@@ -48,8 +48,9 @@
   --glass-tint:     #c8e6f0;
 
   /* Typographies */
-  --font-serif:     'Cormorant Garamond', Georgia, serif;
-  --font-sans:      'Inter', system-ui, sans-serif;
+  --font-serif:     'Handjet', cursive;
+  --font-sans:      'Text Me One', sans-serif;
+  --font-header:    'Audiowide', cursive;
 
   /* Radius (Adoucis) */
   --radius-sm:      16px;

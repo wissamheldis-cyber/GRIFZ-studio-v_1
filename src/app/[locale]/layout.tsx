@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import './globals.css'
+import '../globals.css'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import { HeaderProvider } from '@/context/HeaderContext'
@@ -46,30 +46,44 @@ export const viewport: Viewport = {
 }
 
 /* ─── Layout racine ──────────────────────────────────────── */
-export default function RootLayout({
+import { NextIntlClientProvider } from 'next-intl'
+import { getMessages } from 'next-intl/server'
+
+export default async function RootLayout({
   children,
+  params
 }: {
   children: React.ReactNode
+  params: Promise<{ locale: string }>
 }) {
+  const resolvedParams = await params;
+  const locale = resolvedParams.locale;
+
+  // Providing all messages to the client
+  // side is the easiest way to get started
+  const messages = await getMessages();
+
   return (
-    <html lang="fr">
+    <html lang={locale}>
       <head>
         {/* Google Fonts — preconnect */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body className="glass-bg transition-colors duration-700 ease-in-out">
-        <ThreeLiquidBackground />
-        <ThemeProvider />
-        <RainBackground />
-        <HeaderProvider>
-          <GrifzLoadingIntro />
-          <Header />
-          <main style={{ paddingTop: 200 }}>
-            {children}
-          </main>
-          <Footer />
-        </HeaderProvider>
+        <NextIntlClientProvider messages={messages}>
+          <ThreeLiquidBackground />
+          <ThemeProvider />
+          <RainBackground />
+          <HeaderProvider>
+            <GrifzLoadingIntro />
+            <Header />
+            <main style={{ paddingTop: 200 }}>
+              {children}
+            </main>
+            <Footer />
+          </HeaderProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   )
