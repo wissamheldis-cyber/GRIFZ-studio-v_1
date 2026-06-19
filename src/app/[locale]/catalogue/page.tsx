@@ -19,11 +19,13 @@ const categories = [
 function CategoryCarousel({ 
   title, 
   categoryMaterials,
-  onCardActivate 
+  onCardActivate,
+  categoryIndex = 0
 }: { 
   title: string, 
   categoryMaterials: MaterialData[],
-  onCardActivate: (orbPath: string | undefined) => void
+  onCardActivate: (orbPath: string | undefined) => void,
+  categoryIndex?: number
 }) {
   const [activeIndex, setActiveIndex] = useState(0)
   const [hasEntered, setHasEntered] = useState(false)
@@ -35,11 +37,12 @@ function CategoryCarousel({
   // Déclencher l'animation quand la section entre dans le viewport
   useEffect(() => {
     if (isInView) {
-      const startTimer = setTimeout(() => setHasEntered(true), 80)
-      const endTimer = setTimeout(() => setEntranceComplete(true), 1000)
+      const baseDelay = 80 + (categoryIndex * 350)
+      const startTimer = setTimeout(() => setHasEntered(true), baseDelay)
+      const endTimer = setTimeout(() => setEntranceComplete(true), baseDelay + 1000)
       return () => { clearTimeout(startTimer); clearTimeout(endTimer) }
     }
-  }, [isInView])
+  }, [isInView, categoryIndex])
 
   const handleCardClick = (index: number) => {
     if (activeIndex !== index) {
@@ -87,8 +90,6 @@ function CategoryCarousel({
           const scale = 1 - Math.abs(offset) * 0.1
           const opacity = 1 - Math.abs(offset) * 0.3
           const zIndex = 50 - Math.abs(offset)
-          
-          const filterBlur = Math.abs(offset) > 0 ? `blur(${Math.abs(offset) * 4}px)` : 'blur(0px)'
 
           const staggerDelay = getStaggerDelay(index)
 
@@ -99,7 +100,6 @@ function CategoryCarousel({
             rotateY: 0,
             scale: 0.25,
             opacity: 0,
-            filter: 'blur(18px)',
           }
 
           const entranceAnimate = hasEntered ? {
@@ -108,7 +108,6 @@ function CategoryCarousel({
             rotateY: rotateY,
             scale: scale,
             opacity: opacity,
-            filter: filterBlur,
           } : entranceInitial
 
           return (
@@ -164,7 +163,6 @@ function CategoryCarousel({
                                   alt={`${mat.name} palette ${i + 1}`} 
                                   fill 
                                   className="object-cover"
-                                  unoptimized 
                                 />
                               </div>
                             ))}
@@ -220,7 +218,7 @@ export default function CataloguePage() {
 
         {/* Section par Catégorie */}
         <div className="w-full flex flex-col">
-          {categories.map(catTitle => {
+          {categories.map((catTitle, catIndex) => {
             const catMaterials = materials.filter(m => m.category === catTitle)
             return (
               <CategoryCarousel 
@@ -228,6 +226,7 @@ export default function CataloguePage() {
                 title={categoryTranslations[catTitle] || catTitle} 
                 categoryMaterials={catMaterials} 
                 onCardActivate={(orbPath) => setActiveOrbImage(orbPath || null)}
+                categoryIndex={catIndex}
               />
             )
           })}

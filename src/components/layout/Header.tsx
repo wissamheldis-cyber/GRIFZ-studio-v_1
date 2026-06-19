@@ -4,6 +4,7 @@ import { Link, usePathname } from '@/i18n/routing'
 import { useLocale, useTranslations } from 'next-intl'
 import Orb from '@/components/ui/Orb'
 import { useHeaderContext } from '@/context/HeaderContext'
+import Image from 'next/image'
 
 export default function Header() {
   const pathname = usePathname()
@@ -73,10 +74,9 @@ export default function Header() {
             <Link 
               href={pathname} 
               locale="en" 
-              style={{ fontFamily: 'var(--font-sans)' }}
-              className={`text-xs md:text-sm transition-all duration-300 ${locale === 'en' ? 'text-ink font-semibold' : 'text-muted hover:text-ink'}`}
+              className={`block transition-all duration-300 ${locale === 'en' ? 'scale-110 drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]' : 'opacity-50 hover:opacity-100 hover:scale-105'}`}
             >
-              EN
+              <Image src="/orb/eng.png" alt="English" width={40} height={40} className="object-contain" unoptimized />
             </Link>
           </div>
 
@@ -85,10 +85,9 @@ export default function Header() {
             <Link 
               href={pathname} 
               locale="fr" 
-              style={{ fontFamily: 'var(--font-sans)' }}
-              className={`text-xs md:text-sm transition-all duration-300 ${locale === 'fr' ? 'text-ink font-semibold' : 'text-muted hover:text-ink'}`}
+              className={`block transition-all duration-300 ${locale === 'fr' ? 'scale-110 drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]' : 'opacity-50 hover:opacity-100 hover:scale-105'}`}
             >
-              FR
+              <Image src="/orb/fr.png" alt="Français" width={40} height={40} className="object-contain" unoptimized />
             </Link>
           </div>
 
