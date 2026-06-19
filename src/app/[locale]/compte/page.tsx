@@ -1,6 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
+import WireframeSphere from '@/components/ui/WireframeSphere'
 
 export default function ComptePage() {
   const t = useTranslations('Account')
@@ -69,6 +70,11 @@ export default function ComptePage() {
         <div className="text-center mt-4">
           <p className="text-xs text-ink-soft italic">{t('lab_note')}</p>
         </div>
+      </div>
+
+      {/* ─── 3D Wireframe Sphere ─── */}
+      <div className="mt-24 mb-12 flex flex-col items-center w-full">
+        <WireframeSphere size={333} items={32} />
       </div>
 
     </section>
