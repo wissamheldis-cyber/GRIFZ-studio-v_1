@@ -208,7 +208,7 @@ export default function CataloguePage() {
       <div className="w-full max-w-7xl mx-auto px-4 flex flex-col items-center relative z-10">
         
         {/* Titre central de la page */}
-        <div className="text-center flex flex-col gap-4 mb-16 md:mb-24">
+        <div className="text-center flex flex-col gap-4 mb-[200px]">
           <h1 className="font-serif text-4xl md:text-6xl text-ink">
             {t('title')}
           </h1>
