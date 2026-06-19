@@ -19,7 +19,7 @@ export default function WireframeSphere({
   glow1 = 'rgba(255, 255, 255, 0.1)',
   glow2 = 'rgba(255, 255, 255, 0.2)',
   duration = 16,
-  perspective = 222,
+  perspective = 800,
   className = ''
 }: WireframeSphereProps) {
   const half = Math.floor(items / 2)
@@ -35,12 +35,16 @@ export default function WireframeSphere({
           to { transform: rotateY(360deg) rotateZ(360deg); }
         }
         .wireframe-sphere {
+          position: relative;
+          border-radius: 50%;
           animation: sphere-rot ${duration}s linear infinite reverse;
           transform-origin: center center;
           transform-style: preserve-3d;
         }
         .wireframe-circle {
           position: absolute;
+          top: 0;
+          left: 0;
           border-radius: 50%;
           transform-style: preserve-3d;
           backface-visibility: visible;
