@@ -7,7 +7,7 @@ export default function ComptePage() {
   const t = useTranslations('Account')
 
   return (
-    <section className="min-h-[80vh] px-6 py-24 flex flex-col items-center justify-center">
+    <section className="min-h-[150vh] px-6 pt-40 pb-24 flex flex-col items-center justify-start">
       {/* Cadre animé avec le pattern de pluie */}
       <div className="relative w-full max-w-2xl aspect-[16/9] rounded-2xl overflow-hidden shadow-[0_40px_120px_rgba(0,0,0,0.5)] border border-white/10">
         

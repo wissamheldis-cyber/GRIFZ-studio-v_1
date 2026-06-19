@@ -7,6 +7,8 @@ import { ParallaxWrapper } from '@/components/ui/ParallaxWrapper'
 import Orb from '@/components/ui/Orb'
 import { Link } from '@/i18n/routing'
 import { useTranslations } from 'next-intl'
+import Image from 'next/image'
+import LiquidCard from '@/components/ui/LiquidCard'
 
 export default function AboutPage() {
   const t = useTranslations('About')
@@ -96,46 +98,38 @@ export default function AboutPage() {
 
       </div>
 
-      {/* ─── TEASER MASCOTTE ───────────────────────────────────── */}
-      <motion.div 
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 1.5 }}
-        className="w-full mt-32 relative bg-ink text-[#f7f3ed] flex flex-col items-center justify-center py-40 md:py-56 overflow-hidden"
-      >
-        {/* Orbe mystérieuse en fond sombre */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-20 pointer-events-none scale-150 blur-xl">
-          <Orb material="charbon" size={600} animated={true} intensity={0.5} />
-        </div>
+      {/* ─── TEASER MASCOTTE (Encadré Noir 3D) ───────────────────────────────────── */}
+      <div className="w-full max-w-5xl mx-auto px-6 mt-64 mb-32 z-10 relative">
+        <LiquidCard variant="dark" hoverable padding="0" className="overflow-hidden border-white/10">
+          <div className="flex flex-col md:flex-row items-center w-full min-h-[400px]">
+            {/* Partie Gauche : Textes */}
+            <div className="flex-1 p-12 md:p-16 flex flex-col justify-center items-start text-left z-10">
+              <h2 className="font-serif text-3xl md:text-5xl mb-6 font-light text-white leading-tight">
+                {t('teaser_title_1')}<br/>{t('teaser_title_2')}
+              </h2>
+              <div className="w-12 h-px bg-white/30 mb-6" />
+              <p className="text-sm md:text-base text-white/50 font-sans tracking-widest leading-relaxed uppercase">
+                {t('teaser_text_1')}<br/>
+                {t('teaser_text_2')}
+              </p>
+            </div>
 
-        <div className="relative z-10 flex flex-col items-center text-center max-w-xl px-6 gap-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, delay: 0.2 }}
-          >
-            <h2 className="font-serif text-3xl md:text-5xl mb-6 font-light">
-              {t('teaser_title_1')}<br/>{t('teaser_title_2')}
-            </h2>
-            <p className="text-sm md:text-base text-[#f7f3ed]/60 font-light uppercase tracking-widest leading-relaxed">
-              {t('teaser_text_1')}<br/>
-              {t('teaser_text_2')}
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, delay: 0.8 }}
-            className="mt-8"
-          >
-            <div className="w-px h-16 bg-[#f7f3ed]/30 mx-auto" />
-          </motion.div>
-        </div>
-      </motion.div>
+            {/* Partie Droite : Image Invisible Container */}
+            <div className="w-full md:w-[45%] h-[300px] md:h-[500px] relative flex-shrink-0 bg-transparent flex items-center justify-center p-8">
+              <div className="relative w-full h-full transform hover:scale-105 transition-transform duration-700 ease-in-out">
+                {/* L'image PNG au fond transparent s'insérera ici sans fond propre */}
+                <Image 
+                  src="/images/mascot_placeholder.png" 
+                  alt="Mascot Placeholder" 
+                  fill 
+                  className="object-contain drop-shadow-2xl opacity-80"
+                  unoptimized
+                />
+              </div>
+            </div>
+          </div>
+        </LiquidCard>
+      </div>
 
     </main>
   )
