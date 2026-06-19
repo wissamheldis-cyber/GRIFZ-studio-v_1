@@ -6,6 +6,7 @@ import { FlipCard } from '@/components/ui/FlipCard'
 import Orb from '@/components/ui/Orb'
 import Image from 'next/image'
 import { projects, Project } from '@/data/projectsData'
+import { fictionalConcepts } from '@/data/fictionalConceptsData'
 import { useTranslations } from 'next-intl'
 
 // --- Composant Mini Carrousel d'images ---
@@ -84,12 +85,18 @@ function ProjectMiniCarousel({ images }: { images: string[] }) {
 export default function RealisationsPage() {
   const [activeIndex, setActiveIndex] = useState(2)
   const [activeFlipped, setActiveFlipped] = useState(false)
+  
+  // Nouveaux états pour le carrousel Fictif
+  const [activeFictionalIndex, setActiveFictionalIndex] = useState(2)
+  const [activeFictionalFlipped, setActiveFictionalFlipped] = useState(false)
+  
   const [hasEntered, setHasEntered] = useState(false)
   const [entranceComplete, setEntranceComplete] = useState(false)
   const prefersReducedMotion = useReducedMotion()
   const t = useTranslations('Realisations')
 
   const activeProject = projects[activeIndex]
+  const activeFictionalProject = fictionalConcepts[activeFictionalIndex]
 
   // Déclencher l'animation d'entrée au montage
   useEffect(() => {
@@ -109,11 +116,37 @@ export default function RealisationsPage() {
   const handleFlipChange = (isFlipped: boolean, index: number) => {
     if (activeIndex === index) {
       setActiveFlipped(isFlipped)
+      // Désactiver le flip de l'autre carrousel si activé
+      if (isFlipped) setActiveFictionalFlipped(false)
+      
       // On dispatch l'event pour le composant RainBackground
       window.dispatchEvent(new CustomEvent('card-flip', { 
         detail: { 
           isFlipped,
           color: projects[index].rainColor 
+        } 
+      }))
+    }
+  }
+
+  // Handlers pour le carrousel Fictif
+  const handleFictionalCardClick = (index: number) => {
+    if (activeFictionalIndex !== index) {
+      setActiveFictionalIndex(index)
+      setActiveFictionalFlipped(false)
+    }
+  }
+
+  const handleFictionalFlipChange = (isFlipped: boolean, index: number) => {
+    if (activeFictionalIndex === index) {
+      setActiveFictionalFlipped(isFlipped)
+      // Désactiver le flip de l'autre carrousel si activé
+      if (isFlipped) setActiveFlipped(false)
+      
+      window.dispatchEvent(new CustomEvent('card-flip', { 
+        detail: { 
+          isFlipped,
+          color: fictionalConcepts[index].rainColor 
         } 
       }))
     }
@@ -424,6 +457,171 @@ export default function RealisationsPage() {
                     <div className="w-full md:w-[44%] flex items-center justify-center mt-8 md:mt-0">
                       <ProjectMiniCarousel 
                         images={activeProject.galleryPaths.length > 0 ? activeProject.galleryPaths : [activeProject.coverPath]} 
+                      />
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      <div className="w-full max-w-6xl mx-auto px-4 flex flex-col items-center gap-12 relative z-10 mt-32">
+        {/* Titre central Fictif */}
+        <motion.div 
+          className="text-center flex flex-col gap-4"
+          initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+        >
+          <h1 className="font-serif text-4xl md:text-5xl text-ink">
+            Visions Fictives
+          </h1>
+          <p className="text-ink-soft font-light text-sm md:text-base">Exploration conceptuelle des matières à travers des marques mondiales.</p>
+        </motion.div>
+
+        {/* ─── CARROUSEL 3D COVERFLOW FICTIF ─── */}
+        <div className="relative w-full h-[400px] md:h-[500px] flex items-center justify-center mt-8" style={{ perspective: '1200px' }}>
+          {fictionalConcepts.map((project, index) => {
+            const offset = index - activeFictionalIndex
+            const isActive = offset === 0
+
+            // Mathématiques du Coverflow
+            const isInactiveFlippedState = activeFictionalFlipped && !isActive
+            const translateX = offset * (typeof window !== 'undefined' && window.innerWidth < 768 ? 140 : 280)
+            const translateZ = Math.abs(offset) * -200 + (isInactiveFlippedState ? -150 : 0) + (isActive && activeFictionalFlipped ? 40 : 0)
+            const rotateY = offset * -25
+            const scale = 1 - Math.abs(offset) * 0.1
+            const opacity = isInactiveFlippedState 
+              ? Math.max(0, 1 - Math.abs(offset) * 0.3 - 0.6)
+              : 1 - Math.abs(offset) * 0.3
+            const zIndex = isActive && activeFictionalFlipped ? 100 : 50 - Math.abs(offset)
+            
+            const filterBlur = isInactiveFlippedState
+               ? `blur(${Math.abs(offset) * 4 + 16}px) brightness(0.2)`
+               : Math.abs(offset) > 0 ? `blur(${Math.abs(offset) * 4}px)` : 'blur(0px)'
+
+            // Pour simplifier l'animation d'entrée du second carrousel, on utilise whileInView
+            const entranceAnimate = {
+              x: translateX,
+              z: translateZ,
+              rotateY: rotateY,
+              scale: scale,
+              opacity: opacity,
+              filter: filterBlur,
+            }
+
+            return (
+              <motion.div
+                key={project.id}
+                className="absolute top-0 bottom-0 flex flex-col items-center justify-center cursor-pointer"
+                style={{ zIndex }}
+                initial={{ opacity: 0 }}
+                whileInView={entranceAnimate}
+                viewport={{ once: false, margin: "-50px" }}
+                transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+                onClick={() => handleFictionalCardClick(index)}
+              >
+                <motion.div
+                  className="w-[260px] h-[360px] md:w-[350px] md:h-[480px] rounded-2xl"
+                  animate={isActive && activeFictionalFlipped ? {
+                    y: -15,
+                    boxShadow: "0 40px 100px rgba(0,0,0,0.8), 0 0 80px rgba(255,255,255,0.06)"
+                  } : {
+                    y: 0,
+                    boxShadow: "0 0 0 rgba(0,0,0,0)"
+                  }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                >
+                  <FlipCard 
+                    key={`${project.id}-${isActive}`}
+                    className="w-full h-full cursor-pointer group"
+                    isFlippable={isActive}
+                    onFlipChange={(flipped) => handleFictionalFlipChange(flipped, index)}
+                    frontImage={project.coverPath}
+                    frontContent={
+                      <div className="absolute inset-0 flex items-center justify-center p-8 bg-black/40 backdrop-blur-[2px]">
+                        {/* Logo Vectoriel Typographique Luxueux */}
+                        <h3 className="font-serif text-3xl md:text-5xl text-white tracking-widest uppercase drop-shadow-2xl transition-transform duration-500 group-hover:scale-105"
+                            style={{ 
+                              textShadow: '0 4px 20px rgba(0,0,0,0.8), 0 0 30px rgba(255,255,255,0.2)' 
+                            }}>
+                          {project.brandName}
+                        </h3>
+                      </div>
+                    }
+                    backContent={
+                      <div className="absolute inset-0 w-full h-full p-8 flex flex-col justify-center items-center text-center rounded-2xl border border-white/10"
+                           style={{ background: 'linear-gradient(135deg, rgba(20,20,20,0.95), rgba(0,0,0,0.98))' }}>
+                        <h4 className="font-sans text-[10px] md:text-xs uppercase tracking-[0.3em] text-white/50 mb-6">Matières utilisées</h4>
+                        <div className="flex flex-col gap-4">
+                          {project.materials.map(mat => (
+                            <div key={mat} className="font-serif text-lg md:text-2xl text-white">
+                              {mat}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    }
+                  />
+                </motion.div>
+
+              </motion.div>
+            )
+          })}
+        </div>
+
+        {/* ─── PANNEAU ÉDITORIAL MINI (Fictional) ─── */}
+        <AnimatePresence>
+          {activeFictionalFlipped && activeFictionalProject && (
+            <motion.div
+              initial={{ opacity: 0, y: 30, height: 0 }}
+              animate={{ opacity: 1, y: 0, height: 'auto' }}
+              exit={{ opacity: 0, y: 30, height: 0 }}
+              transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+              className="w-full max-w-5xl mx-auto overflow-hidden mt-12 md:mt-20"
+            >
+              {/* Outer — Gradient border wrapper */}
+              <div 
+                className="mx-4 md:mx-0 relative"
+                style={{
+                  borderRadius: '16px',
+                  padding: '1px',
+                  background: 'radial-gradient(circle 600px at 0% 0%, #ffffff, #0c0d0d)',
+                }}
+              >
+                <div className="panel-dot" />
+
+                <div 
+                  className="relative w-full overflow-hidden"
+                  style={{
+                    borderRadius: '15px',
+                    border: '1px solid #202222',
+                    background: 'radial-gradient(circle 800px at 0% 0%, #333333, #0c0d0d)',
+                  }}
+                >
+                  <div 
+                    className="absolute pointer-events-none"
+                    style={{
+                      width: '280px', height: '50px', borderRadius: '100px',
+                      backgroundColor: '#c7c7c7', opacity: 0.3, boxShadow: '0 0 60px #fff',
+                      filter: 'blur(12px)', transformOrigin: '10%', top: '0%', left: '0',
+                      transform: 'rotate(40deg)', zIndex: 1,
+                    }}
+                  />
+                  <div className="absolute pointer-events-none" style={{ top: '8%', left: 0, right: 0, height: '1px', background: 'linear-gradient(90deg, #888888 30%, #1d1f1f 70%)' }} />
+                  <div className="absolute pointer-events-none" style={{ bottom: '8%', left: 0, right: 0, height: '1px', background: 'linear-gradient(90deg, #2c2c2c 30%, #1d1f1f 70%)' }} />
+                  <div className="absolute pointer-events-none" style={{ left: '5%', top: 0, bottom: 0, width: '1px', background: 'linear-gradient(180deg, #747474 30%, #222424 70%)' }} />
+                  <div className="absolute pointer-events-none" style={{ right: '5%', top: 0, bottom: 0, width: '1px', background: 'linear-gradient(180deg, #2c2c2c 30%, #222424 70%)' }} />
+
+                  <div className="relative z-10 flex flex-col items-center justify-center" style={{ padding: '8% 7%' }}>
+                    <h3 className="font-serif text-3xl md:text-4xl text-white mb-8 text-center">{activeFictionalProject.brandName} - Galerie</h3>
+                    <div className="w-full md:w-3/4 lg:w-2/3 flex items-center justify-center">
+                      <ProjectMiniCarousel 
+                        images={activeFictionalProject.galleryPaths.length > 0 ? activeFictionalProject.galleryPaths : [activeFictionalProject.coverPath]} 
                       />
                     </div>
                   </div>
