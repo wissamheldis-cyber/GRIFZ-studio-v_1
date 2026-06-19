@@ -215,7 +215,7 @@ export default function AboutPage() {
       </div>
 
       {/* ─── TEASER MASCOTTE ───────────────────────────────────── */}
-      <div className="w-full max-w-5xl mx-auto px-6 mt-64 mb-[400px] z-10 relative">
+      <div className="w-full max-w-5xl mx-auto px-6 mt-64 z-10 relative">
         <div className="p-12 md:p-16 flex flex-col md:flex-row gap-10 items-center md:items-start text-center md:text-left bg-[#0A0A0A] border border-white/10 rounded-3xl shadow-2xl overflow-hidden relative">
           
           {/* Lueur blanche radiale subtile dans le fond de l'encadré noir */}
@@ -247,8 +247,11 @@ export default function AboutPage() {
         </div>
       </div>
 
+      {/* BLOC D'ESPACEMENT MAJEUR */}
+      <div className="h-40 md:h-80 w-full" />
+
       {/* ─── CARROUSEL D'ARTICLES ───────────────────────────────────── */}
-      <div className="w-full max-w-6xl mx-auto px-4 mt-20 mb-[800px] relative z-10 flex flex-col items-center">
+      <div className="w-full max-w-6xl mx-auto px-4 relative z-10 flex flex-col items-center">
         <div className="text-center mb-8">
           <h2 className="font-serif text-3xl md:text-4xl text-ink">Articles</h2>
           <p className="text-ink-soft text-sm mt-2 uppercase tracking-widest">À lire prochainement</p>
