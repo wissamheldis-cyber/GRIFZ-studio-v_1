@@ -214,24 +214,27 @@ export default function AboutPage() {
 
       </div>
 
-      {/* ─── TEASER MASCOTTE (Mêmes specs que Le choix de la matière) ───────────────────────────────────── */}
-      <div className="w-full max-w-5xl mx-auto px-6 mt-64 mb-64 z-10 relative">
-        <GlassPanel strong className="p-12 md:p-16 flex flex-col md:flex-row gap-10 items-center md:items-start text-center md:text-left border-ink/5">
+      {/* ─── TEASER MASCOTTE ───────────────────────────────────── */}
+      <div className="w-full max-w-5xl mx-auto px-6 mt-64 mb-[400px] z-10 relative">
+        <GlassPanel strong className="p-12 md:p-16 flex flex-col md:flex-row gap-10 items-center md:items-start text-center md:text-left bg-ink border-ink/20 shadow-2xl overflow-hidden relative">
+          
+          {/* Lueur blanche radiale subtile dans le fond de l'encadré noir */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-white/5 blur-[100px] rounded-full pointer-events-none z-0" />
+
           {/* Partie Gauche : Textes */}
-          <div className="flex-1 flex flex-col gap-4 items-center md:items-start">
-            <h3 className="font-sans text-[11px] uppercase tracking-[0.15em] text-ink font-medium">Coming soon</h3>
-            <h2 className="font-serif text-3xl md:text-4xl text-ink leading-tight">
+          <div className="flex-1 flex flex-col gap-4 items-center md:items-start relative z-10">
+            <h3 className="font-sans text-[11px] uppercase tracking-[0.15em] text-white/50 font-medium">Coming soon</h3>
+            <h2 className="font-serif text-3xl md:text-4xl text-white leading-tight">
               {t('teaser_title_1')}<br/>{t('teaser_title_2')}
             </h2>
-            <p className="text-sm md:text-base text-ink-soft leading-relaxed font-light mt-2 uppercase tracking-widest">
+            <p className="text-sm md:text-base text-white/70 leading-relaxed font-light mt-2 uppercase tracking-widest">
               {t('teaser_text_1')} {t('teaser_text_2')}
             </p>
           </div>
 
           {/* Partie Droite : Image Invisible Container */}
-          <div className="w-64 h-64 md:w-80 md:h-80 relative flex-shrink-0 bg-transparent flex items-center justify-center">
+          <div className="w-64 h-64 md:w-80 md:h-80 relative flex-shrink-0 bg-transparent flex items-center justify-center relative z-10">
             <div className="relative w-full h-full transform hover:scale-105 transition-transform duration-700 ease-in-out">
-              {/* L'image PNG au fond transparent s'insérera ici sans fond propre */}
               <Image 
                 src="/images/mascot_placeholder.png" 
                 alt="Mascot Placeholder" 
