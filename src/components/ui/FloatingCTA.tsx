@@ -47,19 +47,19 @@ export function FloatingCTA() {
     >
       <Link href={ctaHref}>
         <div 
-          className="flex items-center justify-center gap-[10px] font-sans text-[13px] font-medium uppercase tracking-[0.4px] text-[#7e97b8] bg-[#e0e8ef] border-2 border-[rgba(255,255,255,0.333)] rounded-[40px] pl-[28px] pr-[24px] py-[16px] transition-all duration-200 shadow-[-4px_-2px_16px_0px_#ffffff,4px_2px_16px_0px_rgba(95,157,231,0.48)] hover:text-[#516d91] hover:bg-[#E5EDF5] hover:shadow-[-2px_-1px_8px_0px_#ffffff,2px_1px_8px_0px_rgba(95,157,231,0.48)] active:shadow-none"
+          className="flex items-center justify-center gap-[16px] font-sans text-[16px] font-medium uppercase tracking-[1px] text-[#7e97b8] bg-[#e0e8ef] border-[3px] border-[rgba(255,255,255,0.333)] rounded-full px-[64px] py-[22px] transition-all duration-200 shadow-[-6px_-3px_24px_0px_#ffffff,6px_3px_24px_0px_rgba(95,157,231,0.48)] hover:text-[#516d91] hover:bg-[#E5EDF5] hover:shadow-[-3px_-1px_12px_0px_#ffffff,3px_1px_12px_0px_rgba(95,157,231,0.48)] active:shadow-none"
         >
           <span>
             {ctaText}
           </span>
           <svg 
             xmlns="http://www.w3.org/2000/svg" 
-            width="16" 
-            height="16" 
+            width="24" 
+            height="24" 
             viewBox="0 0 24 24" 
             fill="none" 
             stroke="currentColor" 
-            strokeWidth="2" 
+            strokeWidth="2.5" 
             strokeLinecap="round" 
             strokeLinejoin="round"
           >
