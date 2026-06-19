@@ -113,7 +113,7 @@ export const projects: Project[] = [
     title: 'DAG DATA',
     category: 'Concept interne',
     material: 'verre',
-    rainColor: '#c0c0c0', // Métal brossé argent, gris clair
+    rainColor: '#e2dac3', // Argent avec reflets doré clair
     isConceptual: true,
     problem: 'Visualiser la donnée de manière esthétique, technique et architecturale.',
     solution: 'Une série de visuels 4K exploitant les reflets du verre et des structures géométriques complexes.',
