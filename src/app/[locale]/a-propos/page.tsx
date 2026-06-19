@@ -13,7 +13,7 @@ import LiquidCard from '@/components/ui/LiquidCard'
 export default function AboutPage() {
   const t = useTranslations('About')
   return (
-    <main className="min-h-screen pt-40 pb-0 flex flex-col items-center relative overflow-hidden">
+    <main className="min-h-screen pt-40 pb-[400px] flex flex-col items-center relative overflow-hidden">
       
       {/* Container principal */}
       <div className="w-full max-w-4xl mx-auto px-6 flex flex-col items-center gap-16 relative z-10">
@@ -99,13 +99,13 @@ export default function AboutPage() {
       </div>
 
       {/* ─── TEASER MASCOTTE (Mêmes specs que Le choix de la matière) ───────────────────────────────────── */}
-      <div className="w-full max-w-5xl mx-auto px-6 mt-64 mb-32 z-10 relative">
+      <div className="w-full max-w-5xl mx-auto px-6 mt-64 mb-64 z-10 relative">
         <GlassPanel strong className="p-12 md:p-16 flex flex-col md:flex-row gap-10 items-center md:items-start text-center md:text-left border-ink/5">
           {/* Partie Gauche : Textes */}
           <div className="flex-1 flex flex-col gap-4 items-center md:items-start">
             <h3 className="font-sans text-[11px] uppercase tracking-[0.15em] text-ink font-medium">Coming soon</h3>
             <h2 className="font-serif text-3xl md:text-4xl text-ink leading-tight">
-              {t('teaser_title_1')} {t('teaser_title_2')}
+              {t('teaser_title_1')}<br/>{t('teaser_title_2')}
             </h2>
             <p className="text-sm md:text-base text-ink-soft leading-relaxed font-light mt-2 uppercase tracking-widest">
               {t('teaser_text_1')} {t('teaser_text_2')}
