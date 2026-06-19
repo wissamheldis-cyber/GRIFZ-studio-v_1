@@ -122,7 +122,7 @@ export default function Header() {
                   <div
                     className={`transition-all duration-300 ${active ? 'scale-110 drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]' : 'opacity-70 group-hover:opacity-100 group-hover:scale-105'}`}
                   >
-                    <Image src={link.image} alt={link.label} width={36} height={36} className="object-contain" unoptimized />
+                    <Image src={link.image} alt={link.label} width={48} height={48} className="object-contain" unoptimized />
                   </div>
                   <span
                     className="text-[14px] md:text-[18px] w-[8px] md:w-[12px] flex items-center justify-center transition-colors duration-300 group-hover:text-ink"
@@ -163,7 +163,7 @@ export default function Header() {
                   <div
                     className={`transition-all duration-300 ${active ? 'scale-110 drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]' : 'opacity-70 group-hover:opacity-100 group-hover:scale-105'}`}
                   >
-                    <Image src={link.image} alt={link.label} width={36} height={36} className="object-contain" unoptimized />
+                    <Image src={link.image} alt={link.label} width={48} height={48} className="object-contain" unoptimized />
                   </div>
                 </Link>
               )
