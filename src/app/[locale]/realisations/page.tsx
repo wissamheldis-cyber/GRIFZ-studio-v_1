@@ -88,10 +88,6 @@ export default function RealisationsPage() {
   const [entranceComplete, setEntranceComplete] = useState(false)
   const prefersReducedMotion = useReducedMotion()
   const t = useTranslations('Realisations')
-  const [activeFlipped, setActiveFlipped] = useState(false)
-  const [hasEntered, setHasEntered] = useState(false)
-  const [entranceComplete, setEntranceComplete] = useState(false)
-  const prefersReducedMotion = useReducedMotion()
 
   const activeProject = projects[activeIndex]
 
