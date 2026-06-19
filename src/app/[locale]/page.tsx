@@ -40,22 +40,24 @@ export default function HomePage() {
           textAlign: 'center',
         }}
       >
-        {/* Label */}
-        <motion.p
-          {...fadeUp(0.2)}
-          className="label"
-          style={{ marginBottom: 20 }}
-        >
-          {t('label_studio')}
-        </motion.p>
+        {/* Bloc Sphere + Label superposé */}
+        <div className="relative flex justify-center items-center mb-8 w-full">
+          {/* Sphere 3D */}
+          <motion.div
+            {...fadeUp(0.25)}
+            className="w-full flex justify-center"
+          >
+            <WireframeSphere size={240} items={24} glow2="rgba(180, 180, 180, 0.25)" />
+          </motion.div>
 
-        {/* Sphere 3D */}
-        <motion.div
-          {...fadeUp(0.25)}
-          className="relative w-full flex justify-center mb-8"
-        >
-          <WireframeSphere size={240} items={24} glow2="rgba(180, 180, 180, 0.25)" />
-        </motion.div>
+          {/* Label */}
+          <motion.p
+            {...fadeUp(0.2)}
+            className="label absolute z-10 pointer-events-none drop-shadow-[0_4px_10px_rgba(0,0,0,0.5)]"
+          >
+            {t('label_studio')}
+          </motion.p>
+        </div>
 
         {/* Grand titre */}
         <motion.h1
