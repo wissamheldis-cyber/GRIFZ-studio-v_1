@@ -51,44 +51,21 @@ export default function HomePage() {
               size={240} 
               items={24} 
               color="rgba(0, 0, 0, 0.5)" 
-              glow1="rgba(255, 255, 255, 0.3)" 
-              glow2="rgba(255, 255, 255, 0.5)" 
+              glow1="rgba(255, 255, 255, 0.1)" 
+              glow2="rgba(255, 255, 255, 0.2)" 
             />
           </motion.div>
-
-          <style dangerouslySetInnerHTML={{ __html: `
-            @keyframes liquid-mirror {
-              0% { background-position: 0% center; }
-              100% { background-position: 200% center; }
-            }
-            .liquid-glass-text {
-              background: linear-gradient(
-                to right, 
-                #ffffff 0%, 
-                #f5f5f5 15%, 
-                #ffffff 30%, 
-                #e0e0e0 50%, 
-                #ffffff 70%, 
-                #f5f5f5 85%, 
-                #ffffff 100%
-              );
-              background-size: 200% auto;
-              color: transparent;
-              -webkit-background-clip: text;
-              background-clip: text;
-              -webkit-text-stroke: 1px rgba(0,0,0,0.25);
-              animation: liquid-mirror 6s linear infinite;
-              filter: drop-shadow(0px 0px 4px rgba(0,0,0,0.6)) drop-shadow(0px 4px 15px rgba(0,0,0,0.8));
-              font-weight: 700;
-            }
-          `}} />
 
           {/* Label */}
           <motion.p
             {...fadeUp(0.2)}
-            className="label absolute z-10 pointer-events-none liquid-glass-text"
+            className="absolute z-10 pointer-events-none text-black text-2xl md:text-3xl tracking-widest"
+            style={{ 
+              fontFamily: '"Audiowide", cursive',
+              textShadow: '0 0 12px rgba(255,255,255,0.9), 0 0 20px rgba(255,255,255,0.6)'
+            }}
           >
-            {t('label_studio')}
+            GRIFZ studio
           </motion.p>
         </div>
 
