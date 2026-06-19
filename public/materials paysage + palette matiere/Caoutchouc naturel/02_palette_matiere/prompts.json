@@ -1,0 +1,26 @@
+{
+  "material": "Caoutchouc naturel",
+  "format": "square 1:1",
+  "prompts": [
+    {
+      "prompt": "Use case: photorealistic-natural\\nAsset type: square GRIFZ material card\\nPrimary request: natural rubber only, matte natural rubber surface, dense elastic texture, subtle fine grain, deep charcoal tone.\\nComposition/framing: straight-on extreme macro, uniform full-bleed surface, microscopic detail visible; the material touches all four edges and fills 100% of the 1:1 frame.\\nLighting/mood: soft raking studio light revealing the authentic microstructure; premium, tactile, highly detailed, photorealistic.\\nConstraints: show only the material itself; no separate object, no environment, no backdrop, no border, no text, no logo, no watermark.",
+      "negative_prompt": "landscape, scenery, horizon, sky, water, plant, animal, person, hand, face, object, product, tool, furniture, architecture, container, isolated sample, border, frame, background, logo, brand, text, letters, numbers, symbol, label, watermark, pattern illustration, collage, multiple materials",
+      "output": "caoutchouc_naturel_palette_01.png"
+    },
+    {
+      "prompt": "Use case: photorealistic-natural\\nAsset type: square GRIFZ material card\\nPrimary request: natural rubber only, matte natural rubber surface, dense elastic texture, subtle fine grain, deep charcoal tone.\\nComposition/framing: straight-on close macro, continuous full-bleed surface with restrained directional flow; the material touches all four edges and fills 100% of the 1:1 frame.\\nLighting/mood: broad diffused studio light, premium satin response; premium, tactile, highly detailed, photorealistic.\\nConstraints: show only the material itself; no separate object, no environment, no backdrop, no border, no text, no logo, no watermark.",
+      "negative_prompt": "landscape, scenery, horizon, sky, water, plant, animal, person, hand, face, object, product, tool, furniture, architecture, container, isolated sample, border, frame, background, logo, brand, text, letters, numbers, symbol, label, watermark, pattern illustration, collage, multiple materials",
+      "output": "caoutchouc_naturel_palette_02.png"
+    },
+    {
+      "prompt": "Use case: photorealistic-natural\\nAsset type: square GRIFZ material card\\nPrimary request: natural rubber only, matte natural rubber surface, dense elastic texture, subtle fine grain, deep charcoal tone.\\nComposition/framing: oblique macro viewpoint, full-bleed material with shallow relief across the entire square; the material touches all four edges and fills 100% of the 1:1 frame.\\nLighting/mood: low grazing light emphasizing tactile depth without creating a scene; premium, tactile, highly detailed, photorealistic.\\nConstraints: show only the material itself; no separate object, no environment, no backdrop, no border, no text, no logo, no watermark.",
+      "negative_prompt": "landscape, scenery, horizon, sky, water, plant, animal, person, hand, face, object, product, tool, furniture, architecture, container, isolated sample, border, frame, background, logo, brand, text, letters, numbers, symbol, label, watermark, pattern illustration, collage, multiple materials",
+      "output": "caoutchouc_naturel_palette_03.png"
+    },
+    {
+      "prompt": "Use case: photorealistic-natural\\nAsset type: square GRIFZ material card\\nPrimary request: natural rubber only, matte natural rubber surface, dense elastic texture, subtle fine grain, deep charcoal tone.\\nComposition/framing: top-down macro abstraction, edge-to-edge material, balanced natural irregularity; the material touches all four edges and fills 100% of the 1:1 frame.\\nLighting/mood: controlled cross-light with nuanced highlights and deep material definition; premium, tactile, highly detailed, photorealistic.\\nConstraints: show only the material itself; no separate object, no environment, no backdrop, no border, no text, no logo, no watermark.",
+      "negative_prompt": "landscape, scenery, horizon, sky, water, plant, animal, person, hand, face, object, product, tool, furniture, architecture, container, isolated sample, border, frame, background, logo, brand, text, letters, numbers, symbol, label, watermark, pattern illustration, collage, multiple materials",
+      "output": "caoutchouc_naturel_palette_04.png"
+    }
+  ]
+}
