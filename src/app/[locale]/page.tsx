@@ -57,16 +57,21 @@ export default function HomePage() {
           </motion.div>
 
           {/* Label */}
-          <motion.p
+          <motion.div
             {...fadeUp(0.2)}
-            className="absolute z-10 pointer-events-none text-black text-2xl md:text-3xl tracking-widest"
+            className="absolute z-10 pointer-events-none text-black flex flex-col items-center justify-center leading-none"
             style={{ 
               fontFamily: '"Audiowide", cursive',
               textShadow: '0 0 12px rgba(255,255,255,0.9), 0 0 20px rgba(255,255,255,0.6)'
             }}
           >
-            GRIFZ studio
-          </motion.p>
+            <span className="text-3xl md:text-5xl tracking-widest uppercase">
+              GRIFZ
+            </span>
+            <span className="text-lg md:text-xl tracking-[0.3em] font-normal mt-2 opacity-90">
+              studio
+            </span>
+          </motion.div>
         </div>
 
         {/* Grand titre */}
