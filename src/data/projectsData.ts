@@ -49,7 +49,7 @@ export const projects: Project[] = [
     coverPath: '/works realisations/SHOU games tv/cover.png',
     galleryPaths: [
       '/works realisations/SHOU games tv/il_est_tracté_202604050706.png',
-      '/works realisations/SHOU games tv/Le_camp_parait_202604051026.png'
+      '/works realisations/SHOU games tv/enleve_la_cicatrice_202604050658.png'
     ]
   },
   {
@@ -78,7 +78,7 @@ export const projects: Project[] = [
     deliverables: ['Direction artistique', 'Logo', 'Identité visuelle', 'UX/UI design', 'Construction du site web', 'Clarification du concept'],
     logoPath: '/works realisations/Heynouth/logo/logo.png',
     coverPath: '/works realisations/Heynouth/cover.png',
-    galleryPaths: ['/works realisations/Heynouth/logo/apple-touch-icon.png']
+    galleryPaths: []
   },
   {
     id: 'dangushop',
@@ -90,11 +90,10 @@ export const projects: Project[] = [
     problem: 'Identité visuelle, logo, UX/UI & site web',
     solution: 'GRIFZ Studio a travaillé sur l\'image digitale de Dangusho.p afin de construire une présence plus professionnelle, plus cohérente et plus orientée conversion. L\'intervention couvre la direction artistique, l\'identité visuelle, le logo, l\'UX/UI et la construction du site web.',
     deliverables: ['Direction artistique', 'Logo', 'Identité visuelle', 'UX/UI design', 'Construction du site web', 'Mise en valeur de l\'offre'],
-    logoPath: '/works realisations/DANGUSHOP - Benzen/logo/logo.png',
+    logoPath: '/works realisations/DANGUSHOP - Benzen/logo/marque dangushop.png',
     coverPath: '/works realisations/DANGUSHOP - Benzen/cover.png',
     galleryPaths: [
-      '/works realisations/DANGUSHOP - Benzen/1.png',
-      '/works realisations/DANGUSHOP - Benzen/2.png'
+      '/works realisations/DANGUSHOP - Benzen/de.png'
     ]
   },
   {
@@ -107,7 +106,7 @@ export const projects: Project[] = [
     problem: 'Identité visuelle, logo, UX/UI & site web',
     solution: 'GRIFZ Studio a accompagné DAG DATA dans la construction de son univers visuel complet. Le travail a porté sur la direction artistique, la création du logo, l\'identité visuelle, ainsi que la conception UX/UI du site web. L\'objectif était de transformer un projet complexe en une interface plus lisible, plus premium et plus accessible.',
     deliverables: ['Direction artistique', 'Logo', 'Identité visuelle', 'UX/UI design', 'Construction du site web', 'Structuration de l\'expérience utilisateur'],
-    logoPath: '/works realisations/DAG DATA/logo/logo dag data.png',
+    logoPath: '/works realisations/DAG DATA/logo/logo.png',
     coverPath: '/works realisations/DAG DATA/cover.png',
     galleryPaths: []
   },
@@ -121,8 +120,8 @@ export const projects: Project[] = [
     problem: 'Direction artistique & création de visuels',
     solution: 'GRIFZ Studio est intervenu sur la direction artistique du projet Alert Élèves afin de lui donner une présence plus claire, plus crédible et plus identifiable. Le travail s\'est concentré sur la création de visuels, l\'ambiance graphique et la cohérence esthétique globale du projet.',
     deliverables: ['Direction artistique', 'Création de visuels', 'Cohérence graphique', 'Mise en forme visuelle du projet'],
-    logoPath: '/works realisations/Alert Élèves/logo/logo.png',
-    coverPath: '/works realisations/Alert Élèves/cover.png',
+    logoPath: '/works realisations/Alert Eleves/logo/logo.png',
+    coverPath: '/works realisations/Alert Eleves/cover.png',
     galleryPaths: []
   }
 ];
