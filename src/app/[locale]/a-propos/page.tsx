@@ -6,21 +6,79 @@ import { GlassPill } from '@/components/ui/GlassPill'
 import { ParallaxWrapper } from '@/components/ui/ParallaxWrapper'
 import Orb from '@/components/ui/Orb'
 import { Link } from '@/i18n/routing'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import Image from 'next/image'
 import LiquidCard from '@/components/ui/LiquidCard'
 import { ArticlesCarousel } from '@/components/ui/ArticlesCarousel'
 
 export default function AboutPage() {
   const t = useTranslations('About')
+  const locale = useLocale()
+  const isEn = locale === 'en'
 
   const mockArticles = [
     { 
       id: 1, 
-      title: 'Identité Numérique : Sculpter au lieu de Coder', 
+      title: isEn ? 'Digital Identity: Sculpting instead of Coding' : 'Identité Numérique : Sculpter au lieu de Coder', 
       coverPath: '/images/mascot_placeholder.png',
       image: '/images/mascot_placeholder.png',
-      content: (
+      content: isEn ? (
+        <>
+          <p className="font-semibold text-ink text-lg mb-8">Digital presence is no longer a simple broadcasting channel, it has become the virtual extension of your brand's soul.</p>
+          
+          <h3 className="font-serif text-2xl text-ink mt-12 mb-4">1. The genesis of experience</h3>
+          <p>At GRIFZ studio, we approach website creation not as simple code, but as the sculpting of living matter. Every pixel, every interaction is designed to reflect the very essence of what you represent. We forge experiences that leave a lasting impression and transform visitors into ambassadors.</p>
+          <p>The era of static templates and rigid grids is over. The modern user demands to be transported, surprised, and emotionally engaged. This is where the concept of "Digital Presence Sculpted by Matter" comes in.</p>
+
+          <h3 className="font-serif text-2xl text-ink mt-12 mb-4">2. From geometry to emotion</h3>
+          <p>Technology alone is cold. It is design that breathes life into it. By using the complex mathematics behind WebGL, we manage to bend digital space. The refraction of light on our glass components is not a simple image, it is a real-time physical calculation that reacts to the movement of your mouse.</p>
+          <p>This tactile, almost carnal interactivity is what separates an ordinary website from a premium brand experience.</p>
+
+          <h3 className="font-serif text-2xl text-ink mt-12 mb-4">3. The rejection of industrialization</h3>
+          <p>In a world where everything tends towards standardization and mass creation (classic CMS, page builders, standardized generative AI), we make the radical choice of craftsmanship. Each project is a playground where custom-made is the only rule.</p>
+          <p>This requires time, precision, and rare technical expertise. But the result is clear: a visual signature impossible to reproduce or confuse with that of a competitor.</p>
+
+          <h3 className="font-serif text-2xl text-ink mt-12 mb-4">4. The weight of matter</h3>
+          <p>Glass (Glassmorphism), leather, charcoal, wood... Why use these physical terms to talk about pixels? Because our brain is programmed to react to the textures of nature. By imitating the physical behavior of these materials in a web browser, we trigger primary cognitive responses.</p>
+          <p>The heaviness of a "Charcoal" panel, the delicacy of smoked "Glass". All this participates in extremely powerful non-verbal communication.</p>
+
+          <h3 className="font-serif text-2xl text-ink mt-12 mb-4">5. Towards 360 evolution</h3>
+          <p>Creating a showcase site is only the first step. The final goal is the 360 Digital Evolution. This means the brand must exist coherently across all its digital touchpoints. The website acts as the central sun of this solar system, radiating its quality and aesthetic codes to all your communication.</p>
+          <p>This is the promise of GRIFZ studio: not to deliver a simple communication tool, but the absolute weapon of your digital domination.</p>
+
+          <h3 className="font-serif text-2xl text-ink mt-12 mb-4">6. The choreography of pixels</h3>
+          <p>Movement is the universal language of interaction. An abrupt transition breaks immersion, while a fluid animation, timed on a perfectly studied Bezier curve, guides the eye and the mind. At GRIFZ studio, every element that enters or leaves the screen follows a strict choreography.</p>
+          <p>We spend hours tweaking the physics of our animations so they feel natural. A button doesn't just change color, it breathes, it sinks with realistic inertia. It is in this obsessive level of micro-details that true digital luxury resides.</p>
+
+          <h3 className="font-serif text-2xl text-ink mt-12 mb-4">7. Visual acoustics</h3>
+          <p>Although the web is primarily a visual medium, we design our interfaces with what we call "visual acoustics". Every interaction must resonate in the user's mind like a clear, pure sound. Spacing, typographic rhythm and contrast act as musical notes.</p>
+          <p>A silent design is a dead design. Our interfaces whisper through subtle glowing halos, and speak loudly during parallax scrolls. The result is a digital symphony where nothing is left to chance.</p>
+
+          <div className="w-full relative h-[300px] md:h-[400px] rounded-2xl overflow-hidden shadow-xl mt-16 mb-12">
+            <Image 
+              src="/images/mascot_placeholder.png" 
+              alt="Digital Immersion" 
+              fill 
+              className="object-cover"
+              unoptimized
+            />
+            <div className="absolute inset-0 bg-black/10 backdrop-blur-[2px]" />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="font-sans text-white/50 tracking-widest uppercase text-sm">GRIFZ Vision</span>
+            </div>
+          </div>
+
+          <div className="flex justify-center mt-12 pb-12">
+            <Link 
+              href="/realisations"
+              className="group relative px-8 py-4 bg-ink text-white rounded-full overflow-hidden transition-all duration-500 hover:shadow-2xl hover:scale-105"
+            >
+              <span className="relative z-10 font-sans uppercase tracking-[0.15em] text-sm font-medium">Our works</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-in-out" />
+            </Link>
+          </div>
+        </>
+      ) : (
         <>
           <p className="font-semibold text-ink text-lg mb-8">La présence digitale n'est plus un simple canal de diffusion, elle est devenue l'extension virtuelle de l'âme de votre marque.</p>
           
@@ -80,10 +138,15 @@ export default function AboutPage() {
     },
     { 
       id: 2, 
-      title: 'Le Web 3D : Briser l\'écran', 
+      title: isEn ? '3D Web: Breaking the screen' : 'Le Web 3D : Briser l\'écran', 
       coverPath: '/images/mascot_placeholder.png',
       image: '/images/mascot_placeholder.png',
-      content: (
+      content: isEn ? (
+        <>
+          <p>Immersion is the new standard of premium user experience. Integrating real-time 3D via WebGL and Three.js breaks the barrier of the flat screen.</p>
+          <p>We no longer design pages, but spatial environments where light, texture, and physics respond to user actions. This sensory approach creates an instant emotional connection between the digital product and its audience.</p>
+        </>
+      ) : (
         <>
           <p>L'immersion est la nouvelle norme de l'expérience utilisateur premium. L'intégration de la 3D en temps réel via WebGL et Three.js permet de briser la barrière de l'écran plat.</p>
           <p>Nous ne concevons plus des pages, mais des environnements spatiaux où la lumière, la texture et la physique répondent aux actions de l'utilisateur. Cette approche sensorielle crée un lien émotionnel instantané entre le produit digital et son public.</p>
@@ -92,10 +155,15 @@ export default function AboutPage() {
     },
     { 
       id: 3, 
-      title: 'Matière & Lumière', 
+      title: isEn ? 'Matter & Light' : 'Matière & Lumière', 
       coverPath: '/images/mascot_placeholder.png',
       image: '/images/mascot_placeholder.png',
-      content: (
+      content: isEn ? (
+        <>
+          <p>Modern web design finds its inspiration in the physical world. Our interfaces are inspired by glass, metal, water, and light.</p>
+          <p>By mastering shaders and real-time refraction, we manage to give weight, thickness, and warmth to digital elements. It is this marriage between the brutality of matter and the purity of code that defines the unique aesthetic of GRIFZ studio.</p>
+        </>
+      ) : (
         <>
           <p>Le design web moderne trouve son inspiration dans le monde physique. Nos interfaces s'inspirent du verre, du métal, de l'eau et de la lumière.</p>
           <p>En maîtrisant les shaders et la réfraction en temps réel, nous parvenons à donner un poids, une épaisseur et une chaleur aux éléments numériques. C'est ce mariage entre brutalité de la matière et pureté du code qui définit l'esthétique unique de GRIFZ studio.</p>
@@ -104,10 +172,15 @@ export default function AboutPage() {
     },
     { 
       id: 4, 
-      title: 'La Performance au service du Luxe', 
+      title: isEn ? 'Performance serving Luxury' : 'La Performance au service du Luxe', 
       coverPath: '/images/mascot_placeholder.png',
       image: '/images/mascot_placeholder.png',
-      content: (
+      content: isEn ? (
+        <>
+          <p>A premium experience requires flawless velocity. Behind every fluid 60-frames-per-second animation lies rigorous engineering.</p>
+          <p>Using cutting-edge technologies like Next.js and Framer Motion allows us to orchestrate complex visual choreographies while maintaining imperceptible loading times and optimal SEO.</p>
+        </>
+      ) : (
         <>
           <p>Une expérience premium exige une vélocité sans faille. Derrière chaque animation fluide à 60 images par seconde se cache une ingénierie rigoureuse.</p>
           <p>L'utilisation de technologies de pointe comme Next.js et Framer Motion nous permet d'orchestrer des chorégraphies visuelles complexes tout en conservant des temps de chargement imperceptibles et un référencement optimal.</p>
@@ -116,10 +189,15 @@ export default function AboutPage() {
     },
     { 
       id: 5, 
-      title: 'Vision Studio', 
+      title: isEn ? 'Studio Vision' : 'Vision Studio', 
       coverPath: '/images/mascot_placeholder.png',
       image: '/images/mascot_placeholder.png',
-      content: (
+      content: isEn ? (
+        <>
+          <p>Digital craftsmanship is our fundamental philosophy. We refuse prefabricated templates and the industrialization of design.</p>
+          <p>Every project that leaves the studio is treated as a unique, hand-sculpted piece. Our methodology merges avant-garde design and software engineering to create platforms that transcend the usual standards of the Internet.</p>
+        </>
+      ) : (
         <>
           <p>L'artisanat digital est notre philosophie fondamentale. Nous refusons les templates préfabriqués et l'industrialisation du design.</p>
           <p>Chaque projet qui sort du studio est traité comme une pièce unique, sculptée à la main. Notre méthodologie fusionne le design avant-gardiste et l'ingénierie logicielle pour donner naissance à des plateformes qui transcendent les standards habituels d'Internet.</p>
@@ -214,8 +292,20 @@ export default function AboutPage() {
 
       </div>
 
+      {/* BLOC D'ESPACEMENT MAJEUR */}
+      <div className="h-40 md:h-80 w-full" />
+
+      {/* ─── CARROUSEL D'ARTICLES ───────────────────────────────────── */}
+      <div className="w-full max-w-6xl mx-auto px-4 relative z-10 flex flex-col items-center">
+        <div className="text-center mb-8">
+          <h2 className="font-serif text-3xl md:text-4xl text-ink">{isEn ? 'Articles' : 'Articles'}</h2>
+          <p className="text-ink-soft text-sm mt-2 uppercase tracking-widest">{isEn ? 'Coming soon' : 'À lire prochainement'}</p>
+        </div>
+        <ArticlesCarousel articles={mockArticles} />
+      </div>
+
       {/* ─── TEASER MASCOTTE ───────────────────────────────────── */}
-      <div className="w-full max-w-5xl mx-auto px-6 mt-64 z-10 relative">
+      <div className="w-full max-w-5xl mx-auto px-6 mt-[200px] md:mt-[300px] z-10 relative">
         <div 
           className="relative w-full shadow-2xl"
           style={{
@@ -266,17 +356,6 @@ export default function AboutPage() {
         </div>
       </div>
 
-      {/* BLOC D'ESPACEMENT MAJEUR */}
-      <div className="h-40 md:h-80 w-full" />
-
-      {/* ─── CARROUSEL D'ARTICLES ───────────────────────────────────── */}
-      <div className="w-full max-w-6xl mx-auto px-4 relative z-10 flex flex-col items-center">
-        <div className="text-center mb-8">
-          <h2 className="font-serif text-3xl md:text-4xl text-ink">Articles</h2>
-          <p className="text-ink-soft text-sm mt-2 uppercase tracking-widest">À lire prochainement</p>
-        </div>
-        <ArticlesCarousel articles={mockArticles} />
-      </div>
 
     </main>
   )

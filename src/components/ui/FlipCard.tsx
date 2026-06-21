@@ -234,7 +234,7 @@ export function FlipCard({
           {/* FACE AVANT */}
           <div className="flip-card-front">
             {frontImage && (
-              <Image src={frontImage} alt="Card Cover" fill className="img" unoptimized />
+              <Image src={frontImage} alt="Card Cover" fill className="img" sizes="(max-width: 768px) 100vw, 500px" quality={85} />
             )}
             
             <div className="flip-card-front-content">

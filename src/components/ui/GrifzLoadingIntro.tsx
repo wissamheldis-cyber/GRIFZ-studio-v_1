@@ -9,27 +9,34 @@ import Image from 'next/image'
 // Config
 const SHOW_INTRO = true
 
-const MATERIALS_SEQUENCE: OrbMaterial[] = [
-  'charbon', 
-  'cuivre', 
-  'emeraude', 
-  'bois-de-cerisier', 
-  'cuir', 
-  'verre'
+const ORB_IMAGES = [
+  "/materials-paysage/Charbon/03_orbe_matiere/charbon_orbe_01.png",
+  "/materials-paysage/Cuivre/03_orbe_matiere/cuivre_orbe_01.png",
+  "/materials-paysage/Titane/03_orbe_matiere/titane_orbe_01.png",
+  "/materials-paysage/Bois/03_orbe_matiere/bois_orbe_01.png",
+  "/materials-paysage/Cuir-variantes/03_orbe_matiere/cuir_variantes_orbe_01.png",
+  "/materials-paysage/Chrome/03_orbe_matiere/chrome_orbe_01.png"
 ]
 
-const WORDS = [
-  'matière', 
-  'forme', 
-  'présence', 
-  'direction', 
-  'identité'
+const METHOD_STEPS = [
+  'OBSERVER', 
+  'RÉVÉLER', 
+  'CONSTRUIRE', 
+  'DÉPLOYER'
 ]
 
 export function GrifzLoadingIntro() {
   const [isVisible, setIsVisible] = useState(false)
   const [phase, setPhase] = useState(0)
   const [isSkipped, setIsSkipped] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768)
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   useEffect(() => {
     if (!SHOW_INTRO) return
@@ -51,16 +58,18 @@ export function GrifzLoadingIntro() {
     if (!isVisible || isSkipped) return
 
     let currentPhase = 0
-    // Durée totale d'animation ~3.5 secondes pour 6 étapes = ~500ms par étape
+    // Durée totale d'animation ~4.8 secondes pour 12 étapes = 400ms par étape
+    // Les orbes changent toutes les 400ms.
+    // Le texte change toutes les 3 étapes (3 * 400ms = 1.2s).
     const interval = setInterval(() => {
       currentPhase++
-      if (currentPhase <= 5) {
+      if (currentPhase <= 11) {
         setPhase(currentPhase)
       } else {
-        setPhase(6) // Phase finale : texte final + logo
+        setPhase(12) // Phase finale : texte final + logo
         clearInterval(interval)
       }
-    }, 500)
+    }, 400)
 
     return () => clearInterval(interval)
   }, [isVisible, isSkipped])
@@ -68,9 +77,12 @@ export function GrifzLoadingIntro() {
   // Si on a déjà vu l'intro ou qu'elle est terminée
   if (!isVisible) return null
 
-  const isFinalPhase = phase === 6
-  // La matière active suit la phase (de 0 à 5)
-  const activeMaterial = MATERIALS_SEQUENCE[Math.min(phase, 5)]
+  const isFinalPhase = phase === 12
+  // L'image active boucle sur le tableau d'images
+  const activeOrbImage = ORB_IMAGES[phase % ORB_IMAGES.length]
+  // Le texte actif change tous les 3 cycles (donc 3 * 400ms = 1.2s)
+  const activeTextIndex = Math.floor(phase / 3)
+  const activeText = METHOD_STEPS[activeTextIndex]
 
   return (
     <AnimatePresence>
@@ -114,8 +126,9 @@ export function GrifzLoadingIntro() {
                   transition={{ duration: 0.6, ease: 'easeInOut' }}
                 >
                   <Orb 
-                    material={activeMaterial} 
-                    size={280} 
+                    material="grifz" 
+                    customImage={activeOrbImage}
+                    size={isMobile ? 180 : 280} 
                     animated={false} 
                     intensity={0.4} 
                     showLogo={false}
@@ -164,33 +177,18 @@ export function GrifzLoadingIntro() {
               )}
             </AnimatePresence>
 
-            {/* --- Mots Flottants --- */}
-            <AnimatePresence>
-              {!isFinalPhase && (
-                <motion.div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-                  {WORDS.map((word, i) => {
-                    const isVisibleWord = phase >= i && phase < 6
-                    const angle = (i * (360 / WORDS.length) + 45) * (Math.PI / 180)
-                    const radius = 220
-                    const x = Math.cos(angle) * radius
-                    const y = Math.sin(angle) * radius
-
-                    return (
-                      <AnimatePresence key={word}>
-                        {isVisibleWord && (
-                          <motion.div
-                            initial={{ opacity: 0, filter: 'blur(10px)', x: x * 0.8, y: y * 0.8 }}
-                            animate={{ opacity: 0.4, filter: 'blur(0px)', x, y }}
-                            exit={{ opacity: 0, filter: 'blur(10px)', scale: 1.1 }}
-                            transition={{ duration: 0.6 }}
-                            className="absolute font-sans text-xs md:text-sm uppercase tracking-[0.3em] text-white"
-                          >
-                            {word}
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    )
-                  })}
+            {/* --- Mots Incisifs sous l'orbe --- */}
+            <AnimatePresence mode="wait">
+              {!isFinalPhase && activeText && (
+                <motion.div
+                  key={activeText}
+                  initial={{ opacity: 0, y: 10, filter: 'blur(5px)' }}
+                  animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                  exit={{ opacity: 0, y: -10, filter: 'blur(5px)' }}
+                  transition={{ duration: 0.3 }}
+                  className="absolute top-[65%] md:top-[70%] font-sans text-xs md:text-sm uppercase tracking-[0.4em] text-white/80"
+                >
+                  {activeText}
                 </motion.div>
               )}
             </AnimatePresence>

@@ -163,6 +163,7 @@ function CategoryCarousel({
                                   alt={`${mat.name} palette ${i + 1}`} 
                                   fill 
                                   className="object-cover"
+                                  sizes="60px"
                                 />
                               </div>
                             ))}
@@ -238,9 +239,9 @@ export default function CataloguePage() {
           <AnimatePresence mode="wait">
             <motion.div
               key={activeCategory}
-              initial={{ opacity: 0, y: 20, filter: 'blur(10px)' }}
-              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-              exit={{ opacity: 0, y: -20, filter: 'blur(10px)' }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
               className="w-full"
             >

@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform, useMotionTemplate } from 'framer-motion'
 import { GlassPanel } from '@/components/ui/GlassPanel'
+import { MagicButton } from '@/components/ui/MagicButton'
 
 
 import { ParallaxWrapper } from '@/components/ui/ParallaxWrapper'
@@ -82,17 +83,42 @@ export default function ReservationPage() {
             {t('title')}
           </motion.h1>
           <motion.p 
-            className="text-base md:text-lg text-ink-soft font-light"
+            className="text-base md:text-lg text-ink-soft font-light leading-relaxed"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
           >
             {t('subtitle')}
           </motion.p>
+          <motion.p 
+            className="text-sm md:text-base text-ink font-medium mt-2"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            {t('extra_phrase')}
+          </motion.p>
+          <motion.div 
+            className="flex gap-4 mt-2 flex-wrap justify-center"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <Link href="#offres" onClick={(e) => { e.preventDefault(); document.getElementById('offres')?.scrollIntoView({ behavior: 'smooth' }); }}>
+              <button className="px-6 py-3 rounded-full border border-ink bg-ink text-white text-xs uppercase tracking-widest font-medium hover:bg-ink/90 transition-colors duration-300 shadow-md">
+                {t('cta_prescan')}
+              </button>
+            </Link>
+            <Link href="#calendrier" onClick={(e) => { e.preventDefault(); document.getElementById('calendrier')?.scrollIntoView({ behavior: 'smooth' }); }}>
+              <button className="px-6 py-3 rounded-full border border-ink/20 text-ink text-xs uppercase tracking-widest font-medium hover:bg-ink/5 transition-colors duration-300">
+                {t('cta_call')}
+              </button>
+            </Link>
+          </motion.div>
         </div>
 
         {/* ─── LE CALENDRIER 3D VIVANT (Sans Orbe) ─── */}
-        <div style={{ perspective: '1200px' }} className="w-full max-w-lg">
+        <div id="calendrier" style={{ perspective: '1200px' }} className="w-full max-w-lg scroll-mt-32">
           <ParallaxWrapper offset={50} className="w-full">
             <motion.div
             style={{ 
@@ -301,7 +327,7 @@ export default function ReservationPage() {
 
         {/* ─── PARTIE 2 : LES OFFRES (PARALLAX & VERRE EN FUSION) ─── */}
         <ParallaxWrapper offset={40} direction="up" className="w-full">
-          <div className="w-full max-w-6xl flex flex-col items-center gap-20 pb-16">
+          <div id="offres" className="w-full max-w-6xl flex flex-col items-center gap-20 pb-16 scroll-mt-32">
             <div className="text-center flex flex-col gap-6">
               <h2 className="font-serif text-4xl md:text-5xl text-ink">{t('offers_title')}</h2>
               <p className="text-lg text-ink-soft font-light">{t('offers_subtitle')}</p>
@@ -309,89 +335,130 @@ export default function ReservationPage() {
 
             <div className="flex flex-col gap-8 w-full max-w-4xl mx-auto perspective-1000 px-4 md:px-0">
               
-              {/* Pack 1 */}
+              {/* Pack 1 : Pre-Scan */}
               <motion.div whileHover={{ scale: 1.02, rotateX: 2, rotateY: -2, z: 20 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
-                <GlassPanel className="p-8 md:p-10 flex flex-col md:flex-row justify-between items-start md:items-center w-full min-h-[200px] relative overflow-hidden group cursor-pointer border-white/20 hover:border-white/50 transition-colors duration-500">
+                <GlassPanel className="p-8 md:p-10 flex flex-col md:flex-row justify-between items-start md:items-center w-full min-h-[200px] relative overflow-hidden group border-white/20 hover:border-white/50 transition-colors duration-500">
                   <div className="absolute top-1/2 -translate-y-1/2 right-10 opacity-0 group-hover:opacity-40 transition-all duration-700 blur-2xl group-hover:scale-125">
                     <Orb material="cuivre" size={200} animated={true} intensity={0.5} />
                   </div>
                   
-                  <div className="flex flex-col relative z-10 transition-transform duration-300 group-hover:translate-x-2 w-full md:w-2/3">
+                  <div className="flex flex-col relative z-10 transition-transform duration-300 group-hover:translate-x-2 w-full md:w-[60%]">
                     <h4 className="text-[10px] uppercase tracking-[0.2em] text-muted mb-2 font-semibold">{t('pack1_label')}</h4>
                     <h3 className="font-serif text-3xl md:text-4xl text-ink mb-4">{t('pack1_title')}</h3>
-                    <p className="text-sm md:text-base text-ink-soft font-light leading-relaxed">{t('pack1_desc')}</p>
+                    <p className="text-sm md:text-base text-ink-soft font-light leading-relaxed whitespace-pre-wrap">{t('pack1_desc')}</p>
                   </div>
                   
-                  <div className="flex flex-row md:flex-col items-center md:items-end justify-between w-full md:w-auto mt-6 md:mt-0 relative z-10 transition-transform duration-300 group-hover:-translate-x-2">
-                    <span className="font-serif text-3xl md:text-4xl text-ink">200 €</span>
-                    <span className="text-ink/50 group-hover:text-ink transition-colors mt-2 text-2xl hidden md:block">→</span>
+                  <div className="flex flex-col items-start md:items-end justify-center w-full md:w-auto mt-6 md:mt-0 relative z-10 transition-transform duration-300 group-hover:-translate-x-2">
+                    <span className="font-serif text-2xl md:text-3xl text-ink italic opacity-70 mb-4">{t('pack1_price')}</span>
+                    <MagicButton className="!min-h-[44px] !text-[10px] md:!text-[11px] px-6 group !backdrop-blur-none !shadow-[0_0_15px_rgba(255,255,255,0.15)] hover:!shadow-[0_0_25px_rgba(255,255,255,0.35)]" onClick={(e) => { e.preventDefault(); document.getElementById('calendrier')?.scrollIntoView({ behavior: 'smooth' }); }}>
+                      <span className="flex items-center gap-2">
+                        {t('pack1_cta')} <span className="group-hover:translate-x-1 transition-transform">→</span>
+                      </span>
+                    </MagicButton>
                   </div>
                 </GlassPanel>
               </motion.div>
 
-              {/* Pack 2 */}
+              {/* Pack 2 : Scan - Recommandé */}
               <motion.div whileHover={{ scale: 1.02, rotateX: 2, rotateY: -2, z: 20 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
-                <GlassPanel className="p-8 md:p-10 flex flex-col md:flex-row justify-between items-start md:items-center w-full min-h-[200px] relative overflow-hidden group cursor-pointer border-white/20 hover:border-white/50 transition-colors duration-500">
-                  <div className="absolute top-1/2 -translate-y-1/2 right-10 opacity-0 group-hover:opacity-40 transition-all duration-700 blur-2xl group-hover:scale-125">
-                    <Orb material="cuivre" size={200} animated={true} intensity={0.5} />
-                  </div>
-                  
-                  <div className="flex flex-col relative z-10 transition-transform duration-300 group-hover:translate-x-2 w-full md:w-2/3">
-                    <h4 className="text-[10px] uppercase tracking-[0.2em] text-muted mb-2 font-semibold">{t('pack2_label')}</h4>
-                    <h3 className="font-serif text-3xl md:text-4xl text-ink mb-4">{t('pack2_title')}</h3>
-                    <p className="text-sm md:text-base text-ink-soft font-light leading-relaxed">{t('pack2_desc')}</p>
-                  </div>
-                  
-                  <div className="flex flex-row md:flex-col items-center md:items-end justify-between w-full md:w-auto mt-6 md:mt-0 relative z-10 transition-transform duration-300 group-hover:-translate-x-2">
-                    <span className="font-serif text-3xl md:text-4xl text-ink">300 €</span>
-                    <span className="text-ink/50 group-hover:text-ink transition-colors mt-2 text-2xl hidden md:block">→</span>
-                  </div>
-                </GlassPanel>
-              </motion.div>
-
-              {/* Pack 3 - Populaire */}
-              <motion.div whileHover={{ scale: 1.02, rotateX: 2, rotateY: -2, z: 20 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
-                <GlassPanel strong className="p-8 md:p-10 flex flex-col md:flex-row justify-between items-start md:items-center w-full min-h-[200px] relative overflow-hidden group cursor-pointer border-white/30 hover:border-white/60 transition-colors duration-500">
+                <GlassPanel strong className="p-8 md:p-10 flex flex-col md:flex-row justify-between items-start md:items-center w-full min-h-[200px] relative overflow-hidden group border-white/30 hover:border-white/60 transition-colors duration-500">
                   <div className="absolute top-1/2 -translate-y-1/2 right-10 opacity-20 group-hover:opacity-60 transition-all duration-700 blur-2xl group-hover:scale-125">
                     <Orb material="cuivre" size={250} animated={true} intensity={0.6} />
                   </div>
                   
+                  {/* Badge Recommandé */}
                   <div className="absolute top-0 right-8 transform -translate-y-1/2 z-20 hidden md:block">
-                    <span className="bg-ink text-white text-[9px] uppercase tracking-widest px-3 py-1 rounded-full shadow-lg">{t('popular')}</span>
+                    <span className="bg-ink text-white text-[9px] uppercase tracking-widest px-3 py-1 rounded-full shadow-lg">{t('pack2_label')}</span>
                   </div>
                   <div className="absolute top-4 right-4 z-20 md:hidden">
-                    <span className="bg-ink text-white text-[9px] uppercase tracking-widest px-2 py-1 rounded-full shadow-lg">{t('popular')}</span>
+                    <span className="bg-ink text-white text-[9px] uppercase tracking-widest px-2 py-1 rounded-full shadow-lg">{t('pack2_label')}</span>
                   </div>
                   
-                  <div className="flex flex-col relative z-10 transition-transform duration-300 group-hover:translate-x-2 w-full md:w-2/3">
-                    <h4 className="text-[10px] uppercase tracking-[0.2em] text-ink mb-2 font-semibold">{t('pack3_label')}</h4>
-                    <h3 className="font-serif text-3xl md:text-4xl text-ink mb-4">{t('pack3_title')}</h3>
-                    <p className="text-sm md:text-base text-ink-soft font-light leading-relaxed">{t('pack3_desc')}</p>
+                  <div className="flex flex-col relative z-10 transition-transform duration-300 group-hover:translate-x-2 w-full md:w-[60%]">
+                    <h4 className="text-[10px] uppercase tracking-[0.2em] text-ink mb-2 font-semibold">{t('pack2_label')}</h4>
+                    <h3 className="font-serif text-3xl md:text-4xl text-ink mb-4">{t('pack2_title')}</h3>
+                    <p className="text-sm md:text-base text-ink-soft font-light leading-relaxed whitespace-pre-wrap">{t('pack2_desc')}</p>
                   </div>
                   
-                  <div className="flex flex-row md:flex-col items-center md:items-end justify-between w-full md:w-auto mt-6 md:mt-0 relative z-10 transition-transform duration-300 group-hover:-translate-x-2">
-                    <span className="font-serif text-3xl md:text-4xl text-ink">500 €</span>
-                    <span className="text-ink/50 group-hover:text-ink transition-colors mt-2 text-2xl hidden md:block">→</span>
+                  <div className="flex flex-col items-start md:items-end justify-center w-full md:w-auto mt-6 md:mt-0 relative z-10 transition-transform duration-300 group-hover:-translate-x-2">
+                    <span className="font-serif text-2xl md:text-3xl text-ink italic opacity-70 mb-4">{t('pack2_price')}</span>
+                    <MagicButton className="!min-h-[44px] !text-[10px] md:!text-[11px] px-6 group !backdrop-blur-none !shadow-[0_0_15px_rgba(255,255,255,0.15)] hover:!shadow-[0_0_25px_rgba(255,255,255,0.35)]" onClick={(e) => { e.preventDefault(); document.getElementById('calendrier')?.scrollIntoView({ behavior: 'smooth' }); }}>
+                      <span className="flex items-center gap-2">
+                        {t('pack2_cta')} <span className="group-hover:translate-x-1 transition-transform">→</span>
+                      </span>
+                    </MagicButton>
                   </div>
                 </GlassPanel>
               </motion.div>
 
-              {/* Pack 4 */}
+              {/* Pack 3 : Campaign */}
               <motion.div whileHover={{ scale: 1.02, rotateX: 2, rotateY: -2, z: 20 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
-                <GlassPanel className="p-8 md:p-10 flex flex-col md:flex-row justify-between items-start md:items-center w-full min-h-[200px] relative overflow-hidden group cursor-pointer border-white/20 hover:border-white/50 transition-colors duration-500">
+                <GlassPanel className="p-8 md:p-10 flex flex-col md:flex-row justify-between items-start md:items-center w-full min-h-[200px] relative overflow-hidden group border-white/20 hover:border-white/50 transition-colors duration-500">
                   <div className="absolute top-1/2 -translate-y-1/2 right-10 opacity-0 group-hover:opacity-40 transition-all duration-700 blur-2xl group-hover:scale-125">
                     <Orb material="cuivre" size={200} animated={true} intensity={0.5} />
                   </div>
                   
-                  <div className="flex flex-col relative z-10 transition-transform duration-300 group-hover:translate-x-2 w-full md:w-2/3">
-                    <h4 className="text-[10px] uppercase tracking-[0.2em] text-muted mb-2 font-semibold">{t('pack4_label')}</h4>
-                    <h3 className="font-serif text-3xl md:text-4xl text-ink mb-4">{t('pack4_title')}</h3>
-                    <p className="text-sm md:text-base text-ink-soft font-light leading-relaxed">{t('pack4_desc')}</p>
+                  <div className="flex flex-col relative z-10 transition-transform duration-300 group-hover:translate-x-2 w-full md:w-[60%]">
+                    <h4 className="text-[10px] uppercase tracking-[0.2em] text-muted mb-2 font-semibold">{t('pack3_label')}</h4>
+                    <h3 className="font-serif text-3xl md:text-4xl text-ink mb-4">{t('pack3_title')}</h3>
+                    <p className="text-sm md:text-base text-ink-soft font-light leading-relaxed whitespace-pre-wrap">{t('pack3_desc')}</p>
                   </div>
                   
-                  <div className="flex flex-row md:flex-col items-center md:items-end justify-between w-full md:w-auto mt-6 md:mt-0 relative z-10 transition-transform duration-300 group-hover:-translate-x-2">
-                    <span className="font-serif text-2xl md:text-3xl text-ink italic opacity-70">{t('pack4_price')}</span>
-                    <span className="text-ink/50 group-hover:text-ink transition-colors mt-2 text-2xl hidden md:block">→</span>
+                  <div className="flex flex-col items-start md:items-end justify-center w-full md:w-auto mt-6 md:mt-0 relative z-10 transition-transform duration-300 group-hover:-translate-x-2">
+                    <span className="font-serif text-2xl md:text-3xl text-ink italic opacity-70 mb-4">{t('pack3_price')}</span>
+                    <MagicButton className="!min-h-[44px] !text-[10px] md:!text-[11px] px-6 group !backdrop-blur-none !shadow-[0_0_15px_rgba(255,255,255,0.15)] hover:!shadow-[0_0_25px_rgba(255,255,255,0.35)]" onClick={(e) => { e.preventDefault(); document.getElementById('calendrier')?.scrollIntoView({ behavior: 'smooth' }); }}>
+                      <span className="flex items-center gap-2">
+                        {t('pack3_cta')} <span className="group-hover:translate-x-1 transition-transform">→</span>
+                      </span>
+                    </MagicButton>
+                  </div>
+                </GlassPanel>
+              </motion.div>
+
+              {/* Pack 4 : Identity */}
+              <motion.div whileHover={{ scale: 1.02, rotateX: 2, rotateY: -2, z: 20 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
+                <GlassPanel className="p-8 md:p-10 flex flex-col md:flex-row justify-between items-start md:items-center w-full min-h-[200px] relative overflow-hidden group border-white/20 hover:border-white/50 transition-colors duration-500">
+                  <div className="absolute top-1/2 -translate-y-1/2 right-10 opacity-0 group-hover:opacity-40 transition-all duration-700 blur-2xl group-hover:scale-125">
+                    <Orb material="cuivre" size={200} animated={true} intensity={0.5} />
+                  </div>
+                  
+                  <div className="flex flex-col relative z-10 transition-transform duration-300 group-hover:translate-x-2 w-full md:w-[60%]">
+                    <h4 className="text-[10px] uppercase tracking-[0.2em] text-muted mb-2 font-semibold">{t('pack4_label')}</h4>
+                    <h3 className="font-serif text-3xl md:text-4xl text-ink mb-4">{t('pack4_title')}</h3>
+                    <p className="text-sm md:text-base text-ink-soft font-light leading-relaxed whitespace-pre-wrap">{t('pack4_desc')}</p>
+                  </div>
+                  
+                  <div className="flex flex-col items-start md:items-end justify-center w-full md:w-auto mt-6 md:mt-0 relative z-10 transition-transform duration-300 group-hover:-translate-x-2">
+                    <span className="font-serif text-2xl md:text-3xl text-ink italic opacity-70 mb-4">{t('pack4_price')}</span>
+                    <MagicButton className="!min-h-[44px] !text-[10px] md:!text-[11px] px-6 group !backdrop-blur-none !shadow-[0_0_15px_rgba(255,255,255,0.15)] hover:!shadow-[0_0_25px_rgba(255,255,255,0.35)]" onClick={(e) => { e.preventDefault(); document.getElementById('calendrier')?.scrollIntoView({ behavior: 'smooth' }); }}>
+                      <span className="flex items-center gap-2">
+                        {t('pack4_cta')} <span className="group-hover:translate-x-1 transition-transform">→</span>
+                      </span>
+                    </MagicButton>
+                  </div>
+                </GlassPanel>
+              </motion.div>
+
+              {/* Pack 5 : System */}
+              <motion.div whileHover={{ scale: 1.02, rotateX: 2, rotateY: -2, z: 20 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
+                <GlassPanel className="p-8 md:p-10 flex flex-col md:flex-row justify-between items-start md:items-center w-full min-h-[200px] relative overflow-hidden group border-white/20 hover:border-white/50 transition-colors duration-500">
+                  <div className="absolute top-1/2 -translate-y-1/2 right-10 opacity-0 group-hover:opacity-40 transition-all duration-700 blur-2xl group-hover:scale-125">
+                    <Orb material="cuivre" size={200} animated={true} intensity={0.5} />
+                  </div>
+                  
+                  <div className="flex flex-col relative z-10 transition-transform duration-300 group-hover:translate-x-2 w-full md:w-[60%]">
+                    <h4 className="text-[10px] uppercase tracking-[0.2em] text-muted mb-2 font-semibold">{t('pack5_label')}</h4>
+                    <h3 className="font-serif text-3xl md:text-4xl text-ink mb-4">{t('pack5_title')}</h3>
+                    <p className="text-sm md:text-base text-ink-soft font-light leading-relaxed whitespace-pre-wrap">{t('pack5_desc')}</p>
+                  </div>
+                  
+                  <div className="flex flex-col items-start md:items-end justify-center w-full md:w-auto mt-6 md:mt-0 relative z-10 transition-transform duration-300 group-hover:-translate-x-2">
+                    <span className="font-serif text-2xl md:text-3xl text-ink italic opacity-70 mb-4">{t('pack5_price')}</span>
+                    <MagicButton className="!min-h-[44px] !text-[10px] md:!text-[11px] px-6 group !backdrop-blur-none !shadow-[0_0_15px_rgba(255,255,255,0.15)] hover:!shadow-[0_0_25px_rgba(255,255,255,0.35)]" onClick={(e) => { e.preventDefault(); document.getElementById('calendrier')?.scrollIntoView({ behavior: 'smooth' }); }}>
+                      <span className="flex items-center gap-2">
+                        {t('pack5_cta')} <span className="group-hover:translate-x-1 transition-transform">→</span>
+                      </span>
+                    </MagicButton>
                   </div>
                 </GlassPanel>
               </motion.div>

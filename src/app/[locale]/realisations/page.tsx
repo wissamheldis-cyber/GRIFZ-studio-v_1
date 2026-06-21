@@ -7,7 +7,9 @@ import Orb from '@/components/ui/Orb'
 import Image from 'next/image'
 import { projects, Project } from '@/data/projectsData'
 import { fictionalConcepts } from '@/data/fictionalConceptsData'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
+import { Link } from '@/i18n/routing'
+import { MagicButton } from '@/components/ui/MagicButton'
 
 // --- Composant Mini Carrousel d'images ---
 function ProjectMiniCarousel({ images }: { images: string[] }) {
@@ -36,7 +38,8 @@ function ProjectMiniCarousel({ images }: { images: string[] }) {
             alt={`Gallery image ${index + 1}`}
             fill
             className="object-cover"
-            unoptimized
+            sizes="(max-width: 768px) 100vw, 50vw"
+            quality={85}
           />
         </motion.div>
       </AnimatePresence>
@@ -97,6 +100,21 @@ export default function RealisationsPage() {
   const [entranceComplete, setEntranceComplete] = useState(false)
   const prefersReducedMotion = useReducedMotion()
   const t = useTranslations('Realisations')
+  const locale = useLocale()
+  const isEn = locale === 'en'
+
+  const translateMaterial = (mat: string) => {
+    if (!isEn) return mat;
+    const map: Record<string, string> = {
+      'Aluminium': 'Aluminum', 'Cuivre': 'Copper', 'Graphite': 'Graphite', 'Lithium': 'Lithium',
+      'Gallium': 'Gallium', 'Tungstène': 'Tungsten', 'Cuir Classic': 'Classic Leather', 
+      'Cuir Rouge': 'Red Leather', 'Cuir Vert': 'Green Leather', 'Cuir Beige': 'Beige Leather',
+      'Charbon': 'Charcoal', 'Chrome': 'Chrome', 'Palladium': 'Palladium', 'Indium': 'Indium',
+      'Céréales': 'Cereals', 'PET': 'PET', 'Caoutchouc naturel': 'Natural Rubber', 'Bois': 'Wood',
+      'Coton': 'Cotton', 'PVC': 'PVC', 'Titane': 'Titanium'
+    };
+    return map[mat] || mat;
+  };
 
   const activeProject = projects[activeIndex]
   const activeFictionalProject = fictionalConcepts[activeFictionalIndex]
@@ -223,8 +241,8 @@ export default function RealisationsPage() {
                 const zIndex = isActive && activeFlipped ? 100 : 50 - Math.abs(offset)
                 
                 const filterBlur = isInactiveFlippedState
-                  ? `blur(${Math.abs(offset) * 4 + 16}px) brightness(0.2)`
-                  : Math.abs(offset) > 0 ? `blur(${Math.abs(offset) * 4}px)` : 'blur(0px)'
+                  ? `brightness(0.3)`
+                  : Math.abs(offset) > 0 ? `brightness(${Math.max(0.4, 1 - Math.abs(offset) * 0.2)})` : 'brightness(1)'
 
                 const staggerDelay = getStaggerDelay(index)
 
@@ -235,7 +253,6 @@ export default function RealisationsPage() {
                   rotateY: 0,
                   scale: 0.3,
                   opacity: 0,
-                  filter: 'blur(20px)',
                 }
 
                 // État animé : position finale du coverflow OU état initial si pas encore entré
@@ -288,7 +305,7 @@ export default function RealisationsPage() {
                           <div className="absolute inset-0 flex items-center justify-center p-8 bg-black/40 backdrop-blur-[2px]">
                             {project.logoPath ? (
                               <div className="relative w-4/5 h-1/2 transition-transform duration-500 group-hover:scale-105">
-                                <Image src={project.logoPath} alt={`${project.title} logo`} fill className="object-contain" unoptimized />
+                                <Image src={project.logoPath} alt={`${project.title} logo`} fill className="object-contain" sizes="(max-width: 768px) 50vw, 300px" />
                               </div>
                             ) : (
                               <h3 className="font-serif text-3xl md:text-4xl text-white transition-transform duration-500 group-hover:scale-105">{project.title}</h3>
@@ -303,7 +320,7 @@ export default function RealisationsPage() {
                               alt={`${project.title} aperçu`} 
                               fill 
                               className="object-cover" 
-                              unoptimized 
+                              sizes="(max-width: 768px) 100vw, 400px"
                             />
                             {/* Overlay sombre très léger pour que l'image paraisse propre */}
                             <div className="absolute inset-0 bg-black/10" />
@@ -395,57 +412,64 @@ export default function RealisationsPage() {
                       <div className="relative z-10 flex flex-col md:flex-row items-stretch" style={{ padding: '10% 7%' }}>
                         
                         {/* Bloc Texte */}
-                        <div className="flex-1 flex flex-col gap-8 md:gap-10 text-left pr-0 md:pr-12">
-                          <div className="flex flex-col gap-2 mb-2">
-                            <span className="font-sans text-[10px] md:text-xs uppercase tracking-widest text-white/40">{activeProject.category}</span>
+                        <div className="flex-1 flex flex-col gap-6 text-left pr-0 md:pr-12">
+                          {/* Badges and Title */}
+                          <div className="flex flex-col gap-4">
+                            <div className="flex flex-wrap gap-2">
+                              <span className="font-sans text-[10px] md:text-xs uppercase tracking-widest text-white/40 border border-white/20 px-3 py-1 rounded-full">
+                                {t('lbl_type')}: {isEn ? activeProject.projectTypeEn : activeProject.projectTypeFr}
+                              </span>
+                              {activeProject.offerIllustrated && (
+                                <span className="font-sans text-[10px] md:text-xs uppercase tracking-widest text-white/80 border border-white/40 px-3 py-1 rounded-full shadow-[0_0_10px_rgba(255,255,255,0.1)]">
+                                  {activeProject.offerIllustrated}
+                                </span>
+                              )}
+                            </div>
                             <h3 className="font-serif text-3xl md:text-4xl lg:text-5xl text-white leading-tight">{activeProject.title}</h3>
                           </div>
 
                           <div className="w-8 h-px bg-white/20" />
 
-                          {/* Le Problème */}
-                          <div className="flex flex-col gap-2">
-                            <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.25em] text-white/30">{t('challenge')}</span>
-                            <p className="font-sans text-xs md:text-sm text-white/70 leading-[1.8] font-light">
-                              {activeProject.problem}
+                          {/* Contribution */}
+                          <div className="flex flex-col gap-1">
+                            <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/30">{t('lbl_contribution')}</span>
+                            <p className="font-sans text-xs md:text-sm text-white/80 leading-[1.6] font-light">
+                              {isEn ? activeProject.contributionEn : activeProject.contributionFr}
                             </p>
                           </div>
 
-                          {/* La Vision */}
+                          {/* Livrables */}
                           <div className="flex flex-col gap-2">
-                            <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.25em] text-white/30">{t('vision')}</span>
-                            <div className="space-y-4">
-                              <p className="font-serif text-sm md:text-base text-white/90 leading-[1.8]">
-                                {activeProject.solution}
-                              </p>
+                            <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/30">{t('lbl_deliverables')}</span>
+                            <div className="flex flex-wrap gap-2">
+                              {activeProject.deliverables.map(d => (
+                                <span key={d} className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.1em] text-white/60 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full">
+                                  {d}
+                                </span>
+                              ))}
                             </div>
                           </div>
-                          
-                          <div className="w-10 h-px bg-white/10" />
 
-                          {/* Badges Deliverables */}
-                          <div className="flex flex-wrap gap-2.5">
-                            {activeProject.deliverables.map(d => (
-                              <span 
-                                key={d} 
-                                className="font-sans text-[8px] md:text-[9px] uppercase tracking-[0.15em] text-white/60"
-                                style={{
-                                  padding: '7px 16px',
-                                  borderRadius: '100px',
-                                  border: '1px solid rgba(255,255,255,0.1)',
-                                  background: 'rgba(255,255,255,0.04)',
-                                }}
-                              >
-                                {d}
-                              </span>
-                            ))}
+                          {/* Ce que cela démontre */}
+                          <div className="flex flex-col gap-1">
+                            <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/30">{t('lbl_demonstrates')}</span>
+                            <p className="font-sans text-xs md:text-sm text-white/80 leading-[1.6] font-light">
+                              {isEn ? activeProject.demonstratesEn : activeProject.demonstratesFr}
+                            </p>
                           </div>
 
-                          {activeProject.isConceptual && (
-                            <p className="text-[10px] text-white/25 italic mt-1 font-light">
-                              {t('conceptual_note')}
-                            </p>
-                          )}
+                          {/* Bouton Fermer */}
+                          <div className="mt-4">
+                            <button 
+                              onClick={() => {
+                                setActiveFlipped(false)
+                                setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100)
+                              }}
+                              className="font-sans text-xs uppercase tracking-widest text-white/50 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
+                            >
+                              <span className="group-hover:-translate-x-1 transition-transform duration-300">←</span> {t('btn_close').replace('× ', '')}
+                            </button>
+                          </div>
                         </div>
 
                         {/* Bloc Image */}
@@ -471,12 +495,31 @@ export default function RealisationsPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="w-full flex justify-center py-32"
+            className="w-full flex flex-col items-center justify-center py-20 gap-8"
           >
+            <div className="w-px h-16 bg-gradient-to-b from-ink-soft/0 via-ink-soft/20 to-ink-soft/0" />
+            
+            <div className="text-center flex flex-col items-center gap-6">
+              <h2 className="font-serif text-2xl md:text-3xl text-ink">
+                {t('cta_separator_text')}
+              </h2>
+              
+              <Link href="/reservation">
+                <MagicButton className="px-8 group">
+                  <span className="flex items-center justify-center gap-3">
+                    <span className="font-sans text-xs tracking-[0.2em] uppercase font-medium">{t('cta_separator_btn')}</span>
+                    <span className="transition-transform duration-300 group-hover:translate-x-2">→</span>
+                  </span>
+                </MagicButton>
+              </Link>
+            </div>
+
+            <div className="w-px h-16 bg-gradient-to-b from-ink-soft/0 via-ink-soft/20 to-ink-soft/0 mt-4" />
+            
             {/* Indicateur visuel simple (Flèche) */}
-            <div className="flex flex-col items-center justify-center gap-4 opacity-60">
+            <div className="flex flex-col items-center justify-center gap-4 opacity-60 mt-8">
               <span className="font-sans uppercase tracking-[0.25em] text-[10px] text-ink-soft">
-                Concepts Fictifs
+                {isEn ? 'Fictional Concepts' : 'Concepts Fictifs'}
               </span>
               <svg 
                 width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" 
@@ -509,9 +552,11 @@ export default function RealisationsPage() {
               transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
             >
               <h1 className="font-serif text-4xl md:text-5xl text-ink">
-            Visions Fictives
-          </h1>
-          <p className="text-ink-soft font-light text-sm md:text-base">Exploration conceptuelle des matières à travers des marques mondiales.</p>
+                {isEn ? 'Fictional Visions' : 'Visions Fictives'}
+              </h1>
+              <p className="text-ink-soft font-light text-sm md:text-base">
+                {isEn ? 'Conceptual exploration of materials through global brands.' : 'Exploration conceptuelle des matières à travers des marques mondiales.'}
+              </p>
         </motion.div>
 
         {/* ─── CARROUSEL 3D COVERFLOW FICTIF ─── */}
@@ -599,11 +644,11 @@ export default function RealisationsPage() {
                     backContent={
                       <div className="absolute inset-0 w-full h-full p-8 flex flex-col justify-center items-center text-center rounded-2xl border border-white/10"
                            style={{ background: 'linear-gradient(135deg, rgba(20,20,20,0.95), rgba(0,0,0,0.98))' }}>
-                        <h4 className="font-sans text-[10px] md:text-xs uppercase tracking-[0.3em] text-white/50 mb-6">Matières utilisées</h4>
+                        <h4 className="font-sans text-[10px] md:text-xs uppercase tracking-[0.3em] text-white/50 mb-6">{isEn ? 'Materials used' : 'Matières utilisées'}</h4>
                         <div className="flex flex-col gap-4">
                           {project.materials.map(mat => (
                             <div key={mat} className="font-serif text-lg md:text-2xl text-white">
-                              {mat}
+                              {translateMaterial(mat)}
                             </div>
                           ))}
                         </div>
@@ -660,13 +705,50 @@ export default function RealisationsPage() {
                   <div className="absolute pointer-events-none" style={{ left: '5%', top: 0, bottom: 0, width: '1px', background: 'linear-gradient(180deg, #747474 30%, #222424 70%)' }} />
                   <div className="absolute pointer-events-none" style={{ right: '5%', top: 0, bottom: 0, width: '1px', background: 'linear-gradient(180deg, #2c2c2c 30%, #222424 70%)' }} />
 
-                  <div className="relative z-10 flex flex-col items-center justify-center" style={{ padding: '8% 7%' }}>
-                    <h3 className="font-serif text-3xl md:text-4xl text-white mb-8 text-center">{activeFictionalProject.brandName} - Galerie</h3>
-                    <div className="w-full md:w-3/4 lg:w-2/3 flex items-center justify-center">
+                  <div className="relative z-10 flex flex-col items-center justify-center text-center" style={{ padding: '8% 7%' }}>
+                    <div className="flex flex-col md:flex-row items-center gap-2 mb-6">
+                      <span className="font-sans text-[10px] md:text-xs uppercase tracking-widest text-white border border-white/30 px-3 py-1 rounded-full shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+                        {t('fictional_type')}
+                      </span>
+                    </div>
+
+                    <h3 className="font-serif text-3xl md:text-4xl text-white mb-2">{activeFictionalProject.brandName}</h3>
+                    
+                    <p className="font-sans text-[10px] md:text-xs text-white/40 italic font-light mb-8 max-w-md">
+                      {t('fictional_disclaimer')}
+                    </p>
+
+                    <div className="flex flex-col md:flex-row gap-8 text-left w-full max-w-4xl mb-12">
+                      <div className="flex-1 flex flex-col gap-1 md:items-center md:text-center">
+                        <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/30">{t('lbl_contribution')}</span>
+                        <p className="font-sans text-xs md:text-sm text-white/80 leading-[1.6] font-light">
+                          {t('fictional_contribution')}
+                        </p>
+                      </div>
+                      <div className="flex-1 flex flex-col gap-1 md:items-center md:text-center">
+                        <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/30">{t('lbl_demonstrates')}</span>
+                        <p className="font-sans text-xs md:text-sm text-white/80 leading-[1.6] font-light">
+                          {t('fictional_demonstrates')}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="w-full md:w-3/4 lg:w-2/3 flex items-center justify-center mb-8">
                       <ProjectMiniCarousel 
                         images={activeFictionalProject.galleryPaths.length > 0 ? activeFictionalProject.galleryPaths : [activeFictionalProject.coverPath]} 
                       />
                     </div>
+
+                    {/* Bouton Fermer */}
+                    <button 
+                      onClick={() => {
+                        setActiveFictionalFlipped(false)
+                        setTimeout(() => window.scrollTo({ top: fictionalRef.current?.offsetTop || 0, behavior: 'smooth' }), 100)
+                      }}
+                      className="font-sans text-xs uppercase tracking-widest text-white/50 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
+                    >
+                      <span className="group-hover:-translate-x-1 transition-transform duration-300">←</span> {t('btn_close').replace('× ', '')}
+                    </button>
                   </div>
 
                 </div>

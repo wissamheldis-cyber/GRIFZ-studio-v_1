@@ -14,4 +14,13 @@ export interface Project {
   logoPath?: string;
   coverPath: string;
   galleryPaths: string[];
+  
+  // Nouveaux champs pour la preuve commerciale (bilingues optionnels ou traduits via UI)
+  projectTypeFr?: string;
+  projectTypeEn?: string;
+  offerIllustrated?: string;
+  contributionFr?: string;
+  contributionEn?: string;
+  demonstratesFr?: string;
+  demonstratesEn?: string;
 }

@@ -19,7 +19,14 @@ export const projects: Project[] = [
       '/works realisations/U.O.H.S/4.png',
       '/works realisations/U.O.H.S/7.png',
       '/works realisations/U.O.H.S/9.png'
-    ]
+    ],
+    projectTypeFr: 'Projet interne',
+    projectTypeEn: 'Internal project',
+    offerIllustrated: 'Campaign / System',
+    contributionFr: 'Création d\'images, création vidéo, direction artistique.',
+    contributionEn: 'Image creation, video creation, art direction.',
+    demonstratesFr: 'Capacité à produire des univers visuels et vidéos pour des projets créatifs.',
+    demonstratesEn: 'Ability to produce visual universes and videos for creative projects.'
   },
   {
     id: 'redthorn',
@@ -33,7 +40,14 @@ export const projects: Project[] = [
     deliverables: ['Prévisualisation digitale', 'Site web simple', 'Début d\'identité visuelle', 'Première direction artistique', 'Base graphique exploitable'],
     logoPath: '/works realisations/Redthorn/logo/logo redthorndde.png',
     coverPath: '/works realisations/Redthorn/cover.png',
-    galleryPaths: []
+    galleryPaths: [],
+    projectTypeFr: 'Prototype / prévisualisation',
+    projectTypeEn: 'Prototype / preview',
+    offerIllustrated: 'Scan / Identity',
+    contributionFr: 'Base de site, première direction visuelle, prévisualisation.',
+    contributionEn: 'Base website, initial visual direction, preview.',
+    demonstratesFr: 'Capacité à montrer rapidement le potentiel d\'une marque avant une refonte complète.',
+    demonstratesEn: 'Ability to quickly show a brand\'s potential before a complete redesign.'
   },
   {
     id: 'shou-games',
@@ -50,7 +64,14 @@ export const projects: Project[] = [
     galleryPaths: [
       '/works realisations/SHOU games tv/il_est_tracté_202604050706.png',
       '/works realisations/SHOU games tv/enleve_la_cicatrice_202604050658.png'
-    ]
+    ],
+    projectTypeFr: 'Projet interne / Campaign',
+    projectTypeEn: 'Internal project / Campaign',
+    offerIllustrated: 'Campaign',
+    contributionFr: 'Création d\'images, création vidéo, direction visuelle.',
+    contributionEn: 'Image creation, video creation, visual direction.',
+    demonstratesFr: 'Capacité à produire des assets visuels pour une campagne ou un média.',
+    demonstratesEn: 'Ability to produce visual assets for a campaign or media.'
   },
   {
     id: 'shou-edition',
@@ -64,7 +85,14 @@ export const projects: Project[] = [
     deliverables: ['Direction artistique', 'Logo', 'Identité visuelle', 'UX/UI design', 'Construction du site web', 'Architecture visuelle du projet'],
     logoPath: '/works realisations/SHOU edition/logo/logo.png',
     coverPath: '/works realisations/SHOU edition/am articles.png',
-    galleryPaths: []
+    galleryPaths: [],
+    projectTypeFr: 'Projet interne',
+    projectTypeEn: 'Internal project',
+    offerIllustrated: 'System',
+    contributionFr: 'Direction artistique, identité visuelle, site, UX/UI, système de marque.',
+    contributionEn: 'Art direction, visual identity, website, UX/UI, brand system.',
+    demonstratesFr: 'Capacité à structurer un projet complexe avec une identité cohérente.',
+    demonstratesEn: 'Ability to structure a complex project with a coherent identity.'
   },
   {
     id: 'heynouth',
@@ -78,7 +106,14 @@ export const projects: Project[] = [
     deliverables: ['Direction artistique', 'Logo', 'Identité visuelle', 'UX/UI design', 'Construction du site web', 'Clarification du concept'],
     logoPath: '/works realisations/Heynouth/logo/logo.png',
     coverPath: '/works realisations/Heynouth/cover.png',
-    galleryPaths: []
+    galleryPaths: [],
+    projectTypeFr: 'Projet interne',
+    projectTypeEn: 'Internal project',
+    offerIllustrated: 'System / Identity',
+    contributionFr: 'Direction artistique, identité visuelle, logo, site, UX/UI.',
+    contributionEn: 'Art direction, visual identity, logo, website, UX/UI.',
+    demonstratesFr: 'Capacité à créer une présence digitale complète autour d\'un univers singulier.',
+    demonstratesEn: 'Ability to create a complete digital presence around a unique universe.'
   },
   {
     id: 'dangushop',
@@ -94,7 +129,14 @@ export const projects: Project[] = [
     coverPath: '/works realisations/DANGUSHOP - Benzen/cover.png',
     galleryPaths: [
       '/works realisations/DANGUSHOP - Benzen/de.png'
-    ]
+    ],
+    projectTypeFr: 'Projet interne',
+    projectTypeEn: 'Internal project',
+    offerIllustrated: 'System / Identity',
+    contributionFr: 'Direction artistique, identité visuelle, logo, UX/UI, site, univers e-commerce.',
+    contributionEn: 'Art direction, visual identity, logo, UX/UI, website, e-commerce universe.',
+    demonstratesFr: 'Capacité à créer une marque commerciale cohérente et exploitable.',
+    demonstratesEn: 'Ability to create a coherent and usable commercial brand.'
   },
   {
     id: 'dag-data',
@@ -108,7 +150,14 @@ export const projects: Project[] = [
     deliverables: ['Direction artistique', 'Logo', 'Identité visuelle', 'UX/UI design', 'Construction du site web', 'Structuration de l\'expérience utilisateur'],
     logoPath: '/works realisations/DAG DATA/logo/logo.png',
     coverPath: '/works realisations/DAG DATA/cover.png',
-    galleryPaths: []
+    galleryPaths: [],
+    projectTypeFr: 'Projet interne',
+    projectTypeEn: 'Internal project',
+    offerIllustrated: 'System',
+    contributionFr: 'Direction artistique, identité visuelle, logo, UX/UI, site, univers visuel.',
+    contributionEn: 'Art direction, visual identity, logo, UX/UI, website, visual universe.',
+    demonstratesFr: 'Capacité à construire un écosystème digital complexe autour d\'une vision forte.',
+    demonstratesEn: 'Ability to build a complex digital ecosystem around a strong vision.'
   },
   {
     id: 'alert-eleves',
@@ -122,6 +171,13 @@ export const projects: Project[] = [
     deliverables: ['Direction artistique', 'Création de visuels', 'Cohérence graphique', 'Mise en forme visuelle du projet'],
     logoPath: '/works realisations/Alert Eleves/logo/logo.png',
     coverPath: '/works realisations/Alert Eleves/cover.png',
-    galleryPaths: []
+    galleryPaths: [],
+    projectTypeFr: 'Projet accompagné / réalisation',
+    projectTypeEn: 'Accompanied project / realization',
+    offerIllustrated: 'Campaign / Identity légère',
+    contributionFr: 'Direction artistique et création de visuels.',
+    contributionEn: 'Art direction and visual creation.',
+    demonstratesFr: 'Capacité à rendre un message éducatif plus clair, plus impactant et plus crédible.',
+    demonstratesEn: 'Ability to make an educational message clearer, more impactful, and more credible.'
   }
 ];

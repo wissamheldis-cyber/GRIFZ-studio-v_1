@@ -100,10 +100,25 @@ export default function HomePage() {
             color: 'var(--ink-soft)',
             maxWidth: 560,
             lineHeight: 1.65,
-            marginBottom: 56,
+            marginBottom: 16,
           }}
         >
           {t('hero_subtitle')}
+        </motion.p>
+
+        {/* Audience cible */}
+        <motion.p
+          {...fadeUp(0.45)}
+          style={{
+            fontFamily: 'var(--font-sans)',
+            fontSize: 'clamp(14px, 1.5vw, 16px)',
+            color: 'var(--muted)',
+            maxWidth: 600,
+            lineHeight: 1.6,
+            marginBottom: 56,
+          }}
+        >
+          {t('hero_audience')}
         </motion.p>
 
         {/* CTA */}
@@ -115,21 +130,22 @@ export default function HomePage() {
             gap: 24,
             justifyContent: 'center',
             marginTop: 16,
+            marginBottom: 120, // Pousse le bloc vers le haut pour l'éloigner de la flèche
           }}
         >
           <Link href="/reservation">
             <MagicButton className="group">
               <span className="flex items-center justify-center gap-3">
-                {t('cta_reserve')}
+                {t('cta_scan')}
                 <span className="transition-transform duration-300 group-hover:translate-x-2">→</span>
               </span>
             </MagicButton>
           </Link>
-          <Link href="/catalogue">
-            <MagicButton className="px-10 group" onClick={() => window.location.href = '#catalogue'}>
+          <Link href="#offres">
+            <MagicButton className="px-10 group" onClick={(e) => { e.preventDefault(); document.getElementById('offres')?.scrollIntoView({ behavior: 'smooth' }); }}>
               <span className="flex items-center gap-3">
-                <span className="font-sans text-xs tracking-[0.2em] uppercase font-medium">{t('cta_catalog')}</span>
-                <span className="group-hover:translate-x-2 transition-transform duration-300">→</span>
+                <span className="font-sans text-xs tracking-[0.2em] uppercase font-medium">{t('cta_offers')}</span>
+                <span className="group-hover:translate-x-2 transition-transform duration-300">↓</span>
               </span>
             </MagicButton>
           </Link>
@@ -163,7 +179,116 @@ export default function HomePage() {
         </motion.div>
       </section>
 
-      {/* ─── Bloc promesses liquid glass ────────────────── */}
+      {/* ─── Problème / Solution ─────────────────────────── */}
+      <section
+        style={{
+          padding: '40px 28px 80px',
+          display: 'flex',
+          justifyContent: 'center',
+        }}
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.9, ease: [0.25, 0.46, 0.45, 0.94] }}
+          className="w-full max-w-5xl"
+        >
+          <ParallaxWrapper offset={20} direction="up">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24">
+              {/* Problème */}
+              <div className="flex flex-col gap-4 border-l border-ink/10 pl-6">
+                <p className="font-sans text-sm md:text-base text-ink-soft leading-[1.8] font-light">
+                  {t('problem_text')}
+                </p>
+              </div>
+              
+              {/* Solution */}
+              <div className="flex flex-col gap-4 border-l border-ink/10 pl-6">
+                <p className="font-sans text-sm md:text-base text-ink-soft leading-[1.8] font-light">
+                  {t('solution_text')}
+                </p>
+              </div>
+            </div>
+          </ParallaxWrapper>
+        </motion.div>
+      </section>
+
+      {/* ─── Offres ─────────────────────────────────────── */}
+      <section
+        id="offres"
+        style={{
+          padding: '60px 28px 100px',
+          display: 'flex',
+          justifyContent: 'center',
+        }}
+      >
+        <div className="w-full max-w-6xl flex flex-col gap-12">
+          {/* Titre */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-center"
+          >
+            <h2 className="font-serif text-3xl md:text-4xl text-ink">{t('offers_section_title')}</h2>
+          </motion.div>
+
+          {/* Grille Offres */}
+          <ParallaxWrapper offset={40} direction="up">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[
+                { key: 'prescan', label: 'Offert' },
+                { key: 'scan', label: 'Recommandé' },
+                { key: 'campaign', label: 'Rapide' },
+                { key: 'identity', label: 'Sur devis' },
+                { key: 'system', label: 'Premium' },
+              ].map((offer, i) => (
+                <motion.div
+                  key={offer.key}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.1 * i, duration: 0.7 }}
+                >
+                  <LiquidCard className="h-full p-8 flex flex-col gap-4">
+                    <span className="font-sans text-[10px] uppercase tracking-[0.2em] text-ink-soft">
+                      {offer.label}
+                    </span>
+                    <h3 className="font-serif text-2xl text-ink">
+                      {t(`offer_${offer.key}`)}
+                    </h3>
+                    <p className="font-sans text-sm text-ink-soft leading-relaxed font-light mt-auto pt-4 border-t border-ink/10">
+                      {t(`offer_${offer.key}_desc`)}
+                    </p>
+                  </LiquidCard>
+                </motion.div>
+              ))}
+            </div>
+          </ParallaxWrapper>
+
+          {/* CTA Section Offres */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.5, duration: 0.8 }}
+            className="flex justify-center mt-6"
+          >
+            <Link href="/reservation">
+              <MagicButton className="px-10 group">
+                <span className="flex items-center gap-3">
+                  <span className="font-sans text-xs tracking-[0.2em] uppercase font-medium">{t('cta_detailed_offers')}</span>
+                  <span className="group-hover:translate-x-2 transition-transform duration-300">→</span>
+                </span>
+              </MagicButton>
+            </Link>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ─── Méthode (4 étapes) ─────────────────────────── */}
       <section
         style={{
           padding: '60px 28px 100px',
@@ -176,14 +301,15 @@ export default function HomePage() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.9, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="w-full max-w-6xl"
+          className="w-full max-w-7xl"
         >
           <ParallaxWrapper offset={40} direction="up">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { icon: '◈', titleKey: 'promise_bespoke', descKey: 'promise_bespoke_desc' },
-              { icon: '◎', titleKey: 'promise_materials', descKey: 'promise_materials_desc' },
-              { icon: '◉', titleKey: 'promise_impact', descKey: 'promise_impact_desc' },
+              { icon: '01', titleKey: 'method_observe', descKey: 'method_observe_desc' },
+              { icon: '02', titleKey: 'method_reveal', descKey: 'method_reveal_desc' },
+              { icon: '03', titleKey: 'method_build', descKey: 'method_build_desc' },
+              { icon: '04', titleKey: 'method_deploy', descKey: 'method_deploy_desc' },
             ].map((p, i) => (
               <motion.div
                 key={p.titleKey}
@@ -193,18 +319,18 @@ export default function HomePage() {
                 transition={{ delay: 0.1 + i * 0.12, duration: 0.7 }}
               >
                 <FlipCard
-                  height={320}
+                  height={280}
                   frontContent={
                     <div className="flex flex-col items-center justify-center text-center h-full gap-6">
-                      <div className="w-20 h-20 rounded-full bg-gradient-to-b from-white/80 to-white/20 shadow-[inset_0_2px_4px_rgba(255,255,255,1),0_8px_16px_rgba(0,0,0,0.05)] border border-white/60 flex items-center justify-center relative">
-                        <span className="text-2xl text-ink relative z-10">{p.icon}</span>
+                      <div className="w-16 h-16 rounded-full bg-gradient-to-b from-white/80 to-white/20 shadow-[inset_0_2px_4px_rgba(255,255,255,1),0_8px_16px_rgba(0,0,0,0.05)] border border-white/60 flex items-center justify-center relative">
+                        <span className="font-sans font-medium text-lg text-ink relative z-10">{p.icon}</span>
                       </div>
                       <h3 className="font-serif text-2xl text-white">{t(p.titleKey)}</h3>
                     </div>
                   }
                   backContent={
-                    <div className="flex flex-col items-center justify-center text-center h-full p-4">
-                      <p className="font-sans text-sm text-white/80 leading-relaxed">
+                    <div className="flex flex-col items-center justify-center text-center h-full p-6">
+                      <p className="font-sans text-[13px] text-white/80 leading-relaxed font-light">
                         {t(p.descKey)}
                       </p>
                     </div>
@@ -252,7 +378,7 @@ export default function HomePage() {
           ))}
         </motion.div>
 
-        {/* CTA vers catalogue */}
+        {/* CTA vers Réservation */}
         <ParallaxWrapper offset={30} direction="up">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -270,23 +396,32 @@ export default function HomePage() {
               letterSpacing: '-0.02em',
             }}
           >
-            {t('brand_title')}
+            {t('final_title')}
           </p>
           <p
             style={{
               fontFamily: 'var(--font-sans)',
               fontSize: '15px',
               color: 'var(--ink-soft)',
-              maxWidth: 440,
+              maxWidth: 480,
+              lineHeight: 1.6,
             }}
           >
-            {t('brand_subtitle')}
+            {t('final_subtitle')}
           </p>
-          <div style={{ marginTop: 16 }}>
-            <Link href="/catalogue">
+          <div style={{ marginTop: 24, display: 'flex', gap: '16px', flexWrap: 'wrap', justifyContent: 'center' }}>
+            <Link href="/reservation">
               <MagicButton className="group">
                 <span className="flex items-center justify-center gap-3">
-                  {t('brand_cta')}
+                  {t('final_cta_scan')}
+                  <span className="transition-transform duration-300 group-hover:translate-x-2">→</span>
+                </span>
+              </MagicButton>
+            </Link>
+            <Link href="/reservation">
+              <MagicButton className="px-8 group">
+                <span className="flex items-center justify-center gap-3">
+                  <span className="font-sans text-xs tracking-[0.2em] uppercase font-medium">{t('final_cta_call')}</span>
                   <span className="transition-transform duration-300 group-hover:translate-x-2">→</span>
                 </span>
               </MagicButton>
