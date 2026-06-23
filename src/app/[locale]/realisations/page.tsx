@@ -1,15 +1,11 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
-import { FlipCard } from '@/components/ui/FlipCard'
-import Orb from '@/components/ui/Orb'
 import Image from 'next/image'
 import { projects, Project } from '@/data/projectsData'
-import { fictionalConcepts } from '@/data/fictionalConceptsData'
+import { fictionalConcepts, FictionalConcept } from '@/data/fictionalConceptsData'
 import { useTranslations, useLocale } from 'next-intl'
-import { Link } from '@/i18n/routing'
-import { MagicButton } from '@/components/ui/MagicButton'
 
 // --- Composant Mini Carrousel d'images ---
 function ProjectMiniCarousel({ images }: { images: string[] }) {
@@ -44,7 +40,6 @@ function ProjectMiniCarousel({ images }: { images: string[] }) {
         </motion.div>
       </AnimatePresence>
 
-      {/* Couche verre subtile sur l'image */}
       <div 
         className="absolute inset-0 pointer-events-none z-[1]"
         style={{
@@ -52,7 +47,6 @@ function ProjectMiniCarousel({ images }: { images: string[] }) {
           mixBlendMode: 'overlay',
         }}
       />
-      {/* Reflet haut subtil */}
       <div 
         className="absolute top-0 left-0 right-0 h-[30%] pointer-events-none z-[1]"
         style={{
@@ -60,7 +54,6 @@ function ProjectMiniCarousel({ images }: { images: string[] }) {
         }}
       />
 
-      {/* Navigation */}
       {images.length > 1 && (
         <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex gap-2.5 z-10 bg-black/30 backdrop-blur-xl px-4 py-2 rounded-full border border-white/15 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           {images.map((_, i) => (
@@ -73,7 +66,6 @@ function ProjectMiniCarousel({ images }: { images: string[] }) {
         </div>
       )}
       
-      {/* Click zones */}
       {images.length > 1 && (
         <>
           <div className="absolute top-0 left-0 w-1/4 h-full cursor-pointer z-0" onClick={() => setIndex((index - 1 + images.length) % images.length)} />
@@ -84,25 +76,35 @@ function ProjectMiniCarousel({ images }: { images: string[] }) {
   )
 }
 
-
 export default function RealisationsPage() {
+  const [viewMode, setViewMode] = useState<'selection' | 'realisations' | 'fictional'>('selection')
+  const [selectedProject, setSelectedProject] = useState<Project | FictionalConcept | null>(null)
   const [activeIndex, setActiveIndex] = useState(0)
-  const [activeFlipped, setActiveFlipped] = useState(false)
   
-  // Nouveaux états pour le carrousel Fictif
-  const [activeFictionalIndex, setActiveFictionalIndex] = useState(0)
-  const [activeFictionalFlipped, setActiveFictionalFlipped] = useState(false)
-
-  const realisationsRef = useRef<HTMLDivElement>(null)
-  const fictionalRef = useRef<HTMLDivElement>(null)
-  
-  const [hasEntered, setHasEntered] = useState(false)
-  const [entranceComplete, setEntranceComplete] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
   const prefersReducedMotion = useReducedMotion()
   const t = useTranslations('Realisations')
   const locale = useLocale()
   const isEn = locale === 'en'
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
+  useEffect(() => {
+    if (selectedProject) {
+      window.dispatchEvent(new CustomEvent('card-flip', { 
+        detail: { isFlipped: true, color: selectedProject.rainColor } 
+      }))
+    } else {
+      window.dispatchEvent(new CustomEvent('card-flip', { 
+        detail: { isFlipped: false } 
+      }))
+    }
+  }, [selectedProject])
 
   const translateMaterial = (mat: string) => {
     if (!isEn) return mat;
@@ -117,746 +119,297 @@ export default function RealisationsPage() {
     return map[mat] || mat;
   };
 
-  const activeProject = projects[activeIndex]
-  const activeFictionalProject = fictionalConcepts[activeFictionalIndex]
-
-  // Déclencher l'animation d'entrée au montage
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768)
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-
-    const startTimer = setTimeout(() => setHasEntered(true), 100)
-    // Marquer la fin de l'animation d'entrée (durée max du stagger + durée animation)
-    const endTimer = setTimeout(() => setEntranceComplete(true), 1200)
-    return () => { 
-      clearTimeout(startTimer); 
-      clearTimeout(endTimer);
-      window.removeEventListener('resize', checkMobile)
-    }
-  }, [])
-
-  const handleCardClick = (index: number) => {
-    if (activeIndex !== index) {
-      setActiveIndex(index)
-      setActiveFlipped(false)
-    }
-  }
-
-  const handleFlipChange = (isFlipped: boolean, index: number) => {
-    if (activeIndex === index) {
-      setActiveFlipped(isFlipped)
-      // Désactiver le flip de l'autre carrousel si activé
-      if (isFlipped) {
-        setActiveFictionalFlipped(false)
-        setTimeout(() => {
-          window.scrollTo({ top: 0, behavior: 'smooth' })
-        }, 150)
-      }
-      
-      // On dispatch l'event pour le composant RainBackground
-      window.dispatchEvent(new CustomEvent('card-flip', { 
-        detail: { 
-          isFlipped,
-          color: projects[index].rainColor 
-        } 
-      }))
-    }
-  }
-
-  // Handlers pour le carrousel Fictif
-  const handleFictionalCardClick = (index: number) => {
-    if (activeFictionalIndex !== index) {
-      setActiveFictionalIndex(index)
-      setActiveFictionalFlipped(false)
-    }
-  }
-
-  const handleFictionalFlipChange = (isFlipped: boolean, index: number) => {
-    if (activeFictionalIndex === index) {
-      setActiveFictionalFlipped(isFlipped)
-      // Désactiver le flip de l'autre carrousel si activé
-      if (isFlipped) {
-        setActiveFlipped(false)
-        setTimeout(() => {
-          window.scrollTo({ top: 0, behavior: 'smooth' })
-        }, 150)
-      }
-      
-      window.dispatchEvent(new CustomEvent('card-flip', { 
-        detail: { 
-          isFlipped,
-          color: fictionalConcepts[index].rainColor 
-        } 
-      }))
-    }
-  }
-
-  // --- Calcul de l'ordre d'apparition staggeré ---
-  // Les cartes latérales apparaissent d'abord, la carte centrale en dernier
-  const getStaggerDelay = (index: number) => {
-    if (prefersReducedMotion) return 0
-    const offset = Math.abs(index - activeIndex)
-    const maxOffset = Math.max(...projects.map((_, i) => Math.abs(i - activeIndex)))
-    // Les plus éloignées apparaissent en premier (0ms), la centrale en dernier
-    const normalizedOrder = maxOffset > 0 ? 1 - (offset / maxOffset) : 0
-    return normalizedOrder * 0.35 + 0.05 // de 50ms à 400ms
-  }
-
-  const getEntranceDuration = () => prefersReducedMotion ? 0.01 : 0.7
+  const currentList = viewMode === 'realisations' ? projects : fictionalConcepts
 
   return (
-    <main className="min-h-screen pt-40 pb-32 flex flex-col items-center relative overflow-hidden">
+    <main className="min-h-[100dvh] pt-32 pb-32 flex flex-col items-center justify-center relative overflow-hidden">
 
-      <AnimatePresence>
-        {!activeFictionalFlipped && (
+      <AnimatePresence mode="wait">
+        {viewMode === 'selection' ? (
           <motion.div 
-            ref={realisationsRef}
-            key="section-realisations"
+            key="selection"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.6 }}
+            className="flex flex-col md:flex-row gap-8 items-center justify-center w-full max-w-5xl px-4"
+          >
+            {/* Bouton Nos Réalisations */}
+            <div 
+              onClick={() => {
+                setViewMode('realisations')
+                setActiveIndex(0)
+              }}
+              className="group relative cursor-pointer flex-1 w-full flex flex-col items-center justify-center p-12 md:p-24 rounded-3xl border border-white/10 hover:border-white/30 transition-all duration-500 overflow-hidden"
+              style={{ background: 'radial-gradient(circle at center, rgba(30,30,30,0.4), rgba(0,0,0,0.6))' }}
+            >
+              <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <h2 className="font-serif text-3xl md:text-5xl text-white z-10 text-center tracking-widest drop-shadow-md transition-transform duration-500 group-hover:scale-105">
+                {t('title')}
+              </h2>
+              <span className="font-sans text-xs md:text-sm text-white/50 uppercase tracking-[0.3em] mt-6 z-10 transition-colors duration-300 group-hover:text-white/80">
+                {t('subtitle')}
+              </span>
+            </div>
+
+            {/* Bouton Visions Fictives */}
+            <div 
+              onClick={() => {
+                setViewMode('fictional')
+                setActiveIndex(0)
+              }}
+              className="group relative cursor-pointer flex-1 w-full flex flex-col items-center justify-center p-12 md:p-24 rounded-3xl border border-white/10 hover:border-white/30 transition-all duration-500 overflow-hidden"
+              style={{ background: 'radial-gradient(circle at center, rgba(30,30,30,0.4), rgba(0,0,0,0.6))' }}
+            >
+              <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <h2 className="font-serif text-3xl md:text-5xl text-white z-10 text-center tracking-widest drop-shadow-md transition-transform duration-500 group-hover:scale-105">
+                {isEn ? 'Fictional Visions' : 'Visions Fictives'}
+              </h2>
+              <span className="font-sans text-xs md:text-sm text-white/50 uppercase tracking-[0.3em] mt-6 z-10 transition-colors duration-300 group-hover:text-white/80 text-center">
+                {isEn ? 'Conceptual exploration' : 'Exploration conceptuelle'}
+              </span>
+            </div>
+          </motion.div>
+        ) : (
+          <motion.div 
+            key={`view-${viewMode}`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.6 }}
-            className="w-full max-w-6xl mx-auto px-4 flex flex-col items-center gap-12 relative z-10 overflow-hidden"
+            className="w-full flex flex-col items-center justify-center relative"
           >
-            {/* Titre central */}
-            <motion.div 
-              className="text-center flex flex-col gap-4"
-              initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
-              animate={hasEntered ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-            >
-              <h1 className="font-serif text-4xl md:text-5xl text-ink">
-                {t('title')}
-              </h1>
-              <p className="text-ink-soft font-light text-sm md:text-base">{t('subtitle')}</p>
-            </motion.div>
+            {/* Header info et Bouton retour */}
+            <div className="absolute top-0 left-0 w-full flex items-center justify-between px-6 md:px-12 z-20">
+              <button 
+                onClick={() => setViewMode('selection')}
+                className="font-sans text-xs md:text-sm uppercase tracking-widest text-white/50 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
+              >
+                <span className="group-hover:-translate-x-1 transition-transform duration-300">←</span> {t('btn_close').replace('× ', isEn ? 'Back' : 'Précédent')}
+              </button>
+              
+              <div className="font-serif text-xl md:text-2xl text-white/40 tracking-widest">
+                {viewMode === 'realisations' ? t('title') : (isEn ? 'Fictional Visions' : 'Visions Fictives')}
+              </div>
+            </div>
 
-            {/* ─── CARROUSEL ─── */}
-            {!isMobile ? (
-              <div className="relative w-full h-[400px] md:h-[500px] flex items-center justify-center mt-8" style={{ perspective: '1200px' }}>
-                {projects.map((project, index) => {
-                  const offset = index - activeIndex
-                  const isActive = offset === 0
+            {/* Carrousel Logos */}
+            <div className="mt-16 w-full max-w-[100vw]">
+              {!isMobile ? (
+                /* Coverflow 3D pour Desktop */
+                <div className="relative w-full h-[400px] md:h-[500px] flex items-center justify-center" style={{ perspective: '1200px' }}>
+                  {currentList.map((item, index) => {
+                    const offset = index - activeIndex
+                    const isActive = offset === 0
 
-                  // Mathématiques du Coverflow
-                  const isInactiveFlippedState = activeFlipped && !isActive
-                  const translateX = offset * (typeof window !== 'undefined' && window.innerWidth < 768 ? 140 : 280)
-                  const translateZ = Math.abs(offset) * -200 + (isInactiveFlippedState ? -150 : 0) + (isActive && activeFlipped ? 40 : 0)
-                  const rotateY = offset * -25
-                  const scale = 1 - Math.abs(offset) * 0.1
-                  const opacity = isInactiveFlippedState 
-                    ? Math.max(0, 1 - Math.abs(offset) * 0.3 - 0.6)
-                    : 1 - Math.abs(offset) * 0.3
-                  const zIndex = isActive && activeFlipped ? 100 : 50 - Math.abs(offset)
-                  
-                  const filterBlur = isInactiveFlippedState
-                    ? `brightness(0.3)`
-                    : Math.abs(offset) > 0 ? `brightness(${Math.max(0.4, 1 - Math.abs(offset) * 0.2)})` : 'brightness(1)'
+                    const translateX = offset * 280
+                    const translateZ = Math.abs(offset) * -200
+                    const rotateY = offset * -25
+                    const scale = 1 - Math.abs(offset) * 0.1
+                    const opacity = 1 - Math.abs(offset) * 0.3
+                    const zIndex = 50 - Math.abs(offset)
+                    
+                    const filterBlur = Math.abs(offset) > 0 ? `brightness(${Math.max(0.4, 1 - Math.abs(offset) * 0.2)}) blur(${Math.abs(offset) * 2}px)` : 'brightness(1) blur(0px)'
 
-                  const staggerDelay = getStaggerDelay(index)
-
-                  // État initial : toutes les cartes partent du centre, invisibles, écrasées
-                  const entranceInitial = prefersReducedMotion ? false : {
-                    x: 0,
-                    z: -600,
-                    rotateY: 0,
-                    scale: 0.3,
-                    opacity: 0,
-                  }
-
-                  // État animé : position finale du coverflow OU état initial si pas encore entré
-                  const entranceAnimate = hasEntered ? {
-                    x: translateX,
-                    z: translateZ,
-                    rotateY: rotateY,
-                    scale: scale,
-                    opacity: opacity,
-                    filter: filterBlur,
-                  } : entranceInitial
-
-                  return (
-                    <motion.div
-                      key={project.id}
-                      className="absolute top-0 bottom-0 flex flex-col items-center justify-center cursor-pointer"
-                      style={{ zIndex }}
-                      initial={entranceInitial}
-                      animate={entranceAnimate}
-                      transition={
-                        !hasEntered 
-                          ? { duration: 0.01 }
-                          : entranceComplete
-                            ? { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }
-                            : {
-                                duration: getEntranceDuration(),
-                                delay: staggerDelay,
-                                ease: [0.25, 0.46, 0.45, 0.94],
-                              }
-                      }
-                      onClick={() => handleCardClick(index)}
-                    >
+                    return (
                       <motion.div
-                        className="w-[260px] h-[360px] md:w-[350px] md:h-[480px] rounded-2xl"
-                        animate={isActive && activeFlipped ? {
-                          y: -15,
-                        } : {
-                          y: 0,
+                        key={item.id}
+                        className="absolute top-0 bottom-0 flex flex-col items-center justify-center cursor-pointer"
+                        style={{ zIndex }}
+                        animate={{
+                          x: translateX,
+                          z: translateZ,
+                          rotateY: rotateY,
+                          scale: scale,
+                          opacity: opacity,
+                          filter: filterBlur,
                         }}
-                        transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                        transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+                        onClick={() => {
+                          if (isActive) setSelectedProject(item as any)
+                          else setActiveIndex(index)
+                        }}
                       >
-                        <FlipCard 
-                          key={`${project.id}-${isActive}`}
-                          className="w-full h-full cursor-pointer group"
-                          isFlippable={isActive}
-                          onFlipChange={(flipped) => handleFlipChange(flipped, index)}
-                          frontImage={project.coverPath}
-                          frontContent={
-                            <div className="absolute inset-0 flex items-center justify-center p-8 bg-black/40 backdrop-blur-[2px]">
-                              {project.logoPath ? (
-                                <div className="relative w-4/5 h-1/2 transition-transform duration-500 group-hover:scale-105">
-                                  <Image src={project.logoPath} alt={`${project.title} logo`} fill className="object-contain" sizes="(max-width: 768px) 50vw, 300px" />
-                                </div>
-                              ) : (
-                                <h3 className="font-serif text-3xl md:text-4xl text-white transition-transform duration-500 group-hover:scale-105">{project.title}</h3>
-                              )}
-                            </div>
-                          }
-                          backContent={
-                            <div className="absolute inset-0 w-full h-full overflow-hidden rounded-2xl">
-                              {/* Wrapper pour future vidéo. Actuellement une image. */}
-                              <Image 
-                                src={project.galleryPaths && project.galleryPaths.length > 0 ? project.galleryPaths[0] : project.coverPath} 
-                                alt={`${project.title} aperçu`} 
-                                fill 
-                                className="object-cover" 
-                                sizes="(max-width: 768px) 100vw, 400px"
-                              />
-                              {/* Overlay sombre très léger pour que l'image paraisse propre */}
-                              <div className="absolute inset-0 bg-black/10" />
-                            </div>
-                          }
-                        />
-                      </motion.div>
-
-                    </motion.div>
-                  )
-                })}
-              </div>
-            ) : (
-              <div className="w-full mt-8 flex overflow-x-auto gap-4 px-4 snap-x snap-mandatory pb-8 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-                {projects.map((project, index) => {
-                  const isActive = index === activeIndex;
-                  return (
-                    <div 
-                      key={project.id} 
-                      className="snap-center shrink-0 w-[280px] h-[380px] flex flex-col cursor-pointer transition-transform duration-300"
-                      onClick={() => {
-                        handleCardClick(index);
-                        setActiveFlipped(true);
-                        setActiveFictionalFlipped(false);
-                      }}
-                      style={{
-                        transform: isActive ? 'scale(1.02)' : 'scale(0.95)',
-                        opacity: isActive ? 1 : 0.7,
-                      }}
-                    >
-                      <div className="w-full h-full relative rounded-2xl overflow-hidden border border-white/15 shadow-[0_8px_30px_rgba(0,0,0,0.5)]">
-                        <Image 
-                          src={project.coverPath} 
-                          alt={project.title} 
-                          fill 
-                          className="object-cover" 
-                          sizes="280px" 
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                        
-                        <div className="absolute bottom-6 left-6 right-6 flex flex-col gap-2">
-                          {project.logoPath ? (
-                            <div className="relative w-full h-12">
-                              <Image src={project.logoPath} alt={project.title} fill className="object-contain object-left" />
-                            </div>
+                        <motion.div
+                          animate={prefersReducedMotion ? {} : { y: [0, -10, 0] }}
+                          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: index * 0.2 }}
+                          className="w-[200px] h-[200px] md:w-[350px] md:h-[350px] flex items-center justify-center relative transition-transform duration-500 hover:scale-110"
+                        >
+                          {item.logoPath ? (
+                            <Image src={item.logoPath} alt={'title' in item ? item.title : item.brandName} fill className="object-contain drop-shadow-[0_10px_25px_rgba(255,255,255,0.15)]" sizes="350px" />
                           ) : (
-                            <h3 className="font-serif text-2xl text-white">{project.title}</h3>
+                            <h3 className="font-serif text-3xl md:text-5xl text-white drop-shadow-2xl text-center uppercase tracking-widest">{'title' in item ? item.title : item.brandName}</h3>
                           )}
-                          <span className="font-sans text-[10px] uppercase tracking-widest text-white/60">
-                            {isEn ? project.projectTypeEn : project.projectTypeFr}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
-            )}
-
-            {/* ─── PANNEAU ÉDITORIAL PREMIUM (Dark Card) ─── */}
-            <AnimatePresence>
-              {activeFlipped && activeProject && (
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 30 }}
-                  transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-                  className="w-full max-w-5xl mx-auto overflow-hidden mt-12 md:mt-20"
-                >
-                  {/* ── Styles pour le dot animé et le ray ── */}
-                  <style dangerouslySetInnerHTML={{ __html: `
-                    @keyframes moveDotPanel {
-                      0%, 100% { top: 8%; right: 8%; }
-                      25% { top: 8%; right: calc(100% - 30px); }
-                      50% { top: calc(100% - 24px); right: calc(100% - 30px); }
-                      75% { top: calc(100% - 24px); right: 8%; }
-                    }
-                    .panel-dot {
-                      width: 5px;
-                      aspect-ratio: 1;
-                      position: absolute;
-                      background-color: #fff;
-                      border-radius: 100px;
-                      z-index: 20;
-                      animation: moveDotPanel 8s linear infinite;
-                    }
-                    @media (max-width: 768px) {
-                      .panel-dot { display: none; }
-                    }
-                  `}} />
-
-                  {/* Outer — Gradient border wrapper */}
-                  <div 
-                    className="mx-4 md:mx-0 relative"
-                    style={{
-                      borderRadius: '16px',
-                      padding: '1px',
-                      background: 'radial-gradient(circle 600px at 0% 0%, #ffffff, #0c0d0d)',
-                    }}
-                  >
-                    {/* Dot lumineux animé */}
-                    <div className="panel-dot" />
-
-                    {/* Inner Card */}
-                    <div 
-                      className="relative w-full overflow-hidden"
-                      style={{
-                        borderRadius: '15px',
-                        border: '1px solid #202222',
-                        background: 'radial-gradient(circle 800px at 0% 0%, #333333, #0c0d0d)',
-                      }}
-                    >
-                      {/* Ray — faisceau lumineux */}
+                        </motion.div>
+                      </motion.div>
+                    )
+                  })}
+                </div>
+              ) : (
+                /* Native Slider 2D pour Mobile */
+                <div className="w-full flex overflow-x-auto gap-16 px-[50vw] snap-x snap-mandatory py-16 scrollbar-hide items-center h-[400px]">
+                  {/* Pseudo elements to enforce start padding correctly in flex */ }
+                  <div className="-ml-[100px] shrink-0" />
+                  {currentList.map((item, index) => {
+                    const isActive = index === activeIndex
+                    return (
                       <div 
-                        className="absolute pointer-events-none"
-                        style={{
-                          width: '280px',
-                          height: '50px',
-                          borderRadius: '100px',
-                          backgroundColor: '#c7c7c7',
-                          opacity: 0.3,
-                          filter: 'blur(12px)',
-                          transformOrigin: '10%',
-                          top: '0%',
-                          left: '0',
-                          transform: 'rotate(40deg)',
-                          zIndex: 1,
+                        key={item.id}
+                        className="snap-center shrink-0 w-[200px] h-[200px] flex flex-col items-center justify-center cursor-pointer"
+                        onClick={() => {
+                          setActiveIndex(index)
+                          setSelectedProject(item as any)
                         }}
-                      />
-
-                      {/* ── Lignes internes à ~8% — cadre de respiration ── */}
-                      <div className="absolute pointer-events-none" style={{ top: '8%', left: 0, right: 0, height: '1px', background: 'linear-gradient(90deg, #888888 30%, #1d1f1f 70%)' }} />
-                      <div className="absolute pointer-events-none" style={{ bottom: '8%', left: 0, right: 0, height: '1px', background: 'linear-gradient(90deg, #2c2c2c 30%, #1d1f1f 70%)' }} />
-                      <div className="absolute pointer-events-none" style={{ left: '5%', top: 0, bottom: 0, width: '1px', background: 'linear-gradient(180deg, #747474 30%, #222424 70%)' }} />
-                      <div className="absolute pointer-events-none" style={{ right: '5%', top: 0, bottom: 0, width: '1px', background: 'linear-gradient(180deg, #2c2c2c 30%, #222424 70%)' }} />
-
-                      {/* ── Contenu à l'intérieur du cadre ── */}
-                      <div className="relative z-10 flex flex-col md:flex-row items-stretch" style={{ padding: '10% 7%' }}>
-                        
-                        {/* Bloc Texte */}
-                        <div className="flex-1 flex flex-col gap-6 text-left pr-0 md:pr-12">
-                          {/* Badges and Title */}
-                          <div className="flex flex-col gap-4">
-                            <div className="flex flex-wrap gap-2">
-                              <span className="font-sans text-[10px] md:text-xs uppercase tracking-widest text-white/40 border border-white/20 px-3 py-1 rounded-full">
-                                {t('lbl_type')}: {isEn ? activeProject.projectTypeEn : activeProject.projectTypeFr}
-                              </span>
-                              {activeProject.offerIllustrated && (
-                                <span className="font-sans text-[10px] md:text-xs uppercase tracking-widest text-white/80 border border-white/40 px-3 py-1 rounded-full shadow-[0_0_10px_rgba(255,255,255,0.1)]">
-                                  {activeProject.offerIllustrated}
-                                </span>
-                              )}
-                            </div>
-                            <h3 className="font-serif text-3xl md:text-4xl lg:text-5xl text-white leading-tight">{activeProject.title}</h3>
-                          </div>
-
-                          <div className="w-8 h-px bg-white/20" />
-
-                          {/* Contribution */}
-                          <div className="flex flex-col gap-1">
-                            <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/30">{t('lbl_contribution')}</span>
-                            <p className="font-sans text-xs md:text-sm text-white/80 leading-[1.6] font-light">
-                              {isEn ? activeProject.contributionEn : activeProject.contributionFr}
-                            </p>
-                          </div>
-
-                          {/* Livrables */}
-                          <div className="flex flex-col gap-2">
-                            <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/30">{t('lbl_deliverables')}</span>
-                            <div className="flex flex-wrap gap-2">
-                              {activeProject.deliverables.map(d => (
-                                <span key={d} className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.1em] text-white/60 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full">
-                                  {d}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-
-                          {/* Ce que cela démontre */}
-                          <div className="flex flex-col gap-1">
-                            <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/30">{t('lbl_demonstrates')}</span>
-                            <p className="font-sans text-xs md:text-sm text-white/80 leading-[1.6] font-light">
-                              {isEn ? activeProject.demonstratesEn : activeProject.demonstratesFr}
-                            </p>
-                          </div>
-
-                          {/* Bouton Fermer */}
-                          <div className="mt-4">
-                            <button 
-                              onClick={() => {
-                                setActiveFlipped(false)
-                                setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100)
-                              }}
-                              className="font-sans text-xs uppercase tracking-widest text-white/50 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
-                            >
-                              <span className="group-hover:-translate-x-1 transition-transform duration-300">←</span> {t('btn_close').replace('× ', '')}
-                            </button>
-                          </div>
-                        </div>
-
-                        {/* Bloc Image */}
-                        <div className="w-full md:w-[44%] flex items-center justify-center mt-8 md:mt-0">
-                          <ProjectMiniCarousel 
-                            images={activeProject.galleryPaths.length > 0 ? activeProject.galleryPaths : [activeProject.coverPath]} 
-                          />
-                        </div>
+                      >
+                        <motion.div
+                          animate={{ 
+                            y: [0, -8, 0],
+                            scale: isActive ? 1.1 : 0.8,
+                            opacity: isActive ? 1 : 0.5,
+                          }}
+                          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: index * 0.2 }}
+                          className="relative w-full h-full flex items-center justify-center"
+                        >
+                          {item.logoPath ? (
+                            <Image src={item.logoPath} alt={'title' in item ? item.title : item.brandName} fill className="object-contain drop-shadow-[0_10px_20px_rgba(255,255,255,0.1)]" sizes="200px" />
+                          ) : (
+                            <h3 className="font-serif text-2xl text-white drop-shadow-xl text-center uppercase tracking-widest w-full">{'title' in item ? item.title : item.brandName}</h3>
+                          )}
+                        </motion.div>
                       </div>
-
-                    </div>
-                  </div>
-                </motion.div>
+                    )
+                  })}
+                  <div className="-mr-[100px] shrink-0" />
+                </div>
               )}
-            </AnimatePresence>
+            </div>
+
           </motion.div>
         )}
       </AnimatePresence>
 
+      {/* --- Interface Modal Floutée pour le Projet Sélectionné --- */}
       <AnimatePresence>
-        {!activeFlipped && !activeFictionalFlipped && (
+        {selectedProject && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="w-full flex flex-col items-center justify-center py-20 gap-8"
+            transition={{ duration: 0.4 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-0 md:p-8"
           >
-            <div className="w-px h-16 bg-gradient-to-b from-ink-soft/0 via-ink-soft/20 to-ink-soft/0" />
+            {/* Background flouté */}
+            <div className="absolute inset-0 bg-black/50 backdrop-blur-2xl" onClick={() => setSelectedProject(null)} />
             
-            <div className="text-center flex flex-col items-center gap-6">
-              <h2 className="font-serif text-2xl md:text-3xl text-ink">
-                {t('cta_separator_text')}
-              </h2>
-              
-              <Link href="/reservation">
-                <MagicButton className="px-8 group">
-                  <span className="flex items-center justify-center gap-3">
-                    <span className="font-sans text-xs tracking-[0.2em] uppercase font-medium">{t('cta_separator_btn')}</span>
-                    <span className="transition-transform duration-300 group-hover:translate-x-2">→</span>
-                  </span>
-                </MagicButton>
-              </Link>
-            </div>
-
-            <div className="w-px h-16 bg-gradient-to-b from-ink-soft/0 via-ink-soft/20 to-ink-soft/0 mt-4" />
-            
-            {/* Indicateur visuel simple (Flèche) */}
-            <div className="flex flex-col items-center justify-center gap-4 opacity-60 mt-8">
-              <span className="font-sans uppercase tracking-[0.25em] text-[10px] text-ink-soft">
-                {isEn ? 'Fictional Concepts' : 'Concepts Fictifs'}
-              </span>
-              <svg 
-                width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" 
-                className="text-ink-soft/70 animate-bounce"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-              </svg>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {!activeFlipped && (
-          <motion.div 
-            ref={fictionalRef}
-            key="section-fictif"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.6 }}
-            className="w-full max-w-6xl mx-auto px-4 flex flex-col items-center gap-12 relative z-10 overflow-hidden pb-32"
-          >
-            {/* Titre central Fictif */}
+            {/* Contenu de la modale */}
             <motion.div 
-              className="text-center flex flex-col gap-4"
-              initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+              className="relative w-full h-full md:h-auto max-h-full md:max-h-[90vh] md:max-w-6xl md:rounded-3xl border-0 md:border border-white/10 overflow-y-auto overflow-x-hidden flex flex-col md:flex-row gap-8 lg:gap-16 items-start p-6 md:p-12 lg:p-16 scrollbar-hide"
+              style={{ background: 'radial-gradient(circle at top right, rgba(40,40,40,0.7), rgba(10,10,10,0.95))' }}
             >
-              <h1 className="font-serif text-4xl md:text-5xl text-ink">
-                {isEn ? 'Fictional Visions' : 'Visions Fictives'}
-              </h1>
-              <p className="text-ink-soft font-light text-sm md:text-base">
-                {isEn ? 'Conceptual exploration of materials through global brands.' : 'Exploration conceptuelle des matières à travers des marques mondiales.'}
-              </p>
-        </motion.div>
-
-        {/* ─── CARROUSEL FICTIF ─── */}
-        {!isMobile ? (
-          <div className="relative w-full h-[400px] md:h-[500px] flex items-center justify-center mt-8" style={{ perspective: '1200px' }}>
-            {fictionalConcepts.map((project, index) => {
-              const offset = index - activeFictionalIndex
-              const isActive = offset === 0
-
-              // Mathématiques du Coverflow
-              const isInactiveFlippedState = activeFictionalFlipped && !isActive
-              const translateX = offset * (typeof window !== 'undefined' && window.innerWidth < 768 ? 140 : 280)
-              const translateZ = Math.abs(offset) * -200 + (isInactiveFlippedState ? -150 : 0) + (isActive && activeFictionalFlipped ? 40 : 0)
-              const rotateY = offset * -25
-              const scale = 1 - Math.abs(offset) * 0.1
-              const opacity = isInactiveFlippedState 
-                ? Math.max(0, 1 - Math.abs(offset) * 0.3 - 0.6)
-                : 1 - Math.abs(offset) * 0.3
-              const zIndex = isActive && activeFictionalFlipped ? 100 : 50 - Math.abs(offset)
-              
-              const filterValue = isInactiveFlippedState
-                 ? `brightness(0.2)`
-                 : 'brightness(1)'
-
-              // Pour simplifier l'animation d'entrée du second carrousel, on utilise whileInView
-              const entranceAnimate = {
-                x: translateX,
-                z: translateZ,
-                rotateY: rotateY,
-                scale: scale,
-                opacity: opacity,
-                filter: filterValue,
-              }
-
-              return (
-                <motion.div
-                  key={project.id}
-                  className="absolute top-0 bottom-0 flex flex-col items-center justify-center cursor-pointer"
-                  style={{ zIndex }}
-                  initial={{ opacity: 0 }}
-                  whileInView={entranceAnimate}
-                  viewport={{ once: false, margin: "-50px" }}
-                  transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-                  onClick={() => handleFictionalCardClick(index)}
-                >
-                  <motion.div
-                    className="w-[260px] h-[360px] md:w-[350px] md:h-[480px] rounded-2xl"
-                    animate={isActive && activeFictionalFlipped ? {
-                      y: -15,
-                    } : {
-                      y: 0,
-                    }}
-                    transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                  >
-                    <FlipCard 
-                      key={`${project.id}-${isActive}`}
-                      className="w-full h-full cursor-pointer group"
-                      isFlippable={isActive}
-                      onFlipChange={(flipped) => handleFictionalFlipChange(flipped, index)}
-                      frontImage={project.coverPath}
-                      frontContent={
-                        <div className="absolute inset-0 flex flex-col items-center justify-center p-8 bg-black/40 backdrop-blur-[2px] text-center z-10 pointer-events-none">
-                          {project.logoPath ? (
-                            <div className="relative w-72 h-36 md:w-[340px] md:h-[180px] mb-6">
-                              {/* Halo simple */}
-                              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-white/10 blur-[30px] rounded-full z-0 pointer-events-none" />
-                              
-                              <Image 
-                                src={project.logoPath} 
-                                alt={`${project.brandName} logo`}
-                                fill
-                                sizes="(max-width: 768px) 300px, 400px"
-                                className="object-contain relative z-10"
-                              />
-                            </div>
-                          ) : (
-                            <h3 className="font-serif text-5xl md:text-6xl lg:text-7xl text-white tracking-widest uppercase drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)]"
-                                style={{ textShadow: '0 4px 30px rgba(0,0,0,0.8), 0 2px 10px rgba(255,255,255,0.2)' }}
-                            >
-                              {project.brandName}
-                            </h3>
-                          )}
-                        </div>
-                      }
-                      backContent={
-                        <div className="absolute inset-0 w-full h-full p-8 flex flex-col justify-center items-center text-center rounded-2xl border border-white/10"
-                             style={{ background: 'linear-gradient(135deg, rgba(20,20,20,0.95), rgba(0,0,0,0.98))' }}>
-                          <h4 className="font-sans text-[10px] md:text-xs uppercase tracking-[0.3em] text-white/50 mb-6">{isEn ? 'Materials used' : 'Matières utilisées'}</h4>
-                          <div className="flex flex-col gap-4">
-                            {project.materials.map(mat => (
-                              <div key={mat} className="font-serif text-lg md:text-2xl text-white">
-                                {translateMaterial(mat)}
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      }
-                    />
-                  </motion.div>
-
-                </motion.div>
-              )
-            })}
-          </div>
-        ) : (
-          <div className="w-full mt-8 flex overflow-x-auto gap-4 px-4 snap-x snap-mandatory pb-8 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-            {fictionalConcepts.map((project, index) => {
-              const isActive = index === activeFictionalIndex;
-              return (
-                <div 
-                  key={project.id} 
-                  className="snap-center shrink-0 w-[280px] h-[380px] flex flex-col cursor-pointer transition-transform duration-300"
-                  onClick={() => {
-                    handleFictionalCardClick(index);
-                    setActiveFictionalFlipped(true);
-                    setActiveFlipped(false);
-                  }}
-                  style={{
-                    transform: isActive ? 'scale(1.02)' : 'scale(0.95)',
-                    opacity: isActive ? 1 : 0.7,
-                  }}
-                >
-                  <div className="w-full h-full relative rounded-2xl overflow-hidden border border-white/15 shadow-[0_8px_30px_rgba(0,0,0,0.5)]">
-                    <Image 
-                      src={project.coverPath} 
-                      alt={project.brandName} 
-                      fill 
-                      className="object-cover" 
-                      sizes="280px" 
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-                    
-                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none p-6">
-                        {project.logoPath ? (
-                          <div className="relative w-full h-24 drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)]">
-                            <Image src={project.logoPath} alt={project.brandName} fill className="object-contain" />
-                          </div>
-                        ) : (
-                          <h3 className="font-serif text-4xl text-white uppercase text-center drop-shadow-md">{project.brandName}</h3>
-                        )}
-                    </div>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        )}
-
-        {/* ─── PANNEAU ÉDITORIAL MINI (Fictional) ─── */}
-        <AnimatePresence>
-          {activeFictionalFlipped && activeFictionalProject && (
-            <motion.div
-              initial={{ opacity: 0, y: 30, height: 0 }}
-              animate={{ opacity: 1, y: 0, height: 'auto' }}
-              exit={{ opacity: 0, y: 30, height: 0 }}
-              transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="w-full max-w-5xl mx-auto overflow-hidden mt-12 md:mt-20"
-            >
-              {/* Outer — Gradient border wrapper */}
-              <div 
-                className="mx-4 md:mx-0 relative"
-                style={{
-                  borderRadius: '16px',
-                  padding: '1px',
-                  background: 'radial-gradient(circle 600px at 0% 0%, #ffffff, #0c0d0d)',
-                }}
+              {/* Bouton Fermer */}
+              <button 
+                onClick={() => setSelectedProject(null)}
+                className="absolute top-6 right-6 font-sans text-xs uppercase tracking-widest text-white/50 hover:text-white transition-colors duration-300 flex items-center gap-2 group z-20 bg-black/20 p-2 rounded-full md:bg-transparent md:p-0"
               >
-                <div className="panel-dot" />
+                <span className="group-hover:-translate-x-1 transition-transform duration-300">←</span> <span className="hidden md:inline">{t('btn_close').replace('× ', isEn ? 'Back' : 'Précédent')}</span>
+              </button>
 
-                <div 
-                  className="relative w-full overflow-hidden"
-                  style={{
-                    borderRadius: '15px',
-                    border: '1px solid #202222',
-                    background: 'radial-gradient(circle 800px at 0% 0%, #333333, #0c0d0d)',
-                  }}
-                >
-                  <div 
-                    className="absolute pointer-events-none"
-                    style={{
-                      width: '280px', height: '50px', borderRadius: '100px',
-                      backgroundColor: '#c7c7c7', opacity: 0.3, boxShadow: '0 0 60px #fff',
-                      filter: 'blur(12px)', transformOrigin: '10%', top: '0%', left: '0',
-                      transform: 'rotate(40deg)', zIndex: 1,
-                    }}
-                  />
-                  <div className="absolute pointer-events-none" style={{ top: '8%', left: 0, right: 0, height: '1px', background: 'linear-gradient(90deg, #888888 30%, #1d1f1f 70%)' }} />
-                  <div className="absolute pointer-events-none" style={{ bottom: '8%', left: 0, right: 0, height: '1px', background: 'linear-gradient(90deg, #2c2c2c 30%, #1d1f1f 70%)' }} />
-                  <div className="absolute pointer-events-none" style={{ left: '5%', top: 0, bottom: 0, width: '1px', background: 'linear-gradient(180deg, #747474 30%, #222424 70%)' }} />
-                  <div className="absolute pointer-events-none" style={{ right: '5%', top: 0, bottom: 0, width: '1px', background: 'linear-gradient(180deg, #2c2c2c 30%, #222424 70%)' }} />
-
-                  <div className="relative z-10 flex flex-col items-center justify-center text-center" style={{ padding: '8% 7%' }}>
-                    <div className="flex flex-col md:flex-row items-center gap-2 mb-6">
-                      <span className="font-sans text-[10px] md:text-xs uppercase tracking-widest text-white border border-white/30 px-3 py-1 rounded-full shadow-[0_0_15px_rgba(255,255,255,0.2)]">
-                        {t('fictional_type')}
-                      </span>
-                    </div>
-
-                    <h3 className="font-serif text-3xl md:text-4xl text-white mb-2">{activeFictionalProject.brandName}</h3>
-                    
-                    <p className="font-sans text-[10px] md:text-xs text-white/40 italic font-light mb-8 max-w-md">
-                      {t('fictional_disclaimer')}
-                    </p>
-
-                    <div className="flex flex-col md:flex-row gap-8 text-left w-full max-w-4xl mb-12">
-                      <div className="flex-1 flex flex-col gap-1 md:items-center md:text-center">
-                        <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/30">{t('lbl_contribution')}</span>
-                        <p className="font-sans text-xs md:text-sm text-white/80 leading-[1.6] font-light">
-                          {t('fictional_contribution')}
-                        </p>
-                      </div>
-                      <div className="flex-1 flex flex-col gap-1 md:items-center md:text-center">
-                        <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/30">{t('lbl_demonstrates')}</span>
-                        <p className="font-sans text-xs md:text-sm text-white/80 leading-[1.6] font-light">
-                          {t('fictional_demonstrates')}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="w-full md:w-3/4 lg:w-2/3 flex items-center justify-center mb-8">
-                      <ProjectMiniCarousel 
-                        images={activeFictionalProject.galleryPaths.length > 0 ? activeFictionalProject.galleryPaths : [activeFictionalProject.coverPath]} 
-                      />
-                    </div>
-
-                    {/* Bouton Fermer */}
-                    <button 
-                      onClick={() => {
-                        setActiveFictionalFlipped(false)
-                        setTimeout(() => window.scrollTo({ top: fictionalRef.current?.offsetTop || 0, behavior: 'smooth' }), 100)
-                      }}
-                      className="font-sans text-xs uppercase tracking-widest text-white/50 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
-                    >
-                      <span className="group-hover:-translate-x-1 transition-transform duration-300">←</span> {t('btn_close').replace('× ', '')}
-                    </button>
+              {/* Colonne Informations */}
+              <div className="flex-1 flex flex-col gap-8 w-full mt-10 md:mt-0">
+                <div className="flex flex-col gap-4">
+                  <div className="flex flex-wrap gap-2">
+                    <span className="font-sans text-[10px] md:text-xs uppercase tracking-widest text-white/50 border border-white/20 px-3 py-1 rounded-full">
+                      {'title' in selectedProject ? (isEn ? selectedProject.projectTypeEn : selectedProject.projectTypeFr) : (isEn ? 'Fictional Concept' : 'Concept Fictif')}
+                    </span>
                   </div>
-
+                  
+                  {selectedProject.logoPath ? (
+                    <div className="relative w-full max-w-[250px] h-20 md:h-24 opacity-80 mb-2">
+                       <Image src={selectedProject.logoPath} alt="Logo" fill className="object-contain object-left" />
+                    </div>
+                  ) : (
+                    <h3 className="font-serif text-4xl md:text-5xl lg:text-6xl text-white leading-tight">
+                      {'title' in selectedProject ? selectedProject.title : selectedProject.brandName}
+                    </h3>
+                  )}
                 </div>
+
+                <div className="w-12 h-px bg-white/20" />
+
+                {/* Données spécifiques selon le type de projet */}
+                {'title' in selectedProject ? (
+                  // C'est un "Vrai" Projet (Realisations)
+                  <div className="flex flex-col gap-6">
+                    <div className="flex flex-col gap-1">
+                      <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/30">{t('lbl_contribution')}</span>
+                      <p className="font-sans text-sm md:text-base text-white/80 leading-relaxed font-light">
+                        {isEn ? selectedProject.contributionEn : selectedProject.contributionFr}
+                      </p>
+                    </div>
+
+                    <div className="flex flex-col gap-2">
+                      <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/30">{t('lbl_deliverables')}</span>
+                      <div className="flex flex-wrap gap-2">
+                        {selectedProject.deliverables.map(d => (
+                          <span key={d} className="font-sans text-[10px] uppercase tracking-[0.1em] text-white/60 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full">
+                            {d}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col gap-1">
+                      <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/30">{t('lbl_demonstrates')}</span>
+                      <p className="font-sans text-sm md:text-base text-white/80 leading-relaxed font-light">
+                        {isEn ? selectedProject.demonstratesEn : selectedProject.demonstratesFr}
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  // C'est un concept Fictif
+                  <div className="flex flex-col gap-6">
+                     <p className="font-sans text-xs md:text-sm text-white/40 italic font-light max-w-md">
+                        {t('fictional_disclaimer')}
+                     </p>
+                     
+                     <div className="flex flex-col gap-1">
+                        <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/30">{t('lbl_contribution')}</span>
+                        <p className="font-sans text-sm md:text-base text-white/80 leading-relaxed font-light">
+                           {t('fictional_contribution')}
+                        </p>
+                     </div>
+
+                     <div className="flex flex-col gap-2">
+                        <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/30">{isEn ? 'Materials used' : 'Matières explorées'}</span>
+                        <div className="flex flex-wrap gap-2">
+                           {selectedProject.materials.map(m => (
+                             <span key={m} className="font-sans text-[10px] uppercase tracking-[0.1em] text-white/70 bg-white/10 border border-white/20 px-3 py-1.5 rounded-full">
+                               {translateMaterial(m)}
+                             </span>
+                           ))}
+                        </div>
+                     </div>
+
+                     <div className="flex flex-col gap-1">
+                        <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/30">{t('lbl_demonstrates')}</span>
+                        <p className="font-sans text-sm md:text-base text-white/80 leading-relaxed font-light">
+                           {t('fictional_demonstrates')}
+                        </p>
+                     </div>
+                  </div>
+                )}
               </div>
+
+              {/* Colonne Galerie d'images */}
+              <div className="w-full md:w-[50%] lg:w-[45%] flex-shrink-0 flex items-start justify-center">
+                <ProjectMiniCarousel images={selectedProject.galleryPaths?.length > 0 ? selectedProject.galleryPaths : [selectedProject.coverPath]} />
+              </div>
+
             </motion.div>
-          )}
-        </AnimatePresence>
           </motion.div>
         )}
       </AnimatePresence>
