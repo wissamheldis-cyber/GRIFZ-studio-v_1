@@ -63,6 +63,7 @@ export default function Header() {
   const ALL_LINKS = [...LEFT_LINKS, ...RIGHT_LINKS]
   const currentLink = ALL_LINKS.find(link => isActive(link.href))
   const currentLabel = currentLink ? currentLink.label : ''
+  
   /* ─── State for Scroll Blur ──────────────────────────────── */
   const [isScrolled, setIsScrolled] = useState(false)
 
@@ -97,15 +98,15 @@ export default function Header() {
 
         {/* Conteneur très large qui devient un "pill" au scroll */}
         <div 
-          className={`w-[98%] md:w-[95%] max-w-6xl flex items-center justify-center relative min-h-[70px] md:min-h-[120px] z-10 mx-auto transition-all duration-700 pointer-events-auto ${
+          className={`w-[98%] md:w-[95%] max-w-6xl flex items-center justify-center relative z-10 mx-auto transition-all duration-700 pointer-events-auto ${
             isScrolled 
-              ? 'bg-[var(--header-bg)] backdrop-blur-2xl shadow-[var(--header-shadow)] border border-white/20 rounded-[40px] md:rounded-[60px]' 
-              : 'bg-transparent border-transparent'
+              ? 'min-h-[70px] md:min-h-[80px] bg-[var(--header-bg)] backdrop-blur-2xl shadow-[var(--header-shadow)] border border-white/20 rounded-[40px] md:rounded-[60px]' 
+              : 'min-h-[70px] md:min-h-[120px] bg-transparent border-transparent'
           }`}
         >
           
           {/* Switcher EN (gauche) */}
-          <div className="absolute left-6 md:left-12 top-1/2 -translate-y-1/2 z-20">
+          <div className={`absolute left-6 md:left-12 top-1/2 -translate-y-1/2 z-20 transition-all duration-700 ${isScrolled ? 'opacity-0 blur-md pointer-events-none scale-75' : 'opacity-100 blur-0 scale-100'}`}>
             <Link 
               href={pathname} 
               locale="en" 
@@ -116,7 +117,7 @@ export default function Header() {
           </div>
 
           {/* Switcher FR (droite) */}
-          <div className="absolute right-6 md:right-12 top-1/2 -translate-y-1/2 z-20">
+          <div className={`absolute right-6 md:right-12 top-1/2 -translate-y-1/2 z-20 transition-all duration-700 ${isScrolled ? 'opacity-0 blur-md pointer-events-none scale-75' : 'opacity-100 blur-0 scale-100'}`}>
             <Link 
               href={pathname} 
               locale="fr" 
@@ -129,10 +130,10 @@ export default function Header() {
           {/* L'Orb Centrale - En absolu pour garantir le centre parfait */}
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex flex-col items-center justify-center pointer-events-none w-[120px] h-[120px]">
             <motion.div 
-              className="relative transition-all duration-300 pointer-events-auto scale-[0.66] md:scale-[0.83] lg:scale-100 flex items-center justify-center cursor-pointer"
+              className="relative transition-all duration-700 pointer-events-auto flex items-center justify-center cursor-pointer"
               onClick={handleOrbClick}
               animate={{
-                scale: 1 + clickCount * 0.05,
+                scale: (isScrolled ? 0.6 : (window.innerWidth < 768 ? 0.66 : (window.innerWidth < 1024 ? 0.83 : 1))) * (1 + clickCount * 0.05),
                 filter: `drop-shadow(0 0 ${clickCount * 15 + 10}px rgba(255,255,255, ${clickCount * 0.3}))`
               }}
               transition={{ type: 'spring', stiffness: 300, damping: 20 }}
@@ -148,7 +149,7 @@ export default function Header() {
             </motion.div>
             
             {/* Dynamic Label */}
-            <div className="absolute top-[100%] mt-48 left-1/2 -translate-x-1/2 whitespace-nowrap h-[24px] flex items-center justify-center pointer-events-none">
+            <div className={`absolute top-[100%] mt-48 left-1/2 -translate-x-1/2 whitespace-nowrap h-[24px] flex items-center justify-center pointer-events-none transition-all duration-700 ${isScrolled ? 'opacity-0 blur-md' : 'opacity-100 blur-0'}`}>
               <AnimatePresence mode="wait">
                 {(hoveredLabel || (showCurrent && currentLabel)) && (
                   <motion.span
@@ -167,12 +168,11 @@ export default function Header() {
           </div>
 
           {/* Navigation Gauche */}
-          {/* Padding géré par la classe custom CSS garantie */}
-          <nav className="w-1/2 flex flex-col items-end gap-1 md:gap-2 left-nav-spacing">
+          <nav className={`w-1/2 flex justify-end gap-2 md:gap-4 left-nav-spacing transition-all duration-700 ${isScrolled ? 'flex-row items-center' : 'flex-col items-end'}`}>
             {LEFT_LINKS.map((link, index) => {
               const active = isActive(link.href)
-              // Courbe inversée : Le milieu s'éloigne, les bords sont proches de l'orb
-              const curveClass = index === 1 ? '-translate-x-2 md:-translate-x-4' : 'translate-x-0'
+              // Courbe inversée : Le milieu s'éloigne, les bords sont proches de l'orb (désactivé si isScrolled)
+              const curveClass = (!isScrolled && index === 1) ? '-translate-x-2 md:-translate-x-4' : 'translate-x-0'
               
               return (
                 <Link
@@ -180,12 +180,12 @@ export default function Header() {
                   href={link.href}
                   onMouseEnter={() => setHoveredLabel(link.label)}
                   onMouseLeave={() => setHoveredLabel(null)}
-                  className={`group no-underline transition-all duration-500 ${curveClass}`}
+                  className={`group no-underline transition-all duration-700 ${curveClass}`}
                 >
                   <div
-                    className={`transition-all duration-500 ${active ? 'scale-125 translate-x-2 md:translate-x-5 drop-shadow-[0_0_12px_rgba(255,255,255,0.4)]' : 'opacity-60 group-hover:opacity-100 group-hover:scale-125 group-hover:translate-x-2 md:group-hover:translate-x-5'}`}
+                    className={`relative transition-all duration-700 ${isScrolled ? 'w-10 h-10 md:w-12 md:h-12' : 'w-[50px] h-[50px] md:w-[58px] md:h-[58px]'} ${active ? 'scale-125 drop-shadow-[0_0_12px_rgba(255,255,255,0.4)]' + (!isScrolled ? ' translate-x-2 md:translate-x-5' : '') : 'opacity-60 group-hover:opacity-100 group-hover:scale-125' + (!isScrolled ? ' group-hover:translate-x-2 md:group-hover:translate-x-5' : '')}`}
                   >
-                    <Image src={link.image} alt={link.label} width={58} height={58} className="object-contain" unoptimized />
+                    <Image src={link.image} alt={link.label} fill className="object-contain" unoptimized />
                   </div>
                 </Link>
               )
@@ -193,11 +193,11 @@ export default function Header() {
           </nav>
 
           {/* Navigation Droite */}
-          <nav className="w-1/2 flex flex-col items-start gap-1 md:gap-2 right-nav-spacing">
+          <nav className={`w-1/2 flex justify-start gap-2 md:gap-4 right-nav-spacing transition-all duration-700 ${isScrolled ? 'flex-row items-center' : 'flex-col items-start'}`}>
             {RIGHT_LINKS.map((link, index) => {
               const active = isActive(link.href)
-              // Courbe inversée : Le milieu s'éloigne, les bords sont proches de l'orb
-              const curveClass = index === 1 ? 'translate-x-2 md:translate-x-4' : 'translate-x-0'
+              // Courbe inversée : Le milieu s'éloigne, les bords sont proches de l'orb (désactivé si isScrolled)
+              const curveClass = (!isScrolled && index === 1) ? 'translate-x-2 md:translate-x-4' : 'translate-x-0'
               
               return (
                 <Link
@@ -205,12 +205,12 @@ export default function Header() {
                   href={link.href}
                   onMouseEnter={() => setHoveredLabel(link.label)}
                   onMouseLeave={() => setHoveredLabel(null)}
-                  className={`group no-underline transition-all duration-500 ${curveClass}`}
+                  className={`group no-underline transition-all duration-700 ${curveClass}`}
                 >
                   <div
-                    className={`transition-all duration-500 ${active ? 'scale-125 -translate-x-2 md:-translate-x-5 drop-shadow-[0_0_12px_rgba(255,255,255,0.4)]' : 'opacity-60 group-hover:opacity-100 group-hover:scale-125 group-hover:-translate-x-2 md:group-hover:-translate-x-5'}`}
+                    className={`relative transition-all duration-700 ${isScrolled ? 'w-10 h-10 md:w-12 md:h-12' : 'w-[50px] h-[50px] md:w-[58px] md:h-[58px]'} ${active ? 'scale-125 drop-shadow-[0_0_12px_rgba(255,255,255,0.4)]' + (!isScrolled ? ' -translate-x-2 md:-translate-x-5' : '') : 'opacity-60 group-hover:opacity-100 group-hover:scale-125' + (!isScrolled ? ' group-hover:-translate-x-2 md:group-hover:-translate-x-5' : '')}`}
                   >
-                    <Image src={link.image} alt={link.label} width={58} height={58} className="object-contain" unoptimized />
+                    <Image src={link.image} alt={link.label} fill className="object-contain" unoptimized />
                   </div>
                 </Link>
               )
