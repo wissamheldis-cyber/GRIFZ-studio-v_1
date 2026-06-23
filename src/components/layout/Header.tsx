@@ -84,8 +84,8 @@ export default function Header() {
       >
         {/* Force l'application des marges via CSS pur pour éviter tout bug de compilation Tailwind */}
         <style dangerouslySetInnerHTML={{ __html: `
-          .left-nav-spacing { padding-right: 75px; }
-          .right-nav-spacing { padding-left: 75px; }
+          .left-nav-spacing { padding-right: 45px; }
+          .right-nav-spacing { padding-left: 45px; }
           @media (min-width: 768px) {
             .left-nav-spacing { padding-right: 100px; }
             .right-nav-spacing { padding-left: 100px; }
@@ -133,7 +133,7 @@ export default function Header() {
               className="relative transition-all duration-700 pointer-events-auto flex items-center justify-center cursor-pointer"
               onClick={handleOrbClick}
               animate={{
-                scale: (isScrolled ? 0.6 : (window.innerWidth < 768 ? 0.66 : (window.innerWidth < 1024 ? 0.83 : 1))) * (1 + clickCount * 0.05),
+                scale: (isScrolled ? 0.6 : (typeof window !== 'undefined' && window.innerWidth < 768 ? 0.66 : (typeof window !== 'undefined' && window.innerWidth < 1024 ? 0.83 : 1))) * (1 + clickCount * 0.05),
                 filter: `drop-shadow(0 0 ${clickCount * 15 + 10}px rgba(255,255,255, ${clickCount * 0.3}))`
               }}
               transition={{ type: 'spring', stiffness: 300, damping: 20 }}
