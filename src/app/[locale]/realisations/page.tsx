@@ -142,11 +142,11 @@ export default function RealisationsPage() {
                 className="flex-1 hover:flex-[2] transition-all duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] flex items-center justify-center relative cursor-pointer group/item overflow-hidden bg-black"
               >
                 <div 
-                  className="absolute inset-0 rain-pattern opacity-20 group-hover/item:opacity-40 transition-opacity duration-700 pointer-events-none"
+                  className="absolute inset-0 rain-pattern opacity-20 group-hover/item:opacity-70 transition-opacity duration-700 pointer-events-none"
                   style={{ '--rain-color': '#ffffff' } as React.CSSProperties}
                 ></div>
                 <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay pointer-events-none"></div>
-                <div className="absolute inset-0 bg-white/5 opacity-0 group-hover/item:opacity-50 transition-opacity duration-700 pointer-events-none" />
+                <div className="absolute inset-0 bg-white/5 opacity-0 group-hover/item:opacity-70 transition-opacity duration-700 pointer-events-none" />
                 <h3 className="font-serif text-3xl md:text-6xl text-white/50 group-hover/item:text-white transition-colors duration-700 z-10 tracking-[0.2em] text-center drop-shadow-2xl">
                   {t('title')}
                 </h3>
@@ -161,11 +161,11 @@ export default function RealisationsPage() {
                 className="flex-1 hover:flex-[2] transition-all duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] flex items-center justify-center relative cursor-pointer group/item overflow-hidden bg-black"
               >
                 <div 
-                  className="absolute inset-0 rain-pattern opacity-20 group-hover/item:opacity-40 transition-opacity duration-700 pointer-events-none"
+                  className="absolute inset-0 rain-pattern opacity-20 group-hover/item:opacity-70 transition-opacity duration-700 pointer-events-none"
                   style={{ '--rain-color': '#00aaff' } as React.CSSProperties}
                 ></div>
                 <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay pointer-events-none"></div>
-                <div className="absolute inset-0 bg-blue-500/5 opacity-0 group-hover/item:opacity-50 transition-opacity duration-700 pointer-events-none" />
+                <div className="absolute inset-0 bg-blue-500/5 opacity-0 group-hover/item:opacity-70 transition-opacity duration-700 pointer-events-none" />
                 <h3 className="font-serif text-3xl md:text-6xl text-white/50 group-hover/item:text-white transition-colors duration-700 z-10 tracking-[0.2em] text-center drop-shadow-2xl">
                   {isEn ? 'Fictional Visions' : 'Visions Fictives'}
                 </h3>
