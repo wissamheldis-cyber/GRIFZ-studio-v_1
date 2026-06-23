@@ -1,11 +1,12 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import Image from 'next/image'
 import { projects, Project } from '@/data/projectsData'
 import { fictionalConcepts, FictionalConcept } from '@/data/fictionalConceptsData'
 import { useTranslations, useLocale } from 'next-intl'
+import { MagicButton } from '@/components/ui/MagicButton'
 
 // --- Composant Mini Carrousel d'images ---
 function ProjectMiniCarousel({ images }: { images: string[] }) {
@@ -78,8 +79,8 @@ function ProjectMiniCarousel({ images }: { images: string[] }) {
 
 export default function RealisationsPage() {
   const [viewMode, setViewMode] = useState<'selection' | 'realisations' | 'fictional'>('selection')
-  const [selectedProject, setSelectedProject] = useState<Project | FictionalConcept | null>(null)
   const [activeIndex, setActiveIndex] = useState(0)
+  const [showDetails, setShowDetails] = useState(false)
   
   const [isMobile, setIsMobile] = useState(false)
   const prefersReducedMotion = useReducedMotion()
@@ -87,24 +88,14 @@ export default function RealisationsPage() {
   const locale = useLocale()
   const isEn = locale === 'en'
 
+  const realisationsRef = useRef<HTMLDivElement>(null)
+
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768)
     checkMobile()
     window.addEventListener('resize', checkMobile)
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
-
-  useEffect(() => {
-    if (selectedProject) {
-      window.dispatchEvent(new CustomEvent('card-flip', { 
-        detail: { isFlipped: true, color: selectedProject.rainColor } 
-      }))
-    } else {
-      window.dispatchEvent(new CustomEvent('card-flip', { 
-        detail: { isFlipped: false } 
-      }))
-    }
-  }, [selectedProject])
 
   const translateMaterial = (mat: string) => {
     if (!isEn) return mat;
@@ -120,6 +111,33 @@ export default function RealisationsPage() {
   };
 
   const currentList = viewMode === 'realisations' ? projects : fictionalConcepts
+  const activeProject = currentList[activeIndex]
+
+  const handleCardClick = (index: number) => {
+    if (activeIndex === index) {
+      setShowDetails(true)
+      window.dispatchEvent(new CustomEvent('card-flip', { 
+        detail: { isFlipped: true, color: currentList[index].rainColor } 
+      }))
+      setTimeout(() => {
+        window.scrollTo({ top: 300, behavior: 'smooth' })
+      }, 150)
+    } else {
+      setActiveIndex(index)
+      setShowDetails(false)
+      window.dispatchEvent(new CustomEvent('card-flip', { 
+        detail: { isFlipped: false } 
+      }))
+    }
+  }
+
+  const handleCloseDetails = () => {
+    setShowDetails(false)
+    window.dispatchEvent(new CustomEvent('card-flip', { 
+      detail: { isFlipped: false } 
+    }))
+    setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100)
+  }
 
   return (
     <main className="min-h-[100dvh] pt-32 pb-32 flex flex-col items-center justify-center relative overflow-hidden">
@@ -132,42 +150,34 @@ export default function RealisationsPage() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.6 }}
-            className="flex flex-col md:flex-row gap-8 items-center justify-center w-full max-w-5xl px-4"
+            className="flex flex-col md:flex-row gap-6 md:gap-12 items-center justify-center w-full px-4 mt-20"
           >
-            {/* Bouton Nos Réalisations */}
-            <div 
-              onClick={() => {
-                setViewMode('realisations')
-                setActiveIndex(0)
-              }}
-              className="group relative cursor-pointer flex-1 w-full flex flex-col items-center justify-center p-12 md:p-24 rounded-3xl border border-white/10 hover:border-white/30 transition-all duration-500 overflow-hidden"
-              style={{ background: 'radial-gradient(circle at center, rgba(30,30,30,0.4), rgba(0,0,0,0.6))' }}
-            >
-              <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <h2 className="font-serif text-3xl md:text-5xl text-white z-10 text-center tracking-widest drop-shadow-md transition-transform duration-500 group-hover:scale-105">
-                {t('title')}
-              </h2>
-              <span className="font-sans text-xs md:text-sm text-white/50 uppercase tracking-[0.3em] mt-6 z-10 transition-colors duration-300 group-hover:text-white/80">
-                {t('subtitle')}
-              </span>
+            {/* Bouton Nos Réalisations (Même style que Reserver un appel) */}
+            <div onClick={() => { setViewMode('realisations'); setActiveIndex(0); setShowDetails(false); }}>
+              <MagicButton className="px-12 py-6 text-lg group">
+                <span className="flex items-center justify-center gap-4">
+                  <span className="font-sans tracking-[0.2em] uppercase font-medium">{t('title')}</span>
+                  <span className="transition-transform duration-300 group-hover:translate-x-2">→</span>
+                </span>
+              </MagicButton>
             </div>
 
-            {/* Bouton Visions Fictives */}
+            {/* Bouton Visions Fictives (Style grisâtre) */}
             <div 
-              onClick={() => {
-                setViewMode('fictional')
-                setActiveIndex(0)
-              }}
-              className="group relative cursor-pointer flex-1 w-full flex flex-col items-center justify-center p-12 md:p-24 rounded-3xl border border-white/10 hover:border-white/30 transition-all duration-500 overflow-hidden"
-              style={{ background: 'radial-gradient(circle at center, rgba(30,30,30,0.4), rgba(0,0,0,0.6))' }}
+              onClick={() => { setViewMode('fictional'); setActiveIndex(0); setShowDetails(false); }}
+              style={{
+                '--color-wrapper-border': 'rgba(255, 255, 255, 0.1)',
+                '--color-btn-bg': 'rgba(100, 100, 100, 0.05)',
+                '--color-layer-b': 'rgba(150, 150, 150, 0.2)',
+                '--color-overlay-text': 'rgba(255, 255, 255, 0.6)',
+              } as React.CSSProperties}
             >
-              <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <h2 className="font-serif text-3xl md:text-5xl text-white z-10 text-center tracking-widest drop-shadow-md transition-transform duration-500 group-hover:scale-105">
-                {isEn ? 'Fictional Visions' : 'Visions Fictives'}
-              </h2>
-              <span className="font-sans text-xs md:text-sm text-white/50 uppercase tracking-[0.3em] mt-6 z-10 transition-colors duration-300 group-hover:text-white/80 text-center">
-                {isEn ? 'Conceptual exploration' : 'Exploration conceptuelle'}
-              </span>
+              <MagicButton className="px-12 py-6 text-lg group" style={{ filter: 'grayscale(0.8)' }}>
+                <span className="flex items-center justify-center gap-4">
+                  <span className="font-sans tracking-[0.2em] uppercase font-medium">{isEn ? 'Fictional Visions' : 'Visions Fictives'}</span>
+                  <span className="transition-transform duration-300 group-hover:translate-x-2">→</span>
+                </span>
+              </MagicButton>
             </div>
           </motion.div>
         ) : (
@@ -177,24 +187,40 @@ export default function RealisationsPage() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.6 }}
-            className="w-full flex flex-col items-center justify-center relative"
+            className="w-full max-w-6xl mx-auto px-4 flex flex-col items-center relative z-10"
+            ref={realisationsRef}
           >
             {/* Header info et Bouton retour */}
-            <div className="absolute top-0 left-0 w-full flex items-center justify-between px-6 md:px-12 z-20">
+            <div className="absolute top-0 left-0 w-full flex items-center justify-between z-20">
               <button 
-                onClick={() => setViewMode('selection')}
+                onClick={() => {
+                   setViewMode('selection')
+                   setShowDetails(false)
+                   window.dispatchEvent(new CustomEvent('card-flip', { detail: { isFlipped: false } }))
+                }}
                 className="font-sans text-xs md:text-sm uppercase tracking-widest text-white/50 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
               >
                 <span className="group-hover:-translate-x-1 transition-transform duration-300">←</span> {t('btn_close').replace('× ', isEn ? 'Back' : 'Précédent')}
               </button>
-              
-              <div className="font-serif text-xl md:text-2xl text-white/40 tracking-widest">
-                {viewMode === 'realisations' ? t('title') : (isEn ? 'Fictional Visions' : 'Visions Fictives')}
-              </div>
             </div>
 
-            {/* Carrousel Logos */}
-            <div className="mt-16 w-full max-w-[100vw]">
+            {/* Titre central en haut du carrousel */}
+            <motion.div 
+              className="text-center flex flex-col gap-4 mt-8 md:mt-0"
+              initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+            >
+              <h1 className="font-serif text-4xl md:text-5xl text-ink">
+                {viewMode === 'realisations' ? t('title') : (isEn ? 'Fictional Visions' : 'Visions Fictives')}
+              </h1>
+              <p className="text-ink-soft font-light text-sm md:text-base">
+                {viewMode === 'realisations' ? t('subtitle') : (isEn ? 'Conceptual exploration of materials through global brands.' : 'Exploration conceptuelle des matières à travers des marques mondiales.')}
+              </p>
+            </motion.div>
+
+            {/* Carrousel Logos (Desktop 3D / Mobile 2D) */}
+            <div className="mt-8 w-full max-w-[100vw]">
               {!isMobile ? (
                 /* Coverflow 3D pour Desktop */
                 <div className="relative w-full h-[400px] md:h-[500px] flex items-center justify-center" style={{ perspective: '1200px' }}>
@@ -203,13 +229,17 @@ export default function RealisationsPage() {
                     const isActive = offset === 0
 
                     const translateX = offset * 280
-                    const translateZ = Math.abs(offset) * -200
+                    const translateZ = Math.abs(offset) * -200 + (isActive && showDetails ? 40 : 0)
                     const rotateY = offset * -25
                     const scale = 1 - Math.abs(offset) * 0.1
-                    const opacity = 1 - Math.abs(offset) * 0.3
-                    const zIndex = 50 - Math.abs(offset)
+                    const opacity = showDetails && !isActive
+                      ? Math.max(0, 1 - Math.abs(offset) * 0.3 - 0.6)
+                      : 1 - Math.abs(offset) * 0.3
+                    const zIndex = isActive && showDetails ? 100 : 50 - Math.abs(offset)
                     
-                    const filterBlur = Math.abs(offset) > 0 ? `brightness(${Math.max(0.4, 1 - Math.abs(offset) * 0.2)}) blur(${Math.abs(offset) * 2}px)` : 'brightness(1) blur(0px)'
+                    const filterBlur = showDetails && !isActive
+                      ? `brightness(0.2) blur(4px)`
+                      : Math.abs(offset) > 0 ? `brightness(${Math.max(0.4, 1 - Math.abs(offset) * 0.2)}) blur(${Math.abs(offset) * 2}px)` : 'brightness(1) blur(0px)'
 
                     return (
                       <motion.div
@@ -225,14 +255,19 @@ export default function RealisationsPage() {
                           filter: filterBlur,
                         }}
                         transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-                        onClick={() => {
-                          if (isActive) setSelectedProject(item as any)
-                          else setActiveIndex(index)
-                        }}
+                        onClick={() => handleCardClick(index)}
                       >
                         <motion.div
-                          animate={prefersReducedMotion ? {} : { y: [0, -10, 0] }}
-                          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: index * 0.2 }}
+                          animate={
+                            isActive && showDetails 
+                              ? { y: -15 }
+                              : prefersReducedMotion ? {} : { y: [0, -10, 0] }
+                          }
+                          transition={
+                            isActive && showDetails
+                              ? { type: 'spring', stiffness: 300, damping: 20 }
+                              : { duration: 4, repeat: Infinity, ease: "easeInOut", delay: index * 0.2 }
+                          }
                           className="w-[200px] h-[200px] md:w-[350px] md:h-[350px] flex items-center justify-center relative transition-transform duration-500 hover:scale-110"
                         >
                           {item.logoPath ? (
@@ -247,31 +282,31 @@ export default function RealisationsPage() {
                 </div>
               ) : (
                 /* Native Slider 2D pour Mobile */
-                <div className="w-full flex overflow-x-auto gap-16 px-[50vw] snap-x snap-mandatory py-16 scrollbar-hide items-center h-[400px]">
-                  {/* Pseudo elements to enforce start padding correctly in flex */ }
+                <div className="w-full flex overflow-x-auto gap-16 px-[50vw] snap-x snap-mandatory py-16 scrollbar-hide items-center h-[300px]">
                   <div className="-ml-[100px] shrink-0" />
                   {currentList.map((item, index) => {
                     const isActive = index === activeIndex
                     return (
                       <div 
                         key={item.id}
-                        className="snap-center shrink-0 w-[200px] h-[200px] flex flex-col items-center justify-center cursor-pointer"
-                        onClick={() => {
-                          setActiveIndex(index)
-                          setSelectedProject(item as any)
-                        }}
+                        className="snap-center shrink-0 w-[180px] h-[180px] flex flex-col items-center justify-center cursor-pointer"
+                        onClick={() => handleCardClick(index)}
                       >
                         <motion.div
                           animate={{ 
-                            y: [0, -8, 0],
+                            y: isActive && showDetails ? -10 : [0, -8, 0],
                             scale: isActive ? 1.1 : 0.8,
                             opacity: isActive ? 1 : 0.5,
                           }}
-                          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: index * 0.2 }}
+                          transition={
+                            isActive && showDetails
+                              ? { type: 'spring', stiffness: 300, damping: 20 }
+                              : { duration: 3, repeat: Infinity, ease: "easeInOut", delay: index * 0.2 }
+                          }
                           className="relative w-full h-full flex items-center justify-center"
                         >
                           {item.logoPath ? (
-                            <Image src={item.logoPath} alt={'title' in item ? item.title : item.brandName} fill className="object-contain drop-shadow-[0_10px_20px_rgba(255,255,255,0.1)]" sizes="200px" />
+                            <Image src={item.logoPath} alt={'title' in item ? item.title : item.brandName} fill className="object-contain drop-shadow-[0_10px_20px_rgba(255,255,255,0.1)]" sizes="180px" />
                           ) : (
                             <h3 className="font-serif text-2xl text-white drop-shadow-xl text-center uppercase tracking-widest w-full">{'title' in item ? item.title : item.brandName}</h3>
                           )}
@@ -284,132 +319,184 @@ export default function RealisationsPage() {
               )}
             </div>
 
-          </motion.div>
-        )}
-      </AnimatePresence>
+            {/* ─── PANNEAU ÉDITORIAL (Restauration de l'ancien panneau) ─── */}
+            <AnimatePresence>
+              {showDetails && activeProject && (
+                <motion.div
+                  initial={{ opacity: 0, y: 30, height: 0 }}
+                  animate={{ opacity: 1, y: 0, height: 'auto' }}
+                  exit={{ opacity: 0, y: 30, height: 0 }}
+                  transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  className="w-full max-w-5xl mx-auto overflow-hidden mt-2 md:mt-8 mb-20"
+                >
+                  <style dangerouslySetInnerHTML={{ __html: `
+                    @keyframes moveDotPanel {
+                      0%, 100% { top: 8%; right: 8%; }
+                      25% { top: 8%; right: calc(100% - 30px); }
+                      50% { top: calc(100% - 24px); right: calc(100% - 30px); }
+                      75% { top: calc(100% - 24px); right: 8%; }
+                    }
+                    .panel-dot {
+                      width: 5px;
+                      aspect-ratio: 1;
+                      position: absolute;
+                      background-color: #fff;
+                      border-radius: 100px;
+                      z-index: 20;
+                      animation: moveDotPanel 8s linear infinite;
+                    }
+                    @media (max-width: 768px) {
+                      .panel-dot { display: none; }
+                    }
+                  `}} />
 
-      {/* --- Interface Modal Floutée pour le Projet Sélectionné --- */}
-      <AnimatePresence>
-        {selectedProject && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.4 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-0 md:p-8"
-          >
-            {/* Background flouté */}
-            <div className="absolute inset-0 bg-black/50 backdrop-blur-2xl" onClick={() => setSelectedProject(null)} />
-            
-            {/* Contenu de la modale */}
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="relative w-full h-full md:h-auto max-h-full md:max-h-[90vh] md:max-w-6xl md:rounded-3xl border-0 md:border border-white/10 overflow-y-auto overflow-x-hidden flex flex-col md:flex-row gap-8 lg:gap-16 items-start p-6 md:p-12 lg:p-16 scrollbar-hide"
-              style={{ background: 'radial-gradient(circle at top right, rgba(40,40,40,0.7), rgba(10,10,10,0.95))' }}
-            >
-              {/* Bouton Fermer */}
-              <button 
-                onClick={() => setSelectedProject(null)}
-                className="absolute top-6 right-6 font-sans text-xs uppercase tracking-widest text-white/50 hover:text-white transition-colors duration-300 flex items-center gap-2 group z-20 bg-black/20 p-2 rounded-full md:bg-transparent md:p-0"
-              >
-                <span className="group-hover:-translate-x-1 transition-transform duration-300">←</span> <span className="hidden md:inline">{t('btn_close').replace('× ', isEn ? 'Back' : 'Précédent')}</span>
-              </button>
+                  <div 
+                    className="mx-4 md:mx-0 relative"
+                    style={{
+                      borderRadius: '16px',
+                      padding: '1px',
+                      background: 'radial-gradient(circle 600px at 0% 0%, #ffffff, #0c0d0d)',
+                    }}
+                  >
+                    <div className="panel-dot" />
 
-              {/* Colonne Informations */}
-              <div className="flex-1 flex flex-col gap-8 w-full mt-10 md:mt-0">
-                <div className="flex flex-col gap-4">
-                  <div className="flex flex-wrap gap-2">
-                    <span className="font-sans text-[10px] md:text-xs uppercase tracking-widest text-white/50 border border-white/20 px-3 py-1 rounded-full">
-                      {'title' in selectedProject ? (isEn ? selectedProject.projectTypeEn : selectedProject.projectTypeFr) : (isEn ? 'Fictional Concept' : 'Concept Fictif')}
-                    </span>
-                  </div>
-                  
-                  {selectedProject.logoPath ? (
-                    <div className="relative w-full max-w-[250px] h-20 md:h-24 opacity-80 mb-2">
-                       <Image src={selectedProject.logoPath} alt="Logo" fill className="object-contain object-left" />
-                    </div>
-                  ) : (
-                    <h3 className="font-serif text-4xl md:text-5xl lg:text-6xl text-white leading-tight">
-                      {'title' in selectedProject ? selectedProject.title : selectedProject.brandName}
-                    </h3>
-                  )}
-                </div>
+                    <div 
+                      className="relative w-full overflow-hidden"
+                      style={{
+                        borderRadius: '15px',
+                        border: '1px solid #202222',
+                        background: 'radial-gradient(circle 800px at 0% 0%, #333333, #0c0d0d)',
+                      }}
+                    >
+                      <div 
+                        className="absolute pointer-events-none"
+                        style={{
+                          width: '280px', height: '50px', borderRadius: '100px', backgroundColor: '#c7c7c7', opacity: 0.3,
+                          filter: 'blur(12px)', transformOrigin: '10%', top: '0%', left: '0', transform: 'rotate(40deg)', zIndex: 1,
+                        }}
+                      />
 
-                <div className="w-12 h-px bg-white/20" />
+                      <div className="absolute pointer-events-none" style={{ top: '8%', left: 0, right: 0, height: '1px', background: 'linear-gradient(90deg, #888888 30%, #1d1f1f 70%)' }} />
+                      <div className="absolute pointer-events-none" style={{ bottom: '8%', left: 0, right: 0, height: '1px', background: 'linear-gradient(90deg, #2c2c2c 30%, #1d1f1f 70%)' }} />
+                      <div className="absolute pointer-events-none" style={{ left: '5%', top: 0, bottom: 0, width: '1px', background: 'linear-gradient(180deg, #747474 30%, #222424 70%)' }} />
+                      <div className="absolute pointer-events-none" style={{ right: '5%', top: 0, bottom: 0, width: '1px', background: 'linear-gradient(180deg, #2c2c2c 30%, #222424 70%)' }} />
 
-                {/* Données spécifiques selon le type de projet */}
-                {'title' in selectedProject ? (
-                  // C'est un "Vrai" Projet (Realisations)
-                  <div className="flex flex-col gap-6">
-                    <div className="flex flex-col gap-1">
-                      <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/30">{t('lbl_contribution')}</span>
-                      <p className="font-sans text-sm md:text-base text-white/80 leading-relaxed font-light">
-                        {isEn ? selectedProject.contributionEn : selectedProject.contributionFr}
-                      </p>
-                    </div>
+                      <div className="relative z-10 flex flex-col md:flex-row items-stretch" style={{ padding: '10% 7%' }}>
+                        
+                        {/* Bloc Texte */}
+                        <div className="flex-1 flex flex-col gap-6 text-left pr-0 md:pr-12">
+                          {viewMode === 'realisations' ? (
+                            <>
+                              <div className="flex flex-col gap-4">
+                                <div className="flex flex-wrap gap-2">
+                                  <span className="font-sans text-[10px] md:text-xs uppercase tracking-widest text-white/40 border border-white/20 px-3 py-1 rounded-full">
+                                    {t('lbl_type')}: {isEn ? (activeProject as Project).projectTypeEn : (activeProject as Project).projectTypeFr}
+                                  </span>
+                                  {(activeProject as Project).offerIllustrated && (
+                                    <span className="font-sans text-[10px] md:text-xs uppercase tracking-widest text-white/80 border border-white/40 px-3 py-1 rounded-full shadow-[0_0_10px_rgba(255,255,255,0.1)]">
+                                      {(activeProject as Project).offerIllustrated}
+                                    </span>
+                                  )}
+                                </div>
+                                <h3 className="font-serif text-3xl md:text-4xl lg:text-5xl text-white leading-tight">{(activeProject as Project).title}</h3>
+                              </div>
 
-                    <div className="flex flex-col gap-2">
-                      <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/30">{t('lbl_deliverables')}</span>
-                      <div className="flex flex-wrap gap-2">
-                        {selectedProject.deliverables.map(d => (
-                          <span key={d} className="font-sans text-[10px] uppercase tracking-[0.1em] text-white/60 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full">
-                            {d}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
+                              <div className="w-8 h-px bg-white/20" />
 
-                    <div className="flex flex-col gap-1">
-                      <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/30">{t('lbl_demonstrates')}</span>
-                      <p className="font-sans text-sm md:text-base text-white/80 leading-relaxed font-light">
-                        {isEn ? selectedProject.demonstratesEn : selectedProject.demonstratesFr}
-                      </p>
-                    </div>
-                  </div>
-                ) : (
-                  // C'est un concept Fictif
-                  <div className="flex flex-col gap-6">
-                     <p className="font-sans text-xs md:text-sm text-white/40 italic font-light max-w-md">
-                        {t('fictional_disclaimer')}
-                     </p>
-                     
-                     <div className="flex flex-col gap-1">
-                        <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/30">{t('lbl_contribution')}</span>
-                        <p className="font-sans text-sm md:text-base text-white/80 leading-relaxed font-light">
-                           {t('fictional_contribution')}
-                        </p>
-                     </div>
+                              <div className="flex flex-col gap-1">
+                                <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/30">{t('lbl_contribution')}</span>
+                                <p className="font-sans text-xs md:text-sm text-white/80 leading-[1.6] font-light">
+                                  {isEn ? (activeProject as Project).contributionEn : (activeProject as Project).contributionFr}
+                                </p>
+                              </div>
 
-                     <div className="flex flex-col gap-2">
-                        <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/30">{isEn ? 'Materials used' : 'Matières explorées'}</span>
-                        <div className="flex flex-wrap gap-2">
-                           {selectedProject.materials.map(m => (
-                             <span key={m} className="font-sans text-[10px] uppercase tracking-[0.1em] text-white/70 bg-white/10 border border-white/20 px-3 py-1.5 rounded-full">
-                               {translateMaterial(m)}
-                             </span>
-                           ))}
+                              <div className="flex flex-col gap-2">
+                                <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/30">{t('lbl_deliverables')}</span>
+                                <div className="flex flex-wrap gap-2">
+                                  {(activeProject as Project).deliverables.map((d: string) => (
+                                    <span key={d} className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.1em] text-white/60 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full">
+                                      {d}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+
+                              <div className="flex flex-col gap-1">
+                                <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/30">{t('lbl_demonstrates')}</span>
+                                <p className="font-sans text-xs md:text-sm text-white/80 leading-[1.6] font-light">
+                                  {isEn ? (activeProject as Project).demonstratesEn : (activeProject as Project).demonstratesFr}
+                                </p>
+                              </div>
+                            </>
+                          ) : (
+                            <>
+                              {/* Fictional Text Block */}
+                              <div className="flex flex-col gap-4">
+                                <div className="flex flex-wrap gap-2">
+                                  <span className="font-sans text-[10px] md:text-xs uppercase tracking-widest text-white/40 border border-white/20 px-3 py-1 rounded-full">
+                                    {isEn ? 'Fictional Concept' : 'Concept Fictif'}
+                                  </span>
+                                </div>
+                                <h3 className="font-serif text-3xl md:text-4xl lg:text-5xl text-white leading-tight">{(activeProject as FictionalConcept).brandName}</h3>
+                              </div>
+
+                              <div className="w-8 h-px bg-white/20" />
+
+                              <p className="font-sans text-xs md:text-sm text-white/40 italic font-light">
+                                {t('fictional_disclaimer')}
+                              </p>
+
+                              <div className="flex flex-col gap-1">
+                                <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/30">{t('lbl_contribution')}</span>
+                                <p className="font-sans text-xs md:text-sm text-white/80 leading-[1.6] font-light">
+                                  {t('fictional_contribution')}
+                                </p>
+                              </div>
+
+                              <div className="flex flex-col gap-2">
+                                <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/30">{isEn ? 'Materials' : 'Matières'}</span>
+                                <div className="flex flex-wrap gap-2">
+                                  {(activeProject as FictionalConcept).materials.map((m: string) => (
+                                    <span key={m} className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.1em] text-white/60 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full">
+                                      {translateMaterial(m)}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+
+                              <div className="flex flex-col gap-1">
+                                <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/30">{t('lbl_demonstrates')}</span>
+                                <p className="font-sans text-xs md:text-sm text-white/80 leading-[1.6] font-light">
+                                  {t('fictional_demonstrates')}
+                                </p>
+                              </div>
+                            </>
+                          )}
+
+                          <div className="mt-4">
+                            <button 
+                              onClick={handleCloseDetails}
+                              className="font-sans text-xs uppercase tracking-widest text-white/50 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
+                            >
+                              <span className="group-hover:-translate-x-1 transition-transform duration-300">←</span> {t('btn_close').replace('× ', '')}
+                            </button>
+                          </div>
                         </div>
-                     </div>
 
-                     <div className="flex flex-col gap-1">
-                        <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/30">{t('lbl_demonstrates')}</span>
-                        <p className="font-sans text-sm md:text-base text-white/80 leading-relaxed font-light">
-                           {t('fictional_demonstrates')}
-                        </p>
-                     </div>
+                        {/* Bloc Image */}
+                        <div className="w-full md:w-[44%] flex items-center justify-center mt-8 md:mt-0">
+                          <ProjectMiniCarousel 
+                            images={activeProject.galleryPaths.length > 0 ? activeProject.galleryPaths : [activeProject.coverPath]} 
+                          />
+                        </div>
+                      </div>
+
+                    </div>
                   </div>
-                )}
-              </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
-              {/* Colonne Galerie d'images */}
-              <div className="w-full md:w-[50%] lg:w-[45%] flex-shrink-0 flex items-start justify-center">
-                <ProjectMiniCarousel images={selectedProject.galleryPaths?.length > 0 ? selectedProject.galleryPaths : [selectedProject.coverPath]} />
-              </div>
-
-            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
