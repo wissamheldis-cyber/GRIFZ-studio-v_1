@@ -62,10 +62,10 @@
   "Catalogue": {
     "title": "Materials Catalog",
     "subtitle": "Discover our essences through different collections. Click on the center cards to reveal their palettes.",
-    "cat_metals": "Metals & Alloys",
-    "cat_organic": "Organic & Natural",
-    "cat_minerals": "Minerals & Carbon",
-    "cat_polymers": "Polymers & Synthetics"
+    "cat_metals": "Metals",
+    "cat_organic": "Organic",
+    "cat_minerals": "Minerals",
+    "cat_polymers": "Polymers"
   },
   "About": {
     "title": "The Studio.",

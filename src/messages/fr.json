@@ -62,10 +62,10 @@
   "Catalogue": {
     "title": "Catalogue des Matières",
     "subtitle": "Découvrez nos essences à travers différentes collections. Cliquez sur les cartes au centre pour en révéler les palettes.",
-    "cat_metals": "Métaux & Alliages",
-    "cat_organic": "Organiques & Naturels",
-    "cat_minerals": "Minéraux & Carbone",
-    "cat_polymers": "Polymères & Synthétiques"
+    "cat_metals": "Métaux",
+    "cat_organic": "Organiques",
+    "cat_minerals": "Minéraux",
+    "cat_polymers": "Polymères"
   },
   "About": {
     "title": "Le Studio.",

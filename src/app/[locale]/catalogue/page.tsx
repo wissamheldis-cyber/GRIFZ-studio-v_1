@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, useInView, useReducedMotion, AnimatePresence } from 'framer-motion'
 import { FlipCard } from '@/components/ui/FlipCard'
+import Orb from '@/components/ui/Orb'
 import Image from 'next/image'
 import { materials, MaterialData } from '@/data/materialsData'
 import { useHeaderContext } from '@/context/HeaderContext'
@@ -222,16 +223,29 @@ export default function CataloguePage() {
         <div style={{ height: '100px', width: '100%' }} />
 
         {/* Tabs de Sélection */}
-        <div className="flex flex-wrap justify-center gap-6 md:gap-12 mb-16 md:mb-20 relative z-20">
-          {categories.map(cat => (
-            <button
-              key={cat}
-              onClick={() => setActiveCategory(cat)}
-              className={`text-sm md:text-base font-sans tracking-[0.15em] uppercase transition-all duration-300 pb-2 border-b-2 ${activeCategory === cat ? 'border-ink text-ink font-medium drop-shadow-md' : 'border-transparent text-ink-soft hover:text-ink hover:border-ink/30'}`}
-            >
-              {categoryTranslations[cat] || cat}
-            </button>
-          ))}
+        <div className="flex flex-wrap justify-center gap-8 md:gap-16 mb-16 md:mb-20 relative z-20">
+          {[
+            { id: 'Métaux & Alliages', orbPath: '/materials-paysage/Aluminium/03_orbe_matiere/aluminium_orbe_01.png' },
+            { id: 'Organiques & Naturels', orbPath: '/materials-paysage/Bois/03_orbe_matiere/bois_orbe_01.png' },
+            { id: 'Minéraux & Carbone', orbPath: '/materials-paysage/Charbon/03_orbe_matiere/charbon_orbe_01.png' },
+            { id: 'Polymères & Synthétiques', orbPath: '/materials-paysage/PET/03_orbe_matiere/pet_orbe_01.png' }
+          ].map(cat => {
+            const isActive = activeCategory === cat.id;
+            return (
+              <button
+                key={cat.id}
+                onClick={() => setActiveCategory(cat.id)}
+                className={`flex flex-col items-center gap-4 group transition-all duration-500 ${isActive ? 'opacity-100 scale-110' : 'opacity-50 hover:opacity-100 hover:scale-105'}`}
+              >
+                <div className={`relative rounded-full transition-all duration-500 ${isActive ? 'shadow-[0_0_40px_rgba(255,255,255,0.6)]' : ''}`}>
+                  <Orb customImage={cat.orbPath} size={80} animated={isActive} intensity={isActive ? 0.8 : 0.4} />
+                </div>
+                <span className={`text-xs md:text-sm font-sans tracking-[0.15em] uppercase transition-all duration-300 ${isActive ? 'text-ink font-semibold drop-shadow-lg' : 'text-ink-soft'}`}>
+                  {categoryTranslations[cat.id] || cat.id}
+                </span>
+              </button>
+            )
+          })}
         </div>
 
         {/* Section par Catégorie (une seule affichée à la fois) */}

@@ -99,21 +99,22 @@ export default function ReservationPage() {
             {t('extra_phrase')}
           </motion.p>
           <motion.div 
-            className="flex gap-4 mt-2 flex-wrap justify-center"
+            className="flex gap-4 mt-2 flex-wrap justify-center items-center"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
           >
-            <Link href="#offres" onClick={(e) => { e.preventDefault(); document.getElementById('offres')?.scrollIntoView({ behavior: 'smooth' }); }}>
-              <button className="px-6 py-3 rounded-full border border-ink bg-ink text-white text-xs uppercase tracking-widest font-medium hover:bg-ink/90 transition-colors duration-300 shadow-md">
-                {t('cta_prescan')}
-              </button>
-            </Link>
-            <Link href="#calendrier" onClick={(e) => { e.preventDefault(); document.getElementById('calendrier')?.scrollIntoView({ behavior: 'smooth' }); }}>
-              <button className="px-6 py-3 rounded-full border border-ink/20 text-ink text-xs uppercase tracking-widest font-medium hover:bg-ink/5 transition-colors duration-300">
-                {t('cta_call')}
-              </button>
-            </Link>
+            <MagicButton className="!min-h-[44px] !text-[10px] md:!text-[11px] px-8 group" onClick={(e) => { e.preventDefault(); document.getElementById('offres')?.scrollIntoView({ behavior: 'smooth' }); }}>
+              <span className="flex items-center gap-2">
+                {t('cta_prescan')} <span className="group-hover:translate-y-1 transition-transform">↓</span>
+              </span>
+            </MagicButton>
+            
+            <MagicButton className="!min-h-[44px] !text-[10px] md:!text-[11px] px-8 group" onClick={(e) => { e.preventDefault(); document.getElementById('calendrier')?.scrollIntoView({ behavior: 'smooth' }); }}>
+              <span className="flex items-center gap-2">
+                {t('cta_call')} <span className="group-hover:translate-y-1 transition-transform">↓</span>
+              </span>
+            </MagicButton>
           </motion.div>
         </div>
 
@@ -336,8 +337,9 @@ export default function ReservationPage() {
             <div className="flex flex-col gap-8 w-full max-w-4xl mx-auto perspective-1000 px-4 md:px-0">
               
               {/* Pack 1 : Pre-Scan */}
-              <motion.div whileHover={{ scale: 1.02, rotateX: 2, rotateY: -2, z: 20 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
-                <GlassPanel className="p-8 md:p-10 flex flex-col md:flex-row justify-between items-start md:items-center w-full min-h-[200px] relative overflow-hidden group border-white/20 hover:border-white/50 transition-colors duration-500">
+              <div className="flex flex-col items-center w-full">
+                <motion.div className="w-full" whileHover={{ scale: 1.02, rotateX: 2, rotateY: -2, z: 20 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
+<GlassPanel className="p-8 md:p-10 flex flex-col md:flex-row justify-between items-start md:items-center w-full min-h-[200px] relative overflow-hidden group border-white/20 hover:border-white/50 transition-colors duration-500">
                   <div className="absolute top-1/2 -translate-y-1/2 right-10 opacity-0 group-hover:opacity-40 transition-all duration-700 blur-2xl group-hover:scale-125">
                     <Orb material="cuivre" size={200} animated={true} intensity={0.5} />
                   </div>
@@ -349,19 +351,24 @@ export default function ReservationPage() {
                   </div>
                   
                   <div className="flex flex-col items-start md:items-end justify-center w-full md:w-auto mt-6 md:mt-0 relative z-10 transition-transform duration-300 group-hover:-translate-x-2">
+                    
                     <span className="font-serif text-2xl md:text-3xl text-ink italic opacity-70 mb-4">{t('pack1_price')}</span>
-                    <MagicButton className="!min-h-[44px] !text-[10px] md:!text-[11px] px-6 group !backdrop-blur-none !shadow-[0_0_15px_rgba(255,255,255,0.15)] hover:!shadow-[0_0_25px_rgba(255,255,255,0.35)]" onClick={(e) => { e.preventDefault(); document.getElementById('calendrier')?.scrollIntoView({ behavior: 'smooth' }); }}>
+                  </div>
+                </GlassPanel>
+                </motion.div>
+<div className="flex justify-center w-full mt-10 mb-10 px-4 md:px-0">
+                  <MagicButton className="!min-h-[44px] !text-[10px] md:!text-[11px] px-6 group !backdrop-blur-none !shadow-[0_0_15px_rgba(255,255,255,0.15)] hover:!shadow-[0_0_25px_rgba(255,255,255,0.35)]" onClick={(e) => { e.preventDefault(); document.getElementById('calendrier')?.scrollIntoView({ behavior: 'smooth' }); }}>
                       <span className="flex items-center gap-2">
                         {t('pack1_cta')} <span className="group-hover:translate-x-1 transition-transform">→</span>
                       </span>
                     </MagicButton>
-                  </div>
-                </GlassPanel>
-              </motion.div>
+                </div>
+              </div>
 
               {/* Pack 2 : Scan - Recommandé */}
-              <motion.div whileHover={{ scale: 1.02, rotateX: 2, rotateY: -2, z: 20 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
-                <GlassPanel strong className="p-8 md:p-10 flex flex-col md:flex-row justify-between items-start md:items-center w-full min-h-[200px] relative overflow-hidden group border-white/30 hover:border-white/60 transition-colors duration-500">
+              <div className="flex flex-col items-center w-full">
+                <motion.div className="w-full" whileHover={{ scale: 1.02, rotateX: 2, rotateY: -2, z: 20 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
+<GlassPanel strong className="p-8 md:p-10 flex flex-col md:flex-row justify-between items-start md:items-center w-full min-h-[200px] relative overflow-hidden group border-white/30 hover:border-white/60 transition-colors duration-500">
                   <div className="absolute top-1/2 -translate-y-1/2 right-10 opacity-20 group-hover:opacity-60 transition-all duration-700 blur-2xl group-hover:scale-125">
                     <Orb material="cuivre" size={250} animated={true} intensity={0.6} />
                   </div>
@@ -381,19 +388,24 @@ export default function ReservationPage() {
                   </div>
                   
                   <div className="flex flex-col items-start md:items-end justify-center w-full md:w-auto mt-6 md:mt-0 relative z-10 transition-transform duration-300 group-hover:-translate-x-2">
+                    
                     <span className="font-serif text-2xl md:text-3xl text-ink italic opacity-70 mb-4">{t('pack2_price')}</span>
-                    <MagicButton className="!min-h-[44px] !text-[10px] md:!text-[11px] px-6 group !backdrop-blur-none !shadow-[0_0_15px_rgba(255,255,255,0.15)] hover:!shadow-[0_0_25px_rgba(255,255,255,0.35)]" onClick={(e) => { e.preventDefault(); document.getElementById('calendrier')?.scrollIntoView({ behavior: 'smooth' }); }}>
+                  </div>
+                </GlassPanel>
+                </motion.div>
+<div className="flex justify-center w-full mt-10 mb-10 px-4 md:px-0">
+                  <MagicButton className="!min-h-[44px] !text-[10px] md:!text-[11px] px-6 group !backdrop-blur-none !shadow-[0_0_15px_rgba(255,255,255,0.15)] hover:!shadow-[0_0_25px_rgba(255,255,255,0.35)]" onClick={(e) => { e.preventDefault(); document.getElementById('calendrier')?.scrollIntoView({ behavior: 'smooth' }); }}>
                       <span className="flex items-center gap-2">
                         {t('pack2_cta')} <span className="group-hover:translate-x-1 transition-transform">→</span>
                       </span>
                     </MagicButton>
-                  </div>
-                </GlassPanel>
-              </motion.div>
+                </div>
+              </div>
 
               {/* Pack 3 : Campaign */}
-              <motion.div whileHover={{ scale: 1.02, rotateX: 2, rotateY: -2, z: 20 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
-                <GlassPanel className="p-8 md:p-10 flex flex-col md:flex-row justify-between items-start md:items-center w-full min-h-[200px] relative overflow-hidden group border-white/20 hover:border-white/50 transition-colors duration-500">
+              <div className="flex flex-col items-center w-full">
+                <motion.div className="w-full" whileHover={{ scale: 1.02, rotateX: 2, rotateY: -2, z: 20 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
+<GlassPanel className="p-8 md:p-10 flex flex-col md:flex-row justify-between items-start md:items-center w-full min-h-[200px] relative overflow-hidden group border-white/20 hover:border-white/50 transition-colors duration-500">
                   <div className="absolute top-1/2 -translate-y-1/2 right-10 opacity-0 group-hover:opacity-40 transition-all duration-700 blur-2xl group-hover:scale-125">
                     <Orb material="cuivre" size={200} animated={true} intensity={0.5} />
                   </div>
@@ -405,19 +417,24 @@ export default function ReservationPage() {
                   </div>
                   
                   <div className="flex flex-col items-start md:items-end justify-center w-full md:w-auto mt-6 md:mt-0 relative z-10 transition-transform duration-300 group-hover:-translate-x-2">
+                    
                     <span className="font-serif text-2xl md:text-3xl text-ink italic opacity-70 mb-4">{t('pack3_price')}</span>
-                    <MagicButton className="!min-h-[44px] !text-[10px] md:!text-[11px] px-6 group !backdrop-blur-none !shadow-[0_0_15px_rgba(255,255,255,0.15)] hover:!shadow-[0_0_25px_rgba(255,255,255,0.35)]" onClick={(e) => { e.preventDefault(); document.getElementById('calendrier')?.scrollIntoView({ behavior: 'smooth' }); }}>
+                  </div>
+                </GlassPanel>
+                </motion.div>
+<div className="flex justify-center w-full mt-10 mb-10 px-4 md:px-0">
+                  <MagicButton className="!min-h-[44px] !text-[10px] md:!text-[11px] px-6 group !backdrop-blur-none !shadow-[0_0_15px_rgba(255,255,255,0.15)] hover:!shadow-[0_0_25px_rgba(255,255,255,0.35)]" onClick={(e) => { e.preventDefault(); document.getElementById('calendrier')?.scrollIntoView({ behavior: 'smooth' }); }}>
                       <span className="flex items-center gap-2">
                         {t('pack3_cta')} <span className="group-hover:translate-x-1 transition-transform">→</span>
                       </span>
                     </MagicButton>
-                  </div>
-                </GlassPanel>
-              </motion.div>
+                </div>
+              </div>
 
               {/* Pack 4 : Identity */}
-              <motion.div whileHover={{ scale: 1.02, rotateX: 2, rotateY: -2, z: 20 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
-                <GlassPanel className="p-8 md:p-10 flex flex-col md:flex-row justify-between items-start md:items-center w-full min-h-[200px] relative overflow-hidden group border-white/20 hover:border-white/50 transition-colors duration-500">
+              <div className="flex flex-col items-center w-full">
+                <motion.div className="w-full" whileHover={{ scale: 1.02, rotateX: 2, rotateY: -2, z: 20 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
+<GlassPanel className="p-8 md:p-10 flex flex-col md:flex-row justify-between items-start md:items-center w-full min-h-[200px] relative overflow-hidden group border-white/20 hover:border-white/50 transition-colors duration-500">
                   <div className="absolute top-1/2 -translate-y-1/2 right-10 opacity-0 group-hover:opacity-40 transition-all duration-700 blur-2xl group-hover:scale-125">
                     <Orb material="cuivre" size={200} animated={true} intensity={0.5} />
                   </div>
@@ -429,19 +446,24 @@ export default function ReservationPage() {
                   </div>
                   
                   <div className="flex flex-col items-start md:items-end justify-center w-full md:w-auto mt-6 md:mt-0 relative z-10 transition-transform duration-300 group-hover:-translate-x-2">
+                    
                     <span className="font-serif text-2xl md:text-3xl text-ink italic opacity-70 mb-4">{t('pack4_price')}</span>
-                    <MagicButton className="!min-h-[44px] !text-[10px] md:!text-[11px] px-6 group !backdrop-blur-none !shadow-[0_0_15px_rgba(255,255,255,0.15)] hover:!shadow-[0_0_25px_rgba(255,255,255,0.35)]" onClick={(e) => { e.preventDefault(); document.getElementById('calendrier')?.scrollIntoView({ behavior: 'smooth' }); }}>
+                  </div>
+                </GlassPanel>
+                </motion.div>
+<div className="flex justify-center w-full mt-10 mb-10 px-4 md:px-0">
+                  <MagicButton className="!min-h-[44px] !text-[10px] md:!text-[11px] px-6 group !backdrop-blur-none !shadow-[0_0_15px_rgba(255,255,255,0.15)] hover:!shadow-[0_0_25px_rgba(255,255,255,0.35)]" onClick={(e) => { e.preventDefault(); document.getElementById('calendrier')?.scrollIntoView({ behavior: 'smooth' }); }}>
                       <span className="flex items-center gap-2">
                         {t('pack4_cta')} <span className="group-hover:translate-x-1 transition-transform">→</span>
                       </span>
                     </MagicButton>
-                  </div>
-                </GlassPanel>
-              </motion.div>
+                </div>
+              </div>
 
               {/* Pack 5 : System */}
-              <motion.div whileHover={{ scale: 1.02, rotateX: 2, rotateY: -2, z: 20 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
-                <GlassPanel className="p-8 md:p-10 flex flex-col md:flex-row justify-between items-start md:items-center w-full min-h-[200px] relative overflow-hidden group border-white/20 hover:border-white/50 transition-colors duration-500">
+              <div className="flex flex-col items-center w-full">
+                <motion.div className="w-full" whileHover={{ scale: 1.02, rotateX: 2, rotateY: -2, z: 20 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
+<GlassPanel className="p-8 md:p-10 flex flex-col md:flex-row justify-between items-start md:items-center w-full min-h-[200px] relative overflow-hidden group border-white/20 hover:border-white/50 transition-colors duration-500">
                   <div className="absolute top-1/2 -translate-y-1/2 right-10 opacity-0 group-hover:opacity-40 transition-all duration-700 blur-2xl group-hover:scale-125">
                     <Orb material="cuivre" size={200} animated={true} intensity={0.5} />
                   </div>
@@ -453,15 +475,19 @@ export default function ReservationPage() {
                   </div>
                   
                   <div className="flex flex-col items-start md:items-end justify-center w-full md:w-auto mt-6 md:mt-0 relative z-10 transition-transform duration-300 group-hover:-translate-x-2">
+                    
                     <span className="font-serif text-2xl md:text-3xl text-ink italic opacity-70 mb-4">{t('pack5_price')}</span>
-                    <MagicButton className="!min-h-[44px] !text-[10px] md:!text-[11px] px-6 group !backdrop-blur-none !shadow-[0_0_15px_rgba(255,255,255,0.15)] hover:!shadow-[0_0_25px_rgba(255,255,255,0.35)]" onClick={(e) => { e.preventDefault(); document.getElementById('calendrier')?.scrollIntoView({ behavior: 'smooth' }); }}>
+                  </div>
+                </GlassPanel>
+                </motion.div>
+<div className="flex justify-center w-full mt-10 mb-10 px-4 md:px-0">
+                  <MagicButton className="!min-h-[44px] !text-[10px] md:!text-[11px] px-6 group !backdrop-blur-none !shadow-[0_0_15px_rgba(255,255,255,0.15)] hover:!shadow-[0_0_25px_rgba(255,255,255,0.35)]" onClick={(e) => { e.preventDefault(); document.getElementById('calendrier')?.scrollIntoView({ behavior: 'smooth' }); }}>
                       <span className="flex items-center gap-2">
                         {t('pack5_cta')} <span className="group-hover:translate-x-1 transition-transform">→</span>
                       </span>
                     </MagicButton>
-                  </div>
-                </GlassPanel>
-              </motion.div>
+                </div>
+              </div>
 
             </div>
           </div>
