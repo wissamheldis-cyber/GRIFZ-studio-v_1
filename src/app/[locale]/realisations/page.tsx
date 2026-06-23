@@ -98,6 +98,7 @@ export default function RealisationsPage() {
   
   const [hasEntered, setHasEntered] = useState(false)
   const [entranceComplete, setEntranceComplete] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
   const prefersReducedMotion = useReducedMotion()
   const t = useTranslations('Realisations')
   const locale = useLocale()
@@ -121,10 +122,18 @@ export default function RealisationsPage() {
 
   // Déclencher l'animation d'entrée au montage
   useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+
     const startTimer = setTimeout(() => setHasEntered(true), 100)
     // Marquer la fin de l'animation d'entrée (durée max du stagger + durée animation)
     const endTimer = setTimeout(() => setEntranceComplete(true), 1200)
-    return () => { clearTimeout(startTimer); clearTimeout(endTimer) }
+    return () => { 
+      clearTimeout(startTimer); 
+      clearTimeout(endTimer);
+      window.removeEventListener('resize', checkMobile)
+    }
   }, [])
 
   const handleCardClick = (index: number) => {
@@ -223,115 +232,162 @@ export default function RealisationsPage() {
               <p className="text-ink-soft font-light text-sm md:text-base">{t('subtitle')}</p>
             </motion.div>
 
-            {/* ─── CARROUSEL 3D COVERFLOW ─── */}
-            <div className="relative w-full h-[400px] md:h-[500px] flex items-center justify-center mt-8" style={{ perspective: '1200px' }}>
-              {projects.map((project, index) => {
-                const offset = index - activeIndex
-                const isActive = offset === 0
+            {/* ─── CARROUSEL ─── */}
+            {!isMobile ? (
+              <div className="relative w-full h-[400px] md:h-[500px] flex items-center justify-center mt-8" style={{ perspective: '1200px' }}>
+                {projects.map((project, index) => {
+                  const offset = index - activeIndex
+                  const isActive = offset === 0
 
-                // Mathématiques du Coverflow
-                const isInactiveFlippedState = activeFlipped && !isActive
-                const translateX = offset * (typeof window !== 'undefined' && window.innerWidth < 768 ? 140 : 280)
-                const translateZ = Math.abs(offset) * -200 + (isInactiveFlippedState ? -150 : 0) + (isActive && activeFlipped ? 40 : 0)
-                const rotateY = offset * -25
-                const scale = 1 - Math.abs(offset) * 0.1
-                const opacity = isInactiveFlippedState 
-                  ? Math.max(0, 1 - Math.abs(offset) * 0.3 - 0.6)
-                  : 1 - Math.abs(offset) * 0.3
-                const zIndex = isActive && activeFlipped ? 100 : 50 - Math.abs(offset)
-                
-                const filterBlur = isInactiveFlippedState
-                  ? `brightness(0.3)`
-                  : Math.abs(offset) > 0 ? `brightness(${Math.max(0.4, 1 - Math.abs(offset) * 0.2)})` : 'brightness(1)'
+                  // Mathématiques du Coverflow
+                  const isInactiveFlippedState = activeFlipped && !isActive
+                  const translateX = offset * (typeof window !== 'undefined' && window.innerWidth < 768 ? 140 : 280)
+                  const translateZ = Math.abs(offset) * -200 + (isInactiveFlippedState ? -150 : 0) + (isActive && activeFlipped ? 40 : 0)
+                  const rotateY = offset * -25
+                  const scale = 1 - Math.abs(offset) * 0.1
+                  const opacity = isInactiveFlippedState 
+                    ? Math.max(0, 1 - Math.abs(offset) * 0.3 - 0.6)
+                    : 1 - Math.abs(offset) * 0.3
+                  const zIndex = isActive && activeFlipped ? 100 : 50 - Math.abs(offset)
+                  
+                  const filterBlur = isInactiveFlippedState
+                    ? `brightness(0.3)`
+                    : Math.abs(offset) > 0 ? `brightness(${Math.max(0.4, 1 - Math.abs(offset) * 0.2)})` : 'brightness(1)'
 
-                const staggerDelay = getStaggerDelay(index)
+                  const staggerDelay = getStaggerDelay(index)
 
-                // État initial : toutes les cartes partent du centre, invisibles, écrasées
-                const entranceInitial = prefersReducedMotion ? false : {
-                  x: 0,
-                  z: -600,
-                  rotateY: 0,
-                  scale: 0.3,
-                  opacity: 0,
-                }
+                  // État initial : toutes les cartes partent du centre, invisibles, écrasées
+                  const entranceInitial = prefersReducedMotion ? false : {
+                    x: 0,
+                    z: -600,
+                    rotateY: 0,
+                    scale: 0.3,
+                    opacity: 0,
+                  }
 
-                // État animé : position finale du coverflow OU état initial si pas encore entré
-                const entranceAnimate = hasEntered ? {
-                  x: translateX,
-                  z: translateZ,
-                  rotateY: rotateY,
-                  scale: scale,
-                  opacity: opacity,
-                  filter: filterBlur,
-                } : entranceInitial
+                  // État animé : position finale du coverflow OU état initial si pas encore entré
+                  const entranceAnimate = hasEntered ? {
+                    x: translateX,
+                    z: translateZ,
+                    rotateY: rotateY,
+                    scale: scale,
+                    opacity: opacity,
+                    filter: filterBlur,
+                  } : entranceInitial
 
-                return (
-                  <motion.div
-                    key={project.id}
-                    className="absolute top-0 bottom-0 flex flex-col items-center justify-center cursor-pointer"
-                    style={{ zIndex }}
-                    initial={entranceInitial}
-                    animate={entranceAnimate}
-                    transition={
-                      !hasEntered 
-                        ? { duration: 0.01 }
-                        : entranceComplete
-                          ? { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }
-                          : {
-                              duration: getEntranceDuration(),
-                              delay: staggerDelay,
-                              ease: [0.25, 0.46, 0.45, 0.94],
-                            }
-                    }
-                    onClick={() => handleCardClick(index)}
-                  >
+                  return (
                     <motion.div
-                      className="w-[260px] h-[360px] md:w-[350px] md:h-[480px] rounded-2xl"
-                      animate={isActive && activeFlipped ? {
-                        y: -15,
-                      } : {
-                        y: 0,
-                      }}
-                      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                      key={project.id}
+                      className="absolute top-0 bottom-0 flex flex-col items-center justify-center cursor-pointer"
+                      style={{ zIndex }}
+                      initial={entranceInitial}
+                      animate={entranceAnimate}
+                      transition={
+                        !hasEntered 
+                          ? { duration: 0.01 }
+                          : entranceComplete
+                            ? { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }
+                            : {
+                                duration: getEntranceDuration(),
+                                delay: staggerDelay,
+                                ease: [0.25, 0.46, 0.45, 0.94],
+                              }
+                      }
+                      onClick={() => handleCardClick(index)}
                     >
-                      <FlipCard 
-                        key={`${project.id}-${isActive}`}
-                        className="w-full h-full cursor-pointer group"
-                        isFlippable={isActive}
-                        onFlipChange={(flipped) => handleFlipChange(flipped, index)}
-                        frontImage={project.coverPath}
-                        frontContent={
-                          <div className="absolute inset-0 flex items-center justify-center p-8 bg-black/40 backdrop-blur-[2px]">
-                            {project.logoPath ? (
-                              <div className="relative w-4/5 h-1/2 transition-transform duration-500 group-hover:scale-105">
-                                <Image src={project.logoPath} alt={`${project.title} logo`} fill className="object-contain" sizes="(max-width: 768px) 50vw, 300px" />
-                              </div>
-                            ) : (
-                              <h3 className="font-serif text-3xl md:text-4xl text-white transition-transform duration-500 group-hover:scale-105">{project.title}</h3>
-                            )}
-                          </div>
-                        }
-                        backContent={
-                          <div className="absolute inset-0 w-full h-full overflow-hidden rounded-2xl">
-                            {/* Wrapper pour future vidéo. Actuellement une image. */}
-                            <Image 
-                              src={project.galleryPaths && project.galleryPaths.length > 0 ? project.galleryPaths[0] : project.coverPath} 
-                              alt={`${project.title} aperçu`} 
-                              fill 
-                              className="object-cover" 
-                              sizes="(max-width: 768px) 100vw, 400px"
-                            />
-                            {/* Overlay sombre très léger pour que l'image paraisse propre */}
-                            <div className="absolute inset-0 bg-black/10" />
-                          </div>
-                        }
-                      />
-                    </motion.div>
+                      <motion.div
+                        className="w-[260px] h-[360px] md:w-[350px] md:h-[480px] rounded-2xl"
+                        animate={isActive && activeFlipped ? {
+                          y: -15,
+                        } : {
+                          y: 0,
+                        }}
+                        transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                      >
+                        <FlipCard 
+                          key={`${project.id}-${isActive}`}
+                          className="w-full h-full cursor-pointer group"
+                          isFlippable={isActive}
+                          onFlipChange={(flipped) => handleFlipChange(flipped, index)}
+                          frontImage={project.coverPath}
+                          frontContent={
+                            <div className="absolute inset-0 flex items-center justify-center p-8 bg-black/40 backdrop-blur-[2px]">
+                              {project.logoPath ? (
+                                <div className="relative w-4/5 h-1/2 transition-transform duration-500 group-hover:scale-105">
+                                  <Image src={project.logoPath} alt={`${project.title} logo`} fill className="object-contain" sizes="(max-width: 768px) 50vw, 300px" />
+                                </div>
+                              ) : (
+                                <h3 className="font-serif text-3xl md:text-4xl text-white transition-transform duration-500 group-hover:scale-105">{project.title}</h3>
+                              )}
+                            </div>
+                          }
+                          backContent={
+                            <div className="absolute inset-0 w-full h-full overflow-hidden rounded-2xl">
+                              {/* Wrapper pour future vidéo. Actuellement une image. */}
+                              <Image 
+                                src={project.galleryPaths && project.galleryPaths.length > 0 ? project.galleryPaths[0] : project.coverPath} 
+                                alt={`${project.title} aperçu`} 
+                                fill 
+                                className="object-cover" 
+                                sizes="(max-width: 768px) 100vw, 400px"
+                              />
+                              {/* Overlay sombre très léger pour que l'image paraisse propre */}
+                              <div className="absolute inset-0 bg-black/10" />
+                            </div>
+                          }
+                        />
+                      </motion.div>
 
-                  </motion.div>
-                )
-              })}
-            </div>
+                    </motion.div>
+                  )
+                })}
+              </div>
+            ) : (
+              <div className="w-full mt-8 flex overflow-x-auto gap-4 px-4 snap-x snap-mandatory pb-8 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+                {projects.map((project, index) => {
+                  const isActive = index === activeIndex;
+                  return (
+                    <div 
+                      key={project.id} 
+                      className="snap-center shrink-0 w-[280px] h-[380px] flex flex-col cursor-pointer transition-transform duration-300"
+                      onClick={() => {
+                        handleCardClick(index);
+                        setActiveFlipped(true);
+                        setActiveFictionalFlipped(false);
+                      }}
+                      style={{
+                        transform: isActive ? 'scale(1.02)' : 'scale(0.95)',
+                        opacity: isActive ? 1 : 0.7,
+                      }}
+                    >
+                      <div className="w-full h-full relative rounded-2xl overflow-hidden border border-white/15 shadow-[0_8px_30px_rgba(0,0,0,0.5)]">
+                        <Image 
+                          src={project.coverPath} 
+                          alt={project.title} 
+                          fill 
+                          className="object-cover" 
+                          sizes="280px" 
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                        
+                        <div className="absolute bottom-6 left-6 right-6 flex flex-col gap-2">
+                          {project.logoPath ? (
+                            <div className="relative w-full h-12">
+                              <Image src={project.logoPath} alt={project.title} fill className="object-contain object-left" />
+                            </div>
+                          ) : (
+                            <h3 className="font-serif text-2xl text-white">{project.title}</h3>
+                          )}
+                          <span className="font-sans text-[10px] uppercase tracking-widest text-white/60">
+                            {isEn ? project.projectTypeEn : project.projectTypeFr}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
 
             {/* ─── PANNEAU ÉDITORIAL PREMIUM (Dark Card) ─── */}
             <AnimatePresence>
@@ -561,107 +617,151 @@ export default function RealisationsPage() {
               </p>
         </motion.div>
 
-        {/* ─── CARROUSEL 3D COVERFLOW FICTIF ─── */}
-        <div className="relative w-full h-[400px] md:h-[500px] flex items-center justify-center mt-8" style={{ perspective: '1200px' }}>
-          {fictionalConcepts.map((project, index) => {
-            const offset = index - activeFictionalIndex
-            const isActive = offset === 0
+        {/* ─── CARROUSEL FICTIF ─── */}
+        {!isMobile ? (
+          <div className="relative w-full h-[400px] md:h-[500px] flex items-center justify-center mt-8" style={{ perspective: '1200px' }}>
+            {fictionalConcepts.map((project, index) => {
+              const offset = index - activeFictionalIndex
+              const isActive = offset === 0
 
-            // Mathématiques du Coverflow
-            const isInactiveFlippedState = activeFictionalFlipped && !isActive
-            const translateX = offset * (typeof window !== 'undefined' && window.innerWidth < 768 ? 140 : 280)
-            const translateZ = Math.abs(offset) * -200 + (isInactiveFlippedState ? -150 : 0) + (isActive && activeFictionalFlipped ? 40 : 0)
-            const rotateY = offset * -25
-            const scale = 1 - Math.abs(offset) * 0.1
-            const opacity = isInactiveFlippedState 
-              ? Math.max(0, 1 - Math.abs(offset) * 0.3 - 0.6)
-              : 1 - Math.abs(offset) * 0.3
-            const zIndex = isActive && activeFictionalFlipped ? 100 : 50 - Math.abs(offset)
-            
-            const filterValue = isInactiveFlippedState
-               ? `brightness(0.2)`
-               : 'brightness(1)'
+              // Mathématiques du Coverflow
+              const isInactiveFlippedState = activeFictionalFlipped && !isActive
+              const translateX = offset * (typeof window !== 'undefined' && window.innerWidth < 768 ? 140 : 280)
+              const translateZ = Math.abs(offset) * -200 + (isInactiveFlippedState ? -150 : 0) + (isActive && activeFictionalFlipped ? 40 : 0)
+              const rotateY = offset * -25
+              const scale = 1 - Math.abs(offset) * 0.1
+              const opacity = isInactiveFlippedState 
+                ? Math.max(0, 1 - Math.abs(offset) * 0.3 - 0.6)
+                : 1 - Math.abs(offset) * 0.3
+              const zIndex = isActive && activeFictionalFlipped ? 100 : 50 - Math.abs(offset)
+              
+              const filterValue = isInactiveFlippedState
+                 ? `brightness(0.2)`
+                 : 'brightness(1)'
 
-            // Pour simplifier l'animation d'entrée du second carrousel, on utilise whileInView
-            const entranceAnimate = {
-              x: translateX,
-              z: translateZ,
-              rotateY: rotateY,
-              scale: scale,
-              opacity: opacity,
-              filter: filterValue,
-            }
+              // Pour simplifier l'animation d'entrée du second carrousel, on utilise whileInView
+              const entranceAnimate = {
+                x: translateX,
+                z: translateZ,
+                rotateY: rotateY,
+                scale: scale,
+                opacity: opacity,
+                filter: filterValue,
+              }
 
-            return (
-              <motion.div
-                key={project.id}
-                className="absolute top-0 bottom-0 flex flex-col items-center justify-center cursor-pointer"
-                style={{ zIndex }}
-                initial={{ opacity: 0 }}
-                whileInView={entranceAnimate}
-                viewport={{ once: false, margin: "-50px" }}
-                transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-                onClick={() => handleFictionalCardClick(index)}
-              >
+              return (
                 <motion.div
-                  className="w-[260px] h-[360px] md:w-[350px] md:h-[480px] rounded-2xl"
-                  animate={isActive && activeFictionalFlipped ? {
-                    y: -15,
-                  } : {
-                    y: 0,
-                  }}
-                  transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                  key={project.id}
+                  className="absolute top-0 bottom-0 flex flex-col items-center justify-center cursor-pointer"
+                  style={{ zIndex }}
+                  initial={{ opacity: 0 }}
+                  whileInView={entranceAnimate}
+                  viewport={{ once: false, margin: "-50px" }}
+                  transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  onClick={() => handleFictionalCardClick(index)}
                 >
-                  <FlipCard 
-                    key={`${project.id}-${isActive}`}
-                    className="w-full h-full cursor-pointer group"
-                    isFlippable={isActive}
-                    onFlipChange={(flipped) => handleFictionalFlipChange(flipped, index)}
-                    frontImage={project.coverPath}
-                    frontContent={
-                      <div className="absolute inset-0 flex flex-col items-center justify-center p-8 bg-black/40 backdrop-blur-[2px] text-center z-10 pointer-events-none">
+                  <motion.div
+                    className="w-[260px] h-[360px] md:w-[350px] md:h-[480px] rounded-2xl"
+                    animate={isActive && activeFictionalFlipped ? {
+                      y: -15,
+                    } : {
+                      y: 0,
+                    }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                  >
+                    <FlipCard 
+                      key={`${project.id}-${isActive}`}
+                      className="w-full h-full cursor-pointer group"
+                      isFlippable={isActive}
+                      onFlipChange={(flipped) => handleFictionalFlipChange(flipped, index)}
+                      frontImage={project.coverPath}
+                      frontContent={
+                        <div className="absolute inset-0 flex flex-col items-center justify-center p-8 bg-black/40 backdrop-blur-[2px] text-center z-10 pointer-events-none">
+                          {project.logoPath ? (
+                            <div className="relative w-72 h-36 md:w-[340px] md:h-[180px] mb-6">
+                              {/* Halo simple */}
+                              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-white/10 blur-[30px] rounded-full z-0 pointer-events-none" />
+                              
+                              <Image 
+                                src={project.logoPath} 
+                                alt={`${project.brandName} logo`}
+                                fill
+                                sizes="(max-width: 768px) 300px, 400px"
+                                className="object-contain relative z-10"
+                              />
+                            </div>
+                          ) : (
+                            <h3 className="font-serif text-5xl md:text-6xl lg:text-7xl text-white tracking-widest uppercase drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)]"
+                                style={{ textShadow: '0 4px 30px rgba(0,0,0,0.8), 0 2px 10px rgba(255,255,255,0.2)' }}
+                            >
+                              {project.brandName}
+                            </h3>
+                          )}
+                        </div>
+                      }
+                      backContent={
+                        <div className="absolute inset-0 w-full h-full p-8 flex flex-col justify-center items-center text-center rounded-2xl border border-white/10"
+                             style={{ background: 'linear-gradient(135deg, rgba(20,20,20,0.95), rgba(0,0,0,0.98))' }}>
+                          <h4 className="font-sans text-[10px] md:text-xs uppercase tracking-[0.3em] text-white/50 mb-6">{isEn ? 'Materials used' : 'Matières utilisées'}</h4>
+                          <div className="flex flex-col gap-4">
+                            {project.materials.map(mat => (
+                              <div key={mat} className="font-serif text-lg md:text-2xl text-white">
+                                {translateMaterial(mat)}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      }
+                    />
+                  </motion.div>
+
+                </motion.div>
+              )
+            })}
+          </div>
+        ) : (
+          <div className="w-full mt-8 flex overflow-x-auto gap-4 px-4 snap-x snap-mandatory pb-8 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+            {fictionalConcepts.map((project, index) => {
+              const isActive = index === activeFictionalIndex;
+              return (
+                <div 
+                  key={project.id} 
+                  className="snap-center shrink-0 w-[280px] h-[380px] flex flex-col cursor-pointer transition-transform duration-300"
+                  onClick={() => {
+                    handleFictionalCardClick(index);
+                    setActiveFictionalFlipped(true);
+                    setActiveFlipped(false);
+                  }}
+                  style={{
+                    transform: isActive ? 'scale(1.02)' : 'scale(0.95)',
+                    opacity: isActive ? 1 : 0.7,
+                  }}
+                >
+                  <div className="w-full h-full relative rounded-2xl overflow-hidden border border-white/15 shadow-[0_8px_30px_rgba(0,0,0,0.5)]">
+                    <Image 
+                      src={project.coverPath} 
+                      alt={project.brandName} 
+                      fill 
+                      className="object-cover" 
+                      sizes="280px" 
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                    
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none p-6">
                         {project.logoPath ? (
-                          <div className="relative w-72 h-36 md:w-[340px] md:h-[180px] mb-6">
-                            {/* Halo simple */}
-                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-white/10 blur-[30px] rounded-full z-0 pointer-events-none" />
-                            
-                            <Image 
-                              src={project.logoPath} 
-                              alt={`${project.brandName} logo`}
-                              fill
-                              sizes="(max-width: 768px) 300px, 400px"
-                              className="object-contain relative z-10"
-                            />
+                          <div className="relative w-full h-24 drop-shadow-[0_4px_10px_rgba(0,0,0,0.8)]">
+                            <Image src={project.logoPath} alt={project.brandName} fill className="object-contain" />
                           </div>
                         ) : (
-                          <h3 className="font-serif text-5xl md:text-6xl lg:text-7xl text-white tracking-widest uppercase drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)]"
-                              style={{ textShadow: '0 4px 30px rgba(0,0,0,0.8), 0 2px 10px rgba(255,255,255,0.2)' }}
-                          >
-                            {project.brandName}
-                          </h3>
+                          <h3 className="font-serif text-4xl text-white uppercase text-center drop-shadow-md">{project.brandName}</h3>
                         )}
-                      </div>
-                    }
-                    backContent={
-                      <div className="absolute inset-0 w-full h-full p-8 flex flex-col justify-center items-center text-center rounded-2xl border border-white/10"
-                           style={{ background: 'linear-gradient(135deg, rgba(20,20,20,0.95), rgba(0,0,0,0.98))' }}>
-                        <h4 className="font-sans text-[10px] md:text-xs uppercase tracking-[0.3em] text-white/50 mb-6">{isEn ? 'Materials used' : 'Matières utilisées'}</h4>
-                        <div className="flex flex-col gap-4">
-                          {project.materials.map(mat => (
-                            <div key={mat} className="font-serif text-lg md:text-2xl text-white">
-                              {translateMaterial(mat)}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    }
-                  />
-                </motion.div>
-
-              </motion.div>
-            )
-          })}
-        </div>
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        )}
 
         {/* ─── PANNEAU ÉDITORIAL MINI (Fictional) ─── */}
         <AnimatePresence>
