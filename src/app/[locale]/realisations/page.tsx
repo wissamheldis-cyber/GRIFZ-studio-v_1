@@ -7,6 +7,7 @@ import { projects, Project } from '@/data/projectsData'
 import { fictionalConcepts, FictionalConcept } from '@/data/fictionalConceptsData'
 import { useTranslations, useLocale } from 'next-intl'
 import { MagicButton } from '@/components/ui/MagicButton'
+import { GlassPanel } from '@/components/ui/GlassPanel'
 
 // --- Composant Mini Carrousel d'images ---
 function ProjectMiniCarousel({ images }: { images: string[] }) {
@@ -206,17 +207,19 @@ export default function RealisationsPage() {
 
             {/* Titre central en haut du carrousel */}
             <motion.div 
-              className="text-center flex flex-col gap-4 mt-8 md:mt-0"
+              className="text-center flex flex-col items-center justify-center mt-8 md:mt-0"
               initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
             >
-              <h1 className="font-serif text-4xl md:text-5xl text-ink">
-                {viewMode === 'realisations' ? t('title') : (isEn ? 'Fictional Visions' : 'Visions Fictives')}
-              </h1>
-              <p className="text-ink-soft font-light text-sm md:text-base">
-                {viewMode === 'realisations' ? t('subtitle') : (isEn ? 'Conceptual exploration of materials through global brands.' : 'Exploration conceptuelle des matières à travers des marques mondiales.')}
-              </p>
+              <GlassPanel className="p-8 md:p-10 flex flex-col gap-4 items-center justify-center max-w-xl mx-auto">
+                <h1 className="font-serif text-4xl md:text-5xl text-ink">
+                  {viewMode === 'realisations' ? t('title') : (isEn ? 'Fictional Visions' : 'Visions Fictives')}
+                </h1>
+                <p className="text-ink-soft font-light text-sm md:text-base">
+                  {viewMode === 'realisations' ? t('subtitle') : (isEn ? 'Conceptual exploration of materials through global brands.' : 'Exploration conceptuelle des matières à travers des marques mondiales.')}
+                </p>
+              </GlassPanel>
             </motion.div>
 
             {/* Carrousel Logos (Desktop 3D / Mobile 2D) */}
