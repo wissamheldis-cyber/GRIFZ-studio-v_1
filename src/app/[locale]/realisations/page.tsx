@@ -8,7 +8,6 @@ import { fictionalConcepts, FictionalConcept } from '@/data/fictionalConceptsDat
 import { useTranslations, useLocale } from 'next-intl'
 import { MagicButton } from '@/components/ui/MagicButton'
 import { GlassPanel } from '@/components/ui/GlassPanel'
-import ThreeRain from '@/components/ui/ThreeRain'
 
 // --- Composant Mini Carrousel d'images ---
 function ProjectMiniCarousel({ images }: { images: string[] }) {
@@ -141,10 +140,16 @@ export default function RealisationsPage() {
               <div 
                 onClick={goRealisations}
                 className="flex-1 hover:flex-[2] transition-all duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] flex items-center justify-center relative cursor-pointer group/item overflow-hidden"
-                style={{ background: 'radial-gradient(circle at center, #1a1a1a, #000000)' }}
+                style={{ background: 'radial-gradient(circle 1200px at 0% 0%, #2a2a2a, #050505)' }}
               >
-                <ThreeRain color="#ffffff" className="opacity-30 group-hover/item:opacity-100 transition-opacity duration-700" />
-                <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay pointer-events-none"></div>
+                {/* The Editorial Pattern (Light streaks & borders) */}
+                <div className="absolute pointer-events-none transition-all duration-700 group-hover/item:opacity-60" style={{ width: '600px', height: '100px', borderRadius: '100px', backgroundColor: '#c7c7c7', opacity: 0.15, filter: 'blur(40px)', transformOrigin: '0%', top: '0%', left: '0%', transform: 'rotate(40deg)', zIndex: 1 }} />
+                <div className="absolute pointer-events-none transition-all duration-700 group-hover/item:opacity-100" style={{ top: '10%', left: 0, right: 0, height: '1px', background: 'linear-gradient(90deg, #888888 30%, #1d1f1f 70%)', opacity: 0.3 }} />
+                <div className="absolute pointer-events-none transition-all duration-700 group-hover/item:opacity-100" style={{ bottom: '10%', left: 0, right: 0, height: '1px', background: 'linear-gradient(90deg, #2c2c2c 30%, #1d1f1f 70%)', opacity: 0.3 }} />
+                <div className="absolute pointer-events-none transition-all duration-700 group-hover/item:opacity-100" style={{ left: '5%', top: 0, bottom: 0, width: '1px', background: 'linear-gradient(180deg, #747474 30%, #222424 70%)', opacity: 0.3 }} />
+                <div className="absolute pointer-events-none transition-all duration-700 group-hover/item:opacity-100" style={{ right: '5%', top: 0, bottom: 0, width: '1px', background: 'linear-gradient(180deg, #2c2c2c 30%, #222424 70%)', opacity: 0.3 }} />
+
+                <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.03] mix-blend-overlay pointer-events-none"></div>
                 <div className="absolute inset-0 bg-white/5 opacity-0 group-hover/item:opacity-100 transition-opacity duration-700 pointer-events-none" />
                 <h3 className="font-serif text-3xl md:text-6xl text-white/50 group-hover/item:text-white transition-colors duration-700 z-10 tracking-[0.2em] text-center drop-shadow-2xl">
                   {t('title')}
@@ -152,16 +157,22 @@ export default function RealisationsPage() {
               </div>
               
               {/* Ligne séparatrice */}
-              <div className="w-px h-full bg-white/20 z-20 shadow-[0_0_15px_rgba(255,255,255,0.5)]"></div>
+              <div className="w-px h-full bg-white/10 z-20 shadow-[0_0_15px_rgba(255,255,255,0.2)]"></div>
               
               {/* Bloc Droit - Visions Fictives */}
               <div 
                 onClick={goFictional}
                 className="flex-1 hover:flex-[2] transition-all duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] flex items-center justify-center relative cursor-pointer group/item overflow-hidden"
-                style={{ background: 'radial-gradient(circle at center, #151b22, #050505)' }}
+                style={{ background: 'radial-gradient(circle 1200px at 100% 100%, #1a2233, #050505)' }}
               >
-                <ThreeRain color="#00aaff" className="opacity-30 group-hover/item:opacity-100 transition-opacity duration-700" />
-                <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay pointer-events-none"></div>
+                {/* The Editorial Pattern (Light streaks & borders) slightly bluish */}
+                <div className="absolute pointer-events-none transition-all duration-700 group-hover/item:opacity-60" style={{ width: '600px', height: '100px', borderRadius: '100px', backgroundColor: '#5599ff', opacity: 0.1, filter: 'blur(40px)', transformOrigin: '100%', bottom: '0%', right: '0%', transform: 'rotate(40deg)', zIndex: 1 }} />
+                <div className="absolute pointer-events-none transition-all duration-700 group-hover/item:opacity-100" style={{ top: '10%', left: 0, right: 0, height: '1px', background: 'linear-gradient(90deg, #1d1f1f 30%, #5588cc 70%)', opacity: 0.3 }} />
+                <div className="absolute pointer-events-none transition-all duration-700 group-hover/item:opacity-100" style={{ bottom: '10%', left: 0, right: 0, height: '1px', background: 'linear-gradient(90deg, #1d1f1f 30%, #2c3a50 70%)', opacity: 0.3 }} />
+                <div className="absolute pointer-events-none transition-all duration-700 group-hover/item:opacity-100" style={{ left: '5%', top: 0, bottom: 0, width: '1px', background: 'linear-gradient(180deg, #222424 30%, #2c3a50 70%)', opacity: 0.3 }} />
+                <div className="absolute pointer-events-none transition-all duration-700 group-hover/item:opacity-100" style={{ right: '5%', top: 0, bottom: 0, width: '1px', background: 'linear-gradient(180deg, #222424 30%, #5588cc 70%)', opacity: 0.3 }} />
+
+                <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.03] mix-blend-overlay pointer-events-none"></div>
                 <div className="absolute inset-0 bg-blue-500/5 opacity-0 group-hover/item:opacity-100 transition-opacity duration-700 pointer-events-none" />
                 <h3 className="font-serif text-3xl md:text-6xl text-white/50 group-hover/item:text-white transition-colors duration-700 z-10 tracking-[0.2em] text-center drop-shadow-2xl">
                   {isEn ? 'Fictional Visions' : 'Visions Fictives'}
