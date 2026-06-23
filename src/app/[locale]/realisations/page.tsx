@@ -222,104 +222,65 @@ export default function RealisationsPage() {
               </GlassPanel>
             </motion.div>
 
-            {/* Carrousel Logos (Desktop 3D / Mobile 2D) */}
+            {/* Carrousel Logos (3D Coverflow Universel) */}
             <div className="mt-8 w-full max-w-[100vw]">
-              {!isMobile ? (
-                /* Coverflow 3D pour Desktop */
-                <div className="relative w-full h-[400px] md:h-[500px] flex items-center justify-center" style={{ perspective: '1200px' }}>
-                  {currentList.map((item, index) => {
-                    const offset = index - activeIndex
-                    const isActive = offset === 0
+              <div className="relative w-full h-[400px] md:h-[500px] flex items-center justify-center" style={{ perspective: '1200px' }}>
+                {currentList.map((item, index) => {
+                  const offset = index - activeIndex
+                  const isActive = offset === 0
 
-                    const translateX = offset * 280
-                    const translateZ = Math.abs(offset) * -200 + (isActive && showDetails ? 40 : 0)
-                    const rotateY = offset * -25
-                    const scale = 1 - Math.abs(offset) * 0.1
-                    const opacity = showDetails && !isActive
-                      ? Math.max(0, 1 - Math.abs(offset) * 0.3 - 0.6)
-                      : 1 - Math.abs(offset) * 0.3
-                    const zIndex = isActive && showDetails ? 100 : 50 - Math.abs(offset)
-                    
-                    const filterBlur = showDetails && !isActive
-                      ? `brightness(0.2) blur(4px)`
-                      : Math.abs(offset) > 0 ? `brightness(${Math.max(0.4, 1 - Math.abs(offset) * 0.2)}) blur(${Math.abs(offset) * 2}px)` : 'brightness(1) blur(0px)'
+                  const translateX = offset * (isMobile ? 140 : 280)
+                  const translateZ = Math.abs(offset) * -200 + (isActive && showDetails ? 40 : 0)
+                  const rotateY = offset * -25
+                  const scale = 1 - Math.abs(offset) * 0.1
+                  const opacity = showDetails && !isActive
+                    ? Math.max(0, 1 - Math.abs(offset) * 0.3 - 0.6)
+                    : 1 - Math.abs(offset) * 0.3
+                  const zIndex = isActive && showDetails ? 100 : 50 - Math.abs(offset)
+                  
+                  const filterBlur = showDetails && !isActive
+                    ? `brightness(0.2) blur(4px)`
+                    : Math.abs(offset) > 0 ? `brightness(${Math.max(0.4, 1 - Math.abs(offset) * 0.2)}) blur(${Math.abs(offset) * 2}px)` : 'brightness(1) blur(0px)'
 
-                    return (
+                  return (
+                    <motion.div
+                      key={item.id}
+                      className="absolute top-0 bottom-0 flex flex-col items-center justify-center cursor-pointer"
+                      style={{ zIndex }}
+                      animate={{
+                        x: translateX,
+                        z: translateZ,
+                        rotateY: rotateY,
+                        scale: scale,
+                        opacity: opacity,
+                        filter: filterBlur,
+                      }}
+                      transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+                      onClick={() => handleCardClick(index)}
+                    >
                       <motion.div
-                        key={item.id}
-                        className="absolute top-0 bottom-0 flex flex-col items-center justify-center cursor-pointer"
-                        style={{ zIndex }}
-                        animate={{
-                          x: translateX,
-                          z: translateZ,
-                          rotateY: rotateY,
-                          scale: scale,
-                          opacity: opacity,
-                          filter: filterBlur,
-                        }}
-                        transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-                        onClick={() => handleCardClick(index)}
+                        animate={
+                          isActive && showDetails 
+                            ? { y: -15 }
+                            : prefersReducedMotion ? {} : { y: [0, -10, 0] }
+                        }
+                        transition={
+                          isActive && showDetails
+                            ? { type: 'spring', stiffness: 300, damping: 20 }
+                            : { duration: 4, repeat: Infinity, ease: "easeInOut", delay: index * 0.2 }
+                        }
+                        className="w-[180px] h-[180px] md:w-[350px] md:h-[350px] flex items-center justify-center relative transition-transform duration-500 hover:scale-110"
                       >
-                        <motion.div
-                          animate={
-                            isActive && showDetails 
-                              ? { y: -15 }
-                              : prefersReducedMotion ? {} : { y: [0, -10, 0] }
-                          }
-                          transition={
-                            isActive && showDetails
-                              ? { type: 'spring', stiffness: 300, damping: 20 }
-                              : { duration: 4, repeat: Infinity, ease: "easeInOut", delay: index * 0.2 }
-                          }
-                          className="w-[200px] h-[200px] md:w-[350px] md:h-[350px] flex items-center justify-center relative transition-transform duration-500 hover:scale-110"
-                        >
-                          {item.logoPath ? (
-                            <Image src={item.logoPath} alt={'title' in item ? item.title : item.brandName} fill className="object-contain drop-shadow-[0_10px_25px_rgba(255,255,255,0.15)]" sizes="350px" />
-                          ) : (
-                            <h3 className="font-serif text-3xl md:text-5xl text-white drop-shadow-2xl text-center uppercase tracking-widest">{'title' in item ? item.title : item.brandName}</h3>
-                          )}
-                        </motion.div>
+                        {item.logoPath ? (
+                          <Image src={item.logoPath} alt={'title' in item ? item.title : item.brandName} fill className="object-contain drop-shadow-[0_10px_25px_rgba(255,255,255,0.15)]" sizes="(max-width: 768px) 180px, 350px" />
+                        ) : (
+                          <h3 className="font-serif text-3xl md:text-5xl text-white drop-shadow-2xl text-center uppercase tracking-widest">{'title' in item ? item.title : item.brandName}</h3>
+                        )}
                       </motion.div>
-                    )
-                  })}
-                </div>
-              ) : (
-                /* Native Slider 2D pour Mobile */
-                <div className="w-full flex overflow-x-auto gap-16 px-[50vw] snap-x snap-mandatory py-16 scrollbar-hide items-center h-[300px]">
-                  <div className="-ml-[100px] shrink-0" />
-                  {currentList.map((item, index) => {
-                    const isActive = index === activeIndex
-                    return (
-                      <div 
-                        key={item.id}
-                        className="snap-center shrink-0 w-[180px] h-[180px] flex flex-col items-center justify-center cursor-pointer"
-                        onClick={() => handleCardClick(index)}
-                      >
-                        <motion.div
-                          animate={{ 
-                            y: isActive && showDetails ? -10 : [0, -8, 0],
-                            scale: isActive ? 1.1 : 0.8,
-                            opacity: isActive ? 1 : 0.5,
-                          }}
-                          transition={
-                            isActive && showDetails
-                              ? { type: 'spring', stiffness: 300, damping: 20 }
-                              : { duration: 3, repeat: Infinity, ease: "easeInOut", delay: index * 0.2 }
-                          }
-                          className="relative w-full h-full flex items-center justify-center"
-                        >
-                          {item.logoPath ? (
-                            <Image src={item.logoPath} alt={'title' in item ? item.title : item.brandName} fill className="object-contain drop-shadow-[0_10px_20px_rgba(255,255,255,0.1)]" sizes="180px" />
-                          ) : (
-                            <h3 className="font-serif text-2xl text-white drop-shadow-xl text-center uppercase tracking-widest w-full">{'title' in item ? item.title : item.brandName}</h3>
-                          )}
-                        </motion.div>
-                      </div>
-                    )
-                  })}
-                  <div className="-mr-[100px] shrink-0" />
-                </div>
-              )}
+                    </motion.div>
+                  )
+                })}
+              </div>
             </div>
 
             {/* ─── PANNEAU ÉDITORIAL (Restauration de l'ancien panneau) ─── */}
