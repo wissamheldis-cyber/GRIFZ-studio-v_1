@@ -31,43 +31,18 @@ function ProjectMiniCarousel({ images }: { images: string[] }) {
           transition={{ duration: 0.5 }}
           className="absolute inset-0"
         >
-          <Image
-            src={images[index]}
-            alt={`Gallery image ${index + 1}`}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 50vw"
-            quality={85}
-          />
+          <Image src={images[index]} alt={`Gallery image ${index + 1}`} fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" quality={85} />
         </motion.div>
       </AnimatePresence>
-
-      <div 
-        className="absolute inset-0 pointer-events-none z-[1]"
-        style={{
-          background: 'linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 50%, rgba(0,0,0,0.04) 100%)',
-          mixBlendMode: 'overlay',
-        }}
-      />
-      <div 
-        className="absolute top-0 left-0 right-0 h-[30%] pointer-events-none z-[1]"
-        style={{
-          background: 'linear-gradient(to bottom, rgba(255,255,255,0.12) 0%, transparent 100%)',
-        }}
-      />
-
+      <div className="absolute inset-0 pointer-events-none z-[1]" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 50%, rgba(0,0,0,0.04) 100%)', mixBlendMode: 'overlay' }} />
+      <div className="absolute top-0 left-0 right-0 h-[30%] pointer-events-none z-[1]" style={{ background: 'linear-gradient(to bottom, rgba(255,255,255,0.12) 0%, transparent 100%)' }} />
       {images.length > 1 && (
         <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex gap-2.5 z-10 bg-black/30 backdrop-blur-xl px-4 py-2 rounded-full border border-white/15 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           {images.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setIndex(i)}
-              className={`w-2 h-2 rounded-full transition-all duration-300 ${i === index ? 'bg-white scale-125 shadow-[0_0_6px_rgba(255,255,255,0.5)]' : 'bg-white/40 hover:bg-white/60'}`}
-            />
+            <button key={i} onClick={() => setIndex(i)} className={`w-2 h-2 rounded-full transition-all duration-300 ${i === index ? 'bg-white scale-125 shadow-[0_0_6px_rgba(255,255,255,0.5)]' : 'bg-white/40 hover:bg-white/60'}`} />
           ))}
         </div>
       )}
-      
       {images.length > 1 && (
         <>
           <div className="absolute top-0 left-0 w-1/4 h-full cursor-pointer z-0" onClick={() => setIndex((index - 1 + images.length) % images.length)} />
@@ -100,14 +75,7 @@ export default function RealisationsPage() {
 
   const translateMaterial = (mat: string) => {
     if (!isEn) return mat;
-    const map: Record<string, string> = {
-      'Aluminium': 'Aluminum', 'Cuivre': 'Copper', 'Graphite': 'Graphite', 'Lithium': 'Lithium',
-      'Gallium': 'Gallium', 'Tungstène': 'Tungsten', 'Cuir Classic': 'Classic Leather', 
-      'Cuir Rouge': 'Red Leather', 'Cuir Vert': 'Green Leather', 'Cuir Beige': 'Beige Leather',
-      'Charbon': 'Charcoal', 'Chrome': 'Chrome', 'Palladium': 'Palladium', 'Indium': 'Indium',
-      'Céréales': 'Cereals', 'PET': 'PET', 'Caoutchouc naturel': 'Natural Rubber', 'Bois': 'Wood',
-      'Coton': 'Cotton', 'PVC': 'PVC', 'Titane': 'Titanium'
-    };
+    const map: Record<string, string> = { 'Aluminium': 'Aluminum', 'Cuivre': 'Copper', 'Graphite': 'Graphite', 'Lithium': 'Lithium', 'Gallium': 'Gallium', 'Tungstène': 'Tungsten', 'Cuir Classic': 'Classic Leather', 'Cuir Rouge': 'Red Leather', 'Cuir Vert': 'Green Leather', 'Cuir Beige': 'Beige Leather', 'Charbon': 'Charcoal', 'Chrome': 'Chrome', 'Palladium': 'Palladium', 'Indium': 'Indium', 'Céréales': 'Cereals', 'PET': 'PET', 'Caoutchouc naturel': 'Natural Rubber', 'Bois': 'Wood', 'Coton': 'Cotton', 'PVC': 'PVC', 'Titane': 'Titanium' };
     return map[mat] || mat;
   };
 
@@ -117,31 +85,44 @@ export default function RealisationsPage() {
   const handleCardClick = (index: number) => {
     if (activeIndex === index) {
       setShowDetails(true)
-      window.dispatchEvent(new CustomEvent('card-flip', { 
-        detail: { isFlipped: true, color: currentList[index].rainColor } 
-      }))
-      setTimeout(() => {
-        window.scrollTo({ top: 300, behavior: 'smooth' })
-      }, 150)
+      window.dispatchEvent(new CustomEvent('card-flip', { detail: { isFlipped: true, color: currentList[index].rainColor } }))
+      setTimeout(() => window.scrollTo({ top: 300, behavior: 'smooth' }), 150)
     } else {
       setActiveIndex(index)
       setShowDetails(false)
-      window.dispatchEvent(new CustomEvent('card-flip', { 
-        detail: { isFlipped: false } 
-      }))
+      window.dispatchEvent(new CustomEvent('card-flip', { detail: { isFlipped: false } }))
     }
   }
 
   const handleCloseDetails = () => {
     setShowDetails(false)
-    window.dispatchEvent(new CustomEvent('card-flip', { 
-      detail: { isFlipped: false } 
-    }))
+    window.dispatchEvent(new CustomEvent('card-flip', { detail: { isFlipped: false } }))
     setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100)
   }
 
+  const goRealisations = () => { setViewMode('realisations'); setActiveIndex(0); setShowDetails(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  const goFictional = () => { setViewMode('fictional'); setActiveIndex(0); setShowDetails(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+
   return (
     <main className="min-h-[100dvh] pt-32 pb-32 flex flex-col items-center justify-center relative overflow-hidden">
+
+      <style dangerouslySetInnerHTML={{ __html: `
+        .text-outline {
+          -webkit-text-stroke: 1px rgba(255,255,255,0.3);
+          color: transparent;
+          transition: all 0.5s ease;
+        }
+        .text-outline:hover {
+          -webkit-text-stroke: 1px rgba(255,255,255,1);
+          color: rgba(255,255,255,1);
+          text-shadow: 0 0 20px rgba(255,255,255,0.5);
+        }
+        .bg-clip-text-video {
+          background: linear-gradient(90deg, #ff0000, #0000ff);
+          -webkit-background-clip: text;
+          color: transparent;
+        }
+      `}} />
 
       <AnimatePresence mode="wait">
         {viewMode === 'selection' ? (
@@ -151,35 +132,118 @@ export default function RealisationsPage() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.6 }}
-            className="flex flex-col md:flex-row gap-6 md:gap-12 items-center justify-center w-full px-4 mt-20"
+            className="flex flex-col gap-32 items-center w-full mt-10"
           >
-            {/* Bouton Nos Réalisations (Même style que Reserver un appel) */}
-            <div onClick={() => { setViewMode('realisations'); setActiveIndex(0); setShowDetails(false); }}>
-              <MagicButton className="px-12 py-6 text-lg group">
-                <span className="flex items-center justify-center gap-4">
-                  <span className="font-sans tracking-[0.2em] uppercase font-medium">{t('title')}</span>
-                  <span className="transition-transform duration-300 group-hover:translate-x-2">→</span>
-                </span>
-              </MagicButton>
+            <div className="text-center mb-10 border-b border-white/20 pb-4">
+               <h1 className="font-serif text-3xl text-white/50 tracking-widest uppercase">Exploration des 4 Concepts</h1>
+               <p className="text-white/30 font-sans mt-2">Scrollez pour découvrir et cliquez sur une option pour valider</p>
             </div>
 
-            {/* Bouton Visions Fictives (Style grisâtre) */}
-            <div 
-              onClick={() => { setViewMode('fictional'); setActiveIndex(0); setShowDetails(false); }}
-              style={{
-                '--color-wrapper-border': 'rgba(255, 255, 255, 0.1)',
-                '--color-btn-bg': 'rgba(100, 100, 100, 0.05)',
-                '--color-layer-b': 'rgba(150, 150, 150, 0.2)',
-                '--color-overlay-text': 'rgba(255, 255, 255, 0.6)',
-              } as React.CSSProperties}
-            >
-              <MagicButton className="px-12 py-6 text-lg group" style={{ filter: 'grayscale(0.8)' }}>
-                <span className="flex items-center justify-center gap-4">
-                  <span className="font-sans tracking-[0.2em] uppercase font-medium">{isEn ? 'Fictional Visions' : 'Visions Fictives'}</span>
-                  <span className="transition-transform duration-300 group-hover:translate-x-2">→</span>
-                </span>
-              </MagicButton>
+            {/* CONCEPT 1: LA FAILLE DIMENSIONNELLE */}
+            <div className="w-full flex flex-col items-center">
+              <h2 className="font-sans text-xs uppercase tracking-[0.3em] text-white/40 mb-8">Concept 1 : La Faille Dimensionnelle</h2>
+              <div className="w-full max-w-[1400px] h-[500px] flex overflow-hidden rounded-3xl border border-white/10 group/container">
+                {/* Bloc Gauche */}
+                <div 
+                  onClick={goRealisations}
+                  className="flex-1 hover:flex-[2] transition-all duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] flex items-center justify-center relative cursor-pointer group/item overflow-hidden"
+                  style={{ background: 'radial-gradient(circle at center, #1a1a1a, #000000)' }}
+                >
+                  <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay"></div>
+                  <div className="absolute inset-0 bg-white/5 opacity-0 group-hover/item:opacity-100 transition-opacity duration-700" />
+                  <h3 className="font-serif text-3xl md:text-5xl text-white/50 group-hover/item:text-white transition-colors duration-700 z-10 tracking-widest text-center">
+                    {t('title')}
+                  </h3>
+                </div>
+                {/* Ligne séparatrice */}
+                <div className="w-px h-full bg-white/20 z-20"></div>
+                {/* Bloc Droit */}
+                <div 
+                  onClick={goFictional}
+                  className="flex-1 hover:flex-[2] transition-all duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] flex items-center justify-center relative cursor-pointer group/item overflow-hidden"
+                  style={{ background: 'radial-gradient(circle at center, #2c2c2c, #0a0a0a)' }}
+                >
+                  <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay"></div>
+                  <div className="absolute inset-0 bg-white/5 opacity-0 group-hover/item:opacity-100 transition-opacity duration-700" />
+                  <h3 className="font-serif text-3xl md:text-5xl text-white/50 group-hover/item:text-white transition-colors duration-700 z-10 tracking-widest text-center">
+                    {isEn ? 'Fictional Visions' : 'Visions Fictives'}
+                  </h3>
+                </div>
+              </div>
             </div>
+
+            {/* CONCEPT 2: LES MONOLITHES DE VERRE */}
+            <div className="w-full flex flex-col items-center mt-20">
+              <h2 className="font-sans text-xs uppercase tracking-[0.3em] text-white/40 mb-8">Concept 2 : Les Monolithes de Verre</h2>
+              <div className="w-full max-w-5xl flex flex-col md:flex-row gap-8 md:gap-16 items-center justify-center h-[600px]" style={{ perspective: '1500px' }}>
+                <div 
+                  onClick={goRealisations}
+                  className="w-[300px] h-[450px] cursor-pointer group"
+                >
+                  <GlassPanel className="w-full h-full flex flex-col items-center justify-center transition-all duration-700 md:-rotate-y-12 md:group-hover:rotate-y-0 md:group-hover:scale-105 border-white/5 group-hover:border-white/20">
+                    <h3 className="font-serif text-3xl text-white text-center tracking-widest leading-relaxed">
+                      {t('title').split(' ').map((w,i) => <span key={i} className="block">{w}</span>)}
+                    </h3>
+                  </GlassPanel>
+                </div>
+                <div 
+                  onClick={goFictional}
+                  className="w-[300px] h-[450px] cursor-pointer group"
+                >
+                  <GlassPanel strong className="w-full h-full flex flex-col items-center justify-center transition-all duration-700 md:rotate-y-12 md:group-hover:rotate-y-0 md:group-hover:scale-105 border-white/5 group-hover:border-white/20">
+                    <h3 className="font-serif text-3xl text-white text-center tracking-widest leading-relaxed">
+                       {(isEn ? 'Fictional Visions' : 'Visions Fictives').split(' ').map((w,i) => <span key={i} className="block">{w}</span>)}
+                    </h3>
+                  </GlassPanel>
+                </div>
+              </div>
+            </div>
+
+            {/* CONCEPT 3: TYPOGRAPHIE BRUTALISTE */}
+            <div className="w-full flex flex-col items-center mt-20">
+              <h2 className="font-sans text-xs uppercase tracking-[0.3em] text-white/40 mb-16">Concept 3 : Typographie Brutaliste</h2>
+              <div className="w-full flex flex-col items-center justify-center gap-12 group/container">
+                <h1 
+                  onClick={goRealisations}
+                  className="font-serif text-5xl md:text-8xl lg:text-[10rem] text-outline cursor-pointer leading-none text-center"
+                >
+                  {t('title').toUpperCase()}
+                </h1>
+                <h1 
+                  onClick={goFictional}
+                  className="font-serif text-5xl md:text-8xl lg:text-[10rem] text-outline cursor-pointer leading-none text-center"
+                >
+                  {isEn ? 'FICTIONAL VISIONS' : 'VISIONS FICTIVES'}
+                </h1>
+              </div>
+            </div>
+
+            {/* CONCEPT 4: LE PORTAIL DE PROFONDEUR */}
+            <div className="w-full flex flex-col items-center mt-40 mb-40">
+              <h2 className="font-sans text-xs uppercase tracking-[0.3em] text-white/40 mb-16">Concept 4 : Z-Axis Navigation (Profondeur)</h2>
+              <div className="relative w-full h-[500px] flex items-center justify-center group/portal">
+                <div 
+                  onClick={goFictional}
+                  className="absolute z-10 scale-50 opacity-30 blur-[4px] hover:scale-75 hover:opacity-100 hover:blur-none transition-all duration-700 ease-out cursor-pointer -translate-y-20"
+                >
+                  <h3 className="font-serif text-4xl md:text-6xl text-white tracking-widest">
+                    {isEn ? 'Fictional Visions' : 'Visions Fictives'}
+                  </h3>
+                </div>
+                
+                <div 
+                  onClick={goRealisations}
+                  className="absolute z-20 scale-100 opacity-100 blur-0 hover:scale-110 transition-all duration-700 ease-out cursor-pointer translate-y-10 group-hover/portal:opacity-20 group-hover/portal:blur-md hover:!opacity-100 hover:!blur-none"
+                >
+                  <GlassPanel className="px-16 py-8 rounded-full border-white/20">
+                    <h3 className="font-serif text-5xl md:text-7xl text-white tracking-widest">
+                      {t('title')}
+                    </h3>
+                  </GlassPanel>
+                </div>
+              </div>
+            </div>
+
           </motion.div>
         ) : (
           <motion.div 
@@ -283,7 +347,7 @@ export default function RealisationsPage() {
               </div>
             </div>
 
-            {/* ─── PANNEAU ÉDITORIAL (Restauration de l'ancien panneau) ─── */}
+            {/* ─── PANNEAU ÉDITORIAL ─── */}
             <AnimatePresence>
               {showDetails && activeProject && (
                 <motion.div
@@ -294,60 +358,28 @@ export default function RealisationsPage() {
                   className="w-full max-w-5xl mx-auto overflow-hidden mt-2 md:mt-8 mb-20"
                 >
                   <style dangerouslySetInnerHTML={{ __html: `
-                    @keyframes moveDotPanel {
-                      0%, 100% { top: 8%; right: 8%; }
-                      25% { top: 8%; right: calc(100% - 30px); }
-                      50% { top: calc(100% - 24px); right: calc(100% - 30px); }
-                      75% { top: calc(100% - 24px); right: 8%; }
-                    }
-                    .panel-dot {
-                      width: 5px;
-                      aspect-ratio: 1;
-                      position: absolute;
-                      background-color: #fff;
-                      border-radius: 100px;
-                      z-index: 20;
-                      animation: moveDotPanel 8s linear infinite;
-                    }
-                    @media (max-width: 768px) {
-                      .panel-dot { display: none; }
-                    }
+                    @keyframes moveDotPanel { 0%, 100% { top: 8%; right: 8%; } 25% { top: 8%; right: calc(100% - 30px); } 50% { top: calc(100% - 24px); right: calc(100% - 30px); } 75% { top: calc(100% - 24px); right: 8%; } }
+                    .panel-dot { width: 5px; aspect-ratio: 1; position: absolute; background-color: #fff; border-radius: 100px; z-index: 20; animation: moveDotPanel 8s linear infinite; }
+                    @media (max-width: 768px) { .panel-dot { display: none; } }
                   `}} />
 
                   <div 
                     className="mx-4 md:mx-0 relative"
-                    style={{
-                      borderRadius: '16px',
-                      padding: '1px',
-                      background: 'radial-gradient(circle 600px at 0% 0%, #ffffff, #0c0d0d)',
-                    }}
+                    style={{ borderRadius: '16px', padding: '1px', background: 'radial-gradient(circle 600px at 0% 0%, #ffffff, #0c0d0d)' }}
                   >
                     <div className="panel-dot" />
 
                     <div 
                       className="relative w-full overflow-hidden"
-                      style={{
-                        borderRadius: '15px',
-                        border: '1px solid #202222',
-                        background: 'radial-gradient(circle 800px at 0% 0%, #333333, #0c0d0d)',
-                      }}
+                      style={{ borderRadius: '15px', border: '1px solid #202222', background: 'radial-gradient(circle 800px at 0% 0%, #333333, #0c0d0d)' }}
                     >
-                      <div 
-                        className="absolute pointer-events-none"
-                        style={{
-                          width: '280px', height: '50px', borderRadius: '100px', backgroundColor: '#c7c7c7', opacity: 0.3,
-                          filter: 'blur(12px)', transformOrigin: '10%', top: '0%', left: '0', transform: 'rotate(40deg)', zIndex: 1,
-                        }}
-                      />
-
+                      <div className="absolute pointer-events-none" style={{ width: '280px', height: '50px', borderRadius: '100px', backgroundColor: '#c7c7c7', opacity: 0.3, filter: 'blur(12px)', transformOrigin: '10%', top: '0%', left: '0', transform: 'rotate(40deg)', zIndex: 1 }} />
                       <div className="absolute pointer-events-none" style={{ top: '8%', left: 0, right: 0, height: '1px', background: 'linear-gradient(90deg, #888888 30%, #1d1f1f 70%)' }} />
                       <div className="absolute pointer-events-none" style={{ bottom: '8%', left: 0, right: 0, height: '1px', background: 'linear-gradient(90deg, #2c2c2c 30%, #1d1f1f 70%)' }} />
                       <div className="absolute pointer-events-none" style={{ left: '5%', top: 0, bottom: 0, width: '1px', background: 'linear-gradient(180deg, #747474 30%, #222424 70%)' }} />
                       <div className="absolute pointer-events-none" style={{ right: '5%', top: 0, bottom: 0, width: '1px', background: 'linear-gradient(180deg, #2c2c2c 30%, #222424 70%)' }} />
 
                       <div className="relative z-10 flex flex-col md:flex-row items-stretch" style={{ padding: '10% 7%' }}>
-                        
-                        {/* Bloc Texte */}
                         <div className="flex-1 flex flex-col gap-6 text-left pr-0 md:pr-12">
                           {viewMode === 'realisations' ? (
                             <>
@@ -356,105 +388,62 @@ export default function RealisationsPage() {
                                   <span className="font-sans text-[10px] md:text-xs uppercase tracking-widest text-white/40 border border-white/20 px-3 py-1 rounded-full">
                                     {t('lbl_type')}: {isEn ? (activeProject as Project).projectTypeEn : (activeProject as Project).projectTypeFr}
                                   </span>
-                                  {(activeProject as Project).offerIllustrated && (
-                                    <span className="font-sans text-[10px] md:text-xs uppercase tracking-widest text-white/80 border border-white/40 px-3 py-1 rounded-full shadow-[0_0_10px_rgba(255,255,255,0.1)]">
-                                      {(activeProject as Project).offerIllustrated}
-                                    </span>
-                                  )}
                                 </div>
                                 <h3 className="font-serif text-3xl md:text-4xl lg:text-5xl text-white leading-tight">{(activeProject as Project).title}</h3>
                               </div>
-
                               <div className="w-8 h-px bg-white/20" />
-
                               <div className="flex flex-col gap-1">
                                 <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/30">{t('lbl_contribution')}</span>
-                                <p className="font-sans text-xs md:text-sm text-white/80 leading-[1.6] font-light">
-                                  {isEn ? (activeProject as Project).contributionEn : (activeProject as Project).contributionFr}
-                                </p>
+                                <p className="font-sans text-xs md:text-sm text-white/80 leading-[1.6] font-light">{isEn ? (activeProject as Project).contributionEn : (activeProject as Project).contributionFr}</p>
                               </div>
-
                               <div className="flex flex-col gap-2">
                                 <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/30">{t('lbl_deliverables')}</span>
                                 <div className="flex flex-wrap gap-2">
-                                  {(activeProject as Project).deliverables.map((d: string) => (
-                                    <span key={d} className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.1em] text-white/60 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full">
-                                      {d}
-                                    </span>
-                                  ))}
+                                  {(activeProject as Project).deliverables.map((d: string) => <span key={d} className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.1em] text-white/60 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full">{d}</span>)}
                                 </div>
                               </div>
-
                               <div className="flex flex-col gap-1">
                                 <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/30">{t('lbl_demonstrates')}</span>
-                                <p className="font-sans text-xs md:text-sm text-white/80 leading-[1.6] font-light">
-                                  {isEn ? (activeProject as Project).demonstratesEn : (activeProject as Project).demonstratesFr}
-                                </p>
+                                <p className="font-sans text-xs md:text-sm text-white/80 leading-[1.6] font-light">{isEn ? (activeProject as Project).demonstratesEn : (activeProject as Project).demonstratesFr}</p>
                               </div>
                             </>
                           ) : (
                             <>
-                              {/* Fictional Text Block */}
                               <div className="flex flex-col gap-4">
                                 <div className="flex flex-wrap gap-2">
-                                  <span className="font-sans text-[10px] md:text-xs uppercase tracking-widest text-white/40 border border-white/20 px-3 py-1 rounded-full">
-                                    {isEn ? 'Fictional Concept' : 'Concept Fictif'}
-                                  </span>
+                                  <span className="font-sans text-[10px] md:text-xs uppercase tracking-widest text-white/40 border border-white/20 px-3 py-1 rounded-full">{isEn ? 'Fictional Concept' : 'Concept Fictif'}</span>
                                 </div>
                                 <h3 className="font-serif text-3xl md:text-4xl lg:text-5xl text-white leading-tight">{(activeProject as FictionalConcept).brandName}</h3>
                               </div>
-
                               <div className="w-8 h-px bg-white/20" />
-
-                              <p className="font-sans text-xs md:text-sm text-white/40 italic font-light">
-                                {t('fictional_disclaimer')}
-                              </p>
-
+                              <p className="font-sans text-xs md:text-sm text-white/40 italic font-light">{t('fictional_disclaimer')}</p>
                               <div className="flex flex-col gap-1">
                                 <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/30">{t('lbl_contribution')}</span>
-                                <p className="font-sans text-xs md:text-sm text-white/80 leading-[1.6] font-light">
-                                  {t('fictional_contribution')}
-                                </p>
+                                <p className="font-sans text-xs md:text-sm text-white/80 leading-[1.6] font-light">{t('fictional_contribution')}</p>
                               </div>
-
                               <div className="flex flex-col gap-2">
                                 <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/30">{isEn ? 'Materials' : 'Matières'}</span>
                                 <div className="flex flex-wrap gap-2">
-                                  {(activeProject as FictionalConcept).materials.map((m: string) => (
-                                    <span key={m} className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.1em] text-white/60 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full">
-                                      {translateMaterial(m)}
-                                    </span>
-                                  ))}
+                                  {(activeProject as FictionalConcept).materials.map((m: string) => <span key={m} className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.1em] text-white/60 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full">{translateMaterial(m)}</span>)}
                                 </div>
                               </div>
-
                               <div className="flex flex-col gap-1">
                                 <span className="font-sans text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-white/30">{t('lbl_demonstrates')}</span>
-                                <p className="font-sans text-xs md:text-sm text-white/80 leading-[1.6] font-light">
-                                  {t('fictional_demonstrates')}
-                                </p>
+                                <p className="font-sans text-xs md:text-sm text-white/80 leading-[1.6] font-light">{t('fictional_demonstrates')}</p>
                               </div>
                             </>
                           )}
-
                           <div className="mt-4">
-                            <button 
-                              onClick={handleCloseDetails}
-                              className="font-sans text-xs uppercase tracking-widest text-white/50 hover:text-white transition-colors duration-300 flex items-center gap-2 group"
-                            >
+                            <button onClick={handleCloseDetails} className="font-sans text-xs uppercase tracking-widest text-white/50 hover:text-white transition-colors duration-300 flex items-center gap-2 group">
                               <span className="group-hover:-translate-x-1 transition-transform duration-300">←</span> {t('btn_close').replace('× ', '')}
                             </button>
                           </div>
                         </div>
 
-                        {/* Bloc Image */}
                         <div className="w-full md:w-[44%] flex items-center justify-center mt-8 md:mt-0">
-                          <ProjectMiniCarousel 
-                            images={activeProject.galleryPaths.length > 0 ? activeProject.galleryPaths : [activeProject.coverPath]} 
-                          />
+                          <ProjectMiniCarousel images={activeProject.galleryPaths.length > 0 ? activeProject.galleryPaths : [activeProject.coverPath]} />
                         </div>
                       </div>
-
                     </div>
                   </div>
                 </motion.div>
