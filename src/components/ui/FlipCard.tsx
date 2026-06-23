@@ -220,6 +220,22 @@ export function FlipCard({
           50% { transform: translateY(15px); }
           100% { transform: translateY(0px); }
         }
+
+        /* ─── OPTIMISATIONS MOBILES (Anti-crash) ─── */
+        @media (max-width: 768px) {
+          .flip-card-front, .flip-card-back {
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            background-color: rgba(20, 20, 20, 0.95) !important;
+          }
+          .flip-card-back .circle {
+            display: none !important;
+          }
+          .flip-card-back::before {
+            animation: none !important;
+            opacity: 0.1 !important;
+          }
+        }
       ` }} />
 
       <motion.div 

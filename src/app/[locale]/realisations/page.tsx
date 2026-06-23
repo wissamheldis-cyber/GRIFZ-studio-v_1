@@ -293,7 +293,6 @@ export default function RealisationsPage() {
                         y: 0,
                       }}
                       transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                      style={{ willChange: 'transform' }}
                     >
                       <FlipCard 
                         key={`${project.id}-${isActive}`}
@@ -360,6 +359,9 @@ export default function RealisationsPage() {
                       border-radius: 100px;
                       z-index: 20;
                       animation: moveDotPanel 8s linear infinite;
+                    }
+                    @media (max-width: 768px) {
+                      .panel-dot { display: none; }
                     }
                   `}} />
 
@@ -594,7 +596,7 @@ export default function RealisationsPage() {
               <motion.div
                 key={project.id}
                 className="absolute top-0 bottom-0 flex flex-col items-center justify-center cursor-pointer"
-                style={{ zIndex, willChange: 'transform, opacity' }}
+                style={{ zIndex }}
                 initial={{ opacity: 0 }}
                 whileInView={entranceAnimate}
                 viewport={{ once: false, margin: "-50px" }}
@@ -609,7 +611,6 @@ export default function RealisationsPage() {
                     y: 0,
                   }}
                   transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                  style={{ willChange: 'transform' }}
                 >
                   <FlipCard 
                     key={`${project.id}-${isActive}`}
