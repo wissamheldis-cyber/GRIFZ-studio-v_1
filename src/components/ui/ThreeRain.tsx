@@ -74,11 +74,11 @@ function RainParticles({ count = 2000, speed = 1, color = '#00aaff' }: RainParti
   )
 }
 
-export default function ThreeRain({ className = '' }: { className?: string }) {
+export default function ThreeRain({ className = '', color = '#09f' }: { className?: string, color?: string }) {
   return (
     <div className={`absolute inset-0 pointer-events-none z-0 ${className}`}>
       <Canvas camera={{ position: [0, 0, 5], fov: 60 }}>
-        <RainParticles count={3000} speed={0.8} color="#09f" />
+        <RainParticles count={3000} speed={0.8} color={color} />
       </Canvas>
     </div>
   )

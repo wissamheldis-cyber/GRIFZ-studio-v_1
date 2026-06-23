@@ -8,6 +8,7 @@ import { fictionalConcepts, FictionalConcept } from '@/data/fictionalConceptsDat
 import { useTranslations, useLocale } from 'next-intl'
 import { MagicButton } from '@/components/ui/MagicButton'
 import { GlassPanel } from '@/components/ui/GlassPanel'
+import ThreeRain from '@/components/ui/ThreeRain'
 
 // --- Composant Mini Carrousel d'images ---
 function ProjectMiniCarousel({ images }: { images: string[] }) {
@@ -128,122 +129,45 @@ export default function RealisationsPage() {
         {viewMode === 'selection' ? (
           <motion.div 
             key="selection"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.6 }}
-            className="flex flex-col gap-32 items-center w-full mt-10"
+            className="flex flex-col items-center justify-center w-full min-h-[100dvh] absolute inset-0 z-10"
           >
-            <div className="text-center mb-10 border-b border-white/20 pb-4">
-               <h1 className="font-serif text-3xl text-white/50 tracking-widest uppercase">Exploration des 4 Concepts</h1>
-               <p className="text-white/30 font-sans mt-2">Scrollez pour découvrir et cliquez sur une option pour valider</p>
-            </div>
-
             {/* CONCEPT 1: LA FAILLE DIMENSIONNELLE */}
-            <div className="w-full flex flex-col items-center">
-              <h2 className="font-sans text-xs uppercase tracking-[0.3em] text-white/40 mb-8">Concept 1 : La Faille Dimensionnelle</h2>
-              <div className="w-full max-w-[1400px] h-[500px] flex overflow-hidden rounded-3xl border border-white/10 group/container">
-                {/* Bloc Gauche */}
-                <div 
-                  onClick={goRealisations}
-                  className="flex-1 hover:flex-[2] transition-all duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] flex items-center justify-center relative cursor-pointer group/item overflow-hidden"
-                  style={{ background: 'radial-gradient(circle at center, #1a1a1a, #000000)' }}
-                >
-                  <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay"></div>
-                  <div className="absolute inset-0 bg-white/5 opacity-0 group-hover/item:opacity-100 transition-opacity duration-700" />
-                  <h3 className="font-serif text-3xl md:text-5xl text-white/50 group-hover/item:text-white transition-colors duration-700 z-10 tracking-widest text-center">
-                    {t('title')}
-                  </h3>
-                </div>
-                {/* Ligne séparatrice */}
-                <div className="w-px h-full bg-white/20 z-20"></div>
-                {/* Bloc Droit */}
-                <div 
-                  onClick={goFictional}
-                  className="flex-1 hover:flex-[2] transition-all duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] flex items-center justify-center relative cursor-pointer group/item overflow-hidden"
-                  style={{ background: 'radial-gradient(circle at center, #2c2c2c, #0a0a0a)' }}
-                >
-                  <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay"></div>
-                  <div className="absolute inset-0 bg-white/5 opacity-0 group-hover/item:opacity-100 transition-opacity duration-700" />
-                  <h3 className="font-serif text-3xl md:text-5xl text-white/50 group-hover/item:text-white transition-colors duration-700 z-10 tracking-widest text-center">
-                    {isEn ? 'Fictional Visions' : 'Visions Fictives'}
-                  </h3>
-                </div>
+            <div className="w-full h-full flex overflow-hidden">
+              {/* Bloc Gauche - Réalisations */}
+              <div 
+                onClick={goRealisations}
+                className="flex-1 hover:flex-[2] transition-all duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] flex items-center justify-center relative cursor-pointer group/item overflow-hidden"
+                style={{ background: 'radial-gradient(circle at center, #1a1a1a, #000000)' }}
+              >
+                <ThreeRain color="#ffffff" className="opacity-30 group-hover/item:opacity-100 transition-opacity duration-700" />
+                <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay pointer-events-none"></div>
+                <div className="absolute inset-0 bg-white/5 opacity-0 group-hover/item:opacity-100 transition-opacity duration-700 pointer-events-none" />
+                <h3 className="font-serif text-3xl md:text-6xl text-white/50 group-hover/item:text-white transition-colors duration-700 z-10 tracking-[0.2em] text-center drop-shadow-2xl">
+                  {t('title')}
+                </h3>
+              </div>
+              
+              {/* Ligne séparatrice */}
+              <div className="w-px h-full bg-white/20 z-20 shadow-[0_0_15px_rgba(255,255,255,0.5)]"></div>
+              
+              {/* Bloc Droit - Visions Fictives */}
+              <div 
+                onClick={goFictional}
+                className="flex-1 hover:flex-[2] transition-all duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] flex items-center justify-center relative cursor-pointer group/item overflow-hidden"
+                style={{ background: 'radial-gradient(circle at center, #151b22, #050505)' }}
+              >
+                <ThreeRain color="#00aaff" className="opacity-30 group-hover/item:opacity-100 transition-opacity duration-700" />
+                <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay pointer-events-none"></div>
+                <div className="absolute inset-0 bg-blue-500/5 opacity-0 group-hover/item:opacity-100 transition-opacity duration-700 pointer-events-none" />
+                <h3 className="font-serif text-3xl md:text-6xl text-white/50 group-hover/item:text-white transition-colors duration-700 z-10 tracking-[0.2em] text-center drop-shadow-2xl">
+                  {isEn ? 'Fictional Visions' : 'Visions Fictives'}
+                </h3>
               </div>
             </div>
-
-            {/* CONCEPT 2: LES MONOLITHES DE VERRE */}
-            <div className="w-full flex flex-col items-center mt-20">
-              <h2 className="font-sans text-xs uppercase tracking-[0.3em] text-white/40 mb-8">Concept 2 : Les Monolithes de Verre</h2>
-              <div className="w-full max-w-5xl flex flex-col md:flex-row gap-8 md:gap-16 items-center justify-center h-[600px]" style={{ perspective: '1500px' }}>
-                <div 
-                  onClick={goRealisations}
-                  className="w-[300px] h-[450px] cursor-pointer group"
-                >
-                  <GlassPanel className="w-full h-full flex flex-col items-center justify-center transition-all duration-700 md:-rotate-y-12 md:group-hover:rotate-y-0 md:group-hover:scale-105 border-white/5 group-hover:border-white/20">
-                    <h3 className="font-serif text-3xl text-white text-center tracking-widest leading-relaxed">
-                      {t('title').split(' ').map((w,i) => <span key={i} className="block">{w}</span>)}
-                    </h3>
-                  </GlassPanel>
-                </div>
-                <div 
-                  onClick={goFictional}
-                  className="w-[300px] h-[450px] cursor-pointer group"
-                >
-                  <GlassPanel strong className="w-full h-full flex flex-col items-center justify-center transition-all duration-700 md:rotate-y-12 md:group-hover:rotate-y-0 md:group-hover:scale-105 border-white/5 group-hover:border-white/20">
-                    <h3 className="font-serif text-3xl text-white text-center tracking-widest leading-relaxed">
-                       {(isEn ? 'Fictional Visions' : 'Visions Fictives').split(' ').map((w,i) => <span key={i} className="block">{w}</span>)}
-                    </h3>
-                  </GlassPanel>
-                </div>
-              </div>
-            </div>
-
-            {/* CONCEPT 3: TYPOGRAPHIE BRUTALISTE */}
-            <div className="w-full flex flex-col items-center mt-20">
-              <h2 className="font-sans text-xs uppercase tracking-[0.3em] text-white/40 mb-16">Concept 3 : Typographie Brutaliste</h2>
-              <div className="w-full flex flex-col items-center justify-center gap-12 group/container">
-                <h1 
-                  onClick={goRealisations}
-                  className="font-serif text-5xl md:text-8xl lg:text-[10rem] text-outline cursor-pointer leading-none text-center"
-                >
-                  {t('title').toUpperCase()}
-                </h1>
-                <h1 
-                  onClick={goFictional}
-                  className="font-serif text-5xl md:text-8xl lg:text-[10rem] text-outline cursor-pointer leading-none text-center"
-                >
-                  {isEn ? 'FICTIONAL VISIONS' : 'VISIONS FICTIVES'}
-                </h1>
-              </div>
-            </div>
-
-            {/* CONCEPT 4: LE PORTAIL DE PROFONDEUR */}
-            <div className="w-full flex flex-col items-center mt-40 mb-40">
-              <h2 className="font-sans text-xs uppercase tracking-[0.3em] text-white/40 mb-16">Concept 4 : Z-Axis Navigation (Profondeur)</h2>
-              <div className="relative w-full h-[500px] flex items-center justify-center group/portal">
-                <div 
-                  onClick={goFictional}
-                  className="absolute z-10 scale-50 opacity-30 blur-[4px] hover:scale-75 hover:opacity-100 hover:blur-none transition-all duration-700 ease-out cursor-pointer -translate-y-20"
-                >
-                  <h3 className="font-serif text-4xl md:text-6xl text-white tracking-widest">
-                    {isEn ? 'Fictional Visions' : 'Visions Fictives'}
-                  </h3>
-                </div>
-                
-                <div 
-                  onClick={goRealisations}
-                  className="absolute z-20 scale-100 opacity-100 blur-0 hover:scale-110 transition-all duration-700 ease-out cursor-pointer translate-y-10 group-hover/portal:opacity-20 group-hover/portal:blur-md hover:!opacity-100 hover:!blur-none"
-                >
-                  <GlassPanel className="px-16 py-8 rounded-full border-white/20">
-                    <h3 className="font-serif text-5xl md:text-7xl text-white tracking-widest">
-                      {t('title')}
-                    </h3>
-                  </GlassPanel>
-                </div>
-              </div>
-            </div>
-
           </motion.div>
         ) : (
           <motion.div 
